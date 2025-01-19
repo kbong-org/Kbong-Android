@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Kbong-Android"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":presentation")

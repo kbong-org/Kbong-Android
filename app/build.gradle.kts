@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":data")) // data 모듈 의존
+    implementation(project(":domain")) // domain 모듈 의존
+    implementation(project(":presentation")) // presentation 모듈 의존
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
