@@ -1,4 +1,4 @@
-package com.project.kbong.ui.theme
+package com.project.kbong.designsystem.theme
 
 import android.app.Activity
 import android.os.Build
