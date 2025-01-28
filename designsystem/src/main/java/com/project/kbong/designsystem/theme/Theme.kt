@@ -44,7 +44,6 @@ fun KbongAndroidTheme(
 
     MaterialTheme(
       colorScheme = colorScheme,
-      typography = Typography,
       content = content
     )
 }
