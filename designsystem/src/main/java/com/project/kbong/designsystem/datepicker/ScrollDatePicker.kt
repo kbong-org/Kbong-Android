@@ -21,6 +21,9 @@ import com.project.kbong.designsystem.utils.DateUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+/**
+ * todo 우선 임시 중단 안드로이드 기본 DatePicker 사용 하면 제거
+ */
 @Composable
 fun ScrollDatePicker() {
     val coroutineScope = rememberCoroutineScope()
