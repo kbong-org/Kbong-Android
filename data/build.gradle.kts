@@ -48,4 +48,12 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
+
+    // gson
+    implementation(libs.gson)
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.loggin.interceptor)
 }
