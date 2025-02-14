@@ -2,7 +2,11 @@ package com.project.data.model.calender
 
 import com.google.gson.annotations.SerializedName
 
-data class HistoryDaysResponse(
+data class HistoryDayListResponse(
+    @SerializedName("days")
+    val historyDayResponse: List<HistoryDayResponse>
+)
+data class HistoryDayResponse(
     @SerializedName("day")
     val day: String,
     @SerializedName("hasGame")

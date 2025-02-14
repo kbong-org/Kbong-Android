@@ -10,6 +10,7 @@ android {
 
     defaultConfig {
         minSdk = 24
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -25,6 +26,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -37,6 +39,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain")) // domain 모듈 의존
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -55,4 +58,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // coil
+    implementation(libs.coil)
+    implementation(libs.coil.network)
+
+    // desugar
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

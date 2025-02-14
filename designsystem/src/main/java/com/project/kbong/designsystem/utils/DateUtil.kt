@@ -1,12 +1,10 @@
 package com.project.kbong.designsystem.utils
 
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 
 object DateUtil {
 
-    private val currentDate = Calendar.getInstance()
-
-    fun getYearInt(): Int {
-        return currentDate.get(Calendar.YEAR)
-    }
-}
+   fun toDay(): LocalDate = LocalDate.now()
+} 

@@ -16,8 +16,8 @@ retrofit = "2.9.0"
 gson = "2.10.1"
 okhttp = "4.9.1"
 inject = "1"
-
-
+coil = "3.0.4"
+desugarJdkLibs = "2.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +44,13 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-loggin-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 inject = { group = "javax.inject", name = "javax.inject", version.ref = "inject" }
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil"}
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+
+## Desugaring
+# 26 버전이 필요한 API를 21 버전에서도 사용할 수 있게 해주는 라이브러리
+# 대표적으로는 LocalDateTIme, LocalDate, ZondedDateTime과 같은 유틸리티 함수 들
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

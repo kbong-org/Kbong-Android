@@ -1,9 +1,11 @@
 package com.project.presentation.home
 
-import com.project.domain.model.calender.HistoryDaysContent
+import com.project.domain.model.calender.HistoryDayContent
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
 import com.project.presentation.mvi.UiState
+import java.time.LocalDate
+
 
 class HomeViewContract {
 
@@ -12,15 +14,20 @@ class HomeViewContract {
      */
     data class HomeViewState(
         val isError: Boolean = false,
-        val historyDaysContent: List<HistoryDaysContent> = listOf(HistoryDaysContent())
-
+      //  val currentDate: LocalDate = LocalDate.now(),
+       // val selectedDate: LocalDate = LocalDate.now(),
+        val selectTab: String = "직관기록",
+        val currentDate: LocalDate = LocalDate.of(2024,6,1),
+        val selectedDate: LocalDate = LocalDate.of(2024,6,1),
+        val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent())
     ) : UiState
 
     /**
      * 액션 정의
      */
     sealed interface HomeViewEvent : UiEvent {
-
+        data class OnSelectedDate(val onSelectedDate: String) : HomeViewEvent
+        data class OnTabSelected(val selectTab: String) : HomeViewEvent
     }
 
     /**
