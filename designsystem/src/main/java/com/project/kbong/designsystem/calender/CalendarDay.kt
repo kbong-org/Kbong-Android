@@ -5,8 +5,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +24,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTeamGray10
-import com.project.kbong.designsystem.utils.DateUtil
+import com.project.kbong.designsystem.theme.KBongTypography
 import java.time.LocalDate
 
 @Composable
@@ -37,11 +39,14 @@ fun CalendarDay(
     val isSelected = historyDayContent.day == selectedDate.dayOfMonth.toString()
     val currentDateColor = when{
         isSelected -> KBongPrimary
-        DateUtil.toDay() == conversionLocalDate -> KBongGrayscaleGray1
+        LocalDate.of(2024, 6, 21) == conversionLocalDate -> KBongGrayscaleGray1
+        // DateUtil.toDay() == conversionLocalDate -> KBongGrayscaleGray1
         else -> KBongGrayscaleGray0
     }
     Column(
-        modifier = modifier.clickable { onSelectedDate() },
+        modifier = modifier
+            .defaultMinSize(minHeight = 48.dp)
+            .clickable { onSelectedDate() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -50,25 +55,31 @@ fun CalendarDay(
                 .background(currentDateColor)
         ) {
             Text(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
                 text = historyDayContent.day,
+                style = KBongTypography.Label1Normal,
                 color = if (isSelected) KBongGrayscaleGray0 else KBongTeamGray10
             )
         }
 
         if (
             historyDayContent.emotion.isNullOrEmpty() &&
-            DateUtil.toDay() <= selectedDate
+            //DateUtil.toDay() <= selectedDate
+            LocalDate.of(2024, 6, 21) >= conversionLocalDate
         ) {
             Box(
                 modifier = Modifier
+                    .padding(top = 14.dp, bottom = 10.dp)
                     .size(4.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .clip(RoundedCornerShape(200.dp))
+                    .clip(CircleShape)
                     .background(KBongGrayscaleGray2)
+                    .align(Alignment.CenterHorizontally)
             ) {}
         } else {
             AsyncImage(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .align(Alignment.CenterHorizontally),
                 model = historyDayContent.emotion,
                 contentDescription = "emotion"
             )
@@ -76,13 +87,13 @@ fun CalendarDay(
     }
 }
 
-@Preview(backgroundColor = 0xFFFFFFFF)
+@Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
 @Composable
 private fun PreviewCalendarDay() {
     CalendarDay(
         selectedDate = LocalDate.now(),
-        conversionLocalDate = LocalDate.now(),
-        historyDayContent = HistoryDayContent("1", true, null),
+        conversionLocalDate = LocalDate.of(2024, 6, 21),
+        historyDayContent = HistoryDayContent("10", true, null),
         onSelectedDate = {}
     )
 }

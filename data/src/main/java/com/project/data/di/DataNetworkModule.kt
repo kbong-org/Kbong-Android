@@ -57,7 +57,10 @@ object DataNetworkModule {
             addInterceptor { chain ->
                 try {
                     val newRequest = chain.request().newBuilder().apply {
-                        addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlci1pbmZvIjp7ImlkIjoyLCJuaWNrbmFtZSI6Iu2FjOyKpO2KuDExMSIsInJvbGVzIjpbIk1FTUJFUiJdfSwiaWF0IjoxNzM5MTcxNzkzLCJleHAiOjE3Mzk0MzA5OTN9.WQHOa8xmcuoQh23QuZhzPXAvP0wxI5D7GpYsz1Xgi20")
+                        addHeader(
+                            "Authorization",
+                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlci1pbmZvIjp7ImlkIjoyLCJuaWNrbmFtZSI6Iu2FjOyKpO2KuDExMSIsInJvbGVzIjpbIk1FTUJFUiJdfSwiaWF0IjoxNzM5NjI5MTY0LCJleHAiOjE3Mzk4ODgzNjR9.msX3UKCIIl07noeaFgZ_h_3CN-qUKm_0JtDr3AU2k1o"
+                        )
                     }.build()
                     chain.proceed(newRequest)
                 } catch (e: Exception) {

@@ -1,6 +1,5 @@
 package com.project.kbong.designsystem.calender
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,54 +24,11 @@ fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     currentDate: LocalDate,
     selectedDate: LocalDate,
+    firstDayOfWeek: Int,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
     ){
     val weekTextList = stringArrayResource(R.array.week_text).toList()
-    val firstDayOfWeek by remember { mutableIntStateOf(currentDate.dayOfWeek.value) }
-
-    /*    val firstDayOfWeek by remember {
-            mutableIntStateOf(calendar.time)
-        }*/
-
-    /*    val calender = Calendar.getInstance()
-
-        var currentMonth by remember {
-            mutableStateOf(calender.apply {
-                firstDayOfWeek = Calendar.SUNDAY // 일요일 시작으로 설정
-            })
-        }
-
-        var currentPage by remember {
-            val currentYear = currentMonth.get(Calendar.YEAR)
-            val currentMonthValue = currentMonth.get(Calendar.MONTH)
-            val monthsSince1970 = (currentYear - 1970) * 12 + currentMonthValue
-            mutableIntStateOf(monthsSince1970)
-        }
-        var currentSelectedDate by remember {
-            mutableStateOf(calender)
-        }
-
-        // 1970부터 2100까지의 총 월 수 계산
-        val totalMonths = (2100 - 1970) * 12
-
-
-
-        LaunchedEffect(pagerState.currentPage) {
-            val addMonth = (pagerState.currentPage - currentPage)
-            val newCalendar = currentMonth.clone() as Calendar
-            newCalendar.add(Calendar.MONTH, addMonth)
-            currentMonth = newCalendar
-            currentPage = pagerState.currentPage
-        }
-
-        LaunchedEffect(currentSelectedDate) {
-            onSelectedDate(currentSelectedDate)
-        }
-
-        Log.d(TAG, "HorizontalCalendar: currentMonth ${currentMonth.time}")
-        Log.d(TAG, "HorizontalCalendar: currentSelectedDate ${currentSelectedDate.time}")
-        Log.d(TAG, "HorizontalCalendar: currentPage $currentPage")*/
 
     Column(
         modifier = modifier
@@ -108,18 +61,5 @@ fun HorizontalCalendar(
                 onSelectedDate(selectedDate)
             },
         )
-    /*    HorizontalPager(
-            state = pagerState
-        ) { page ->
-            val inCalendar = calender.apply {
-                val relativePosition = page - currentPage
-                set(Calendar.YEAR, currentMonth.get(Calendar.YEAR) + relativePosition / 12)
-                set(Calendar.MONTH, page % 12 + 1)
-                set(Calendar.DAY_OF_MONTH, 1)
-            }
-            if (page in pagerState.currentPage - 1..pagerState.currentPage + 1) {
-
-            }
-        }*/
     }
 }

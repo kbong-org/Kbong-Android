@@ -1,11 +1,10 @@
 package com.project.kbong.designsystem.calender
 
-import android.icu.util.Calendar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -36,7 +35,7 @@ fun CalendarMonthItem(
             }
         }
 
-        items(historyDayContentList) { historyDayContent ->
+        itemsIndexed(historyDayContentList) { index, historyDayContent ->
             val conversionLocalDate = LocalDate.of(
                 currentDate.year,
                 currentDate.month,

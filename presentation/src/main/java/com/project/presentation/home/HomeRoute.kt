@@ -6,7 +6,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,7 +27,6 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.presentation.R
 import com.project.presentation.utils.localDateToString
-import java.util.Calendar
 
 @Composable
 fun HomeRoute(
@@ -53,7 +54,7 @@ fun HomeRoute(
 fun HomeScreen(
     modifier: Modifier,
     state: HomeViewContract.HomeViewState,
-    homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit
+    homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit,
 ) {
     val homeTabTitleList = stringArrayResource(R.array.home_tab).toList()
 
@@ -91,26 +92,40 @@ fun HomeScreen(
             }
         )
 
-        DateTopContent(
-            currentMonth = "2",
-            myTeam = "두산 베어스",
-            teamColor = KBongTeamBears,
-            onClickMonth = {}
-        )
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth()
+        ) {
 
-        Log.d(TAG, "HomeScreen: state ${state.historyDayContents}")
-        Log.d(TAG, "HomeScreen: state ${state.currentDate}") // 2025-02-10
-
-        HorizontalCalendar(
-            currentDate = state.currentDate,
-            selectedDate = state.selectedDate,
-            historyDayContentList = state.historyDayContents,
-            onSelectedDate = { selectedDate ->
-                homeViewEvent(
-                    HomeViewContract.HomeViewEvent.OnSelectedDate(selectedDate.localDateToString())
+            item {
+                DateTopContent(
+                    currentMonth = "2",
+                    myTeam = "두산 베어스",
+                    teamColor = KBongTeamBears,
+                    onClickMonth = {}
                 )
             }
-        )
+
+            item {
+                Log.d(TAG, "HomeScreen: state ${state.historyDayContents}")
+                Log.d(TAG, "HomeScreen: state ${state.currentDate}") // 2025-02-10
+
+                HorizontalCalendar(
+                    currentDate = state.currentDate,
+                    selectedDate = state.selectedDate,
+                    firstDayOfWeek = state.firstDayOfWeek,
+                    historyDayContentList = state.historyDayContents,
+                    onSelectedDate = { selectedDate ->
+                        homeViewEvent(
+                            HomeViewContract.HomeViewEvent.OnSelectedDate(selectedDate.localDateToString())
+                        )
+                    }
+                )
+            }
+
+            item {
+
+            }
+        }
 
     }
 }

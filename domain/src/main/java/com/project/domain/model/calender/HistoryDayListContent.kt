@@ -6,7 +6,7 @@ data class HistoryDayListContent(
 )
 
 data class HistoryDayContent(
-    val day: String = "",
+    val day: String = "1",
     val hasGame: Boolean = false,
     val emotion: String? = null,
 )
