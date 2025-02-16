@@ -1,6 +1,7 @@
 package com.project.kbong.designsystem.calender
 
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,9 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import com.project.domain.model.calender.HistoryDayContent
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
@@ -37,12 +38,17 @@ fun CalendarDay(
 ) {
 
     val isSelected = historyDayContent.day == selectedDate.dayOfMonth.toString()
-    val currentDateColor = when{
+    val currentDateColor = when {
         isSelected -> KBongPrimary
         LocalDate.of(2024, 6, 21) == conversionLocalDate -> KBongGrayscaleGray1
         // DateUtil.toDay() == conversionLocalDate -> KBongGrayscaleGray1
         else -> KBongGrayscaleGray0
     }
+    val emotion = when (val painterId = DayEmotion.fromDescription(historyDayContent.emotion)) {
+        null -> null
+        else -> painterResource(id = painterId)
+    }
+
     Column(
         modifier = modifier
             .defaultMinSize(minHeight = 48.dp)
@@ -76,13 +82,15 @@ fun CalendarDay(
                     .align(Alignment.CenterHorizontally)
             ) {}
         } else {
-            AsyncImage(
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .align(Alignment.CenterHorizontally),
-                model = historyDayContent.emotion,
-                contentDescription = "emotion"
-            )
+            emotion?.let { nonNullEmotion ->
+                Image(
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .align(Alignment.CenterHorizontally),
+                    painter = nonNullEmotion,
+                    contentDescription = "emotion"
+                )
+            }
         }
     }
 }

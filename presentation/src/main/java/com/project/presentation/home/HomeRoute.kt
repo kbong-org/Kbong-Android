@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
@@ -24,6 +26,7 @@ import com.project.kbong.designsystem.calender.HorizontalCalendar
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.tab.KBongTabBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.presentation.R
 import com.project.presentation.utils.localDateToString
@@ -36,7 +39,7 @@ fun HomeRoute(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        when(viewModel.sideEffect){
+        when (viewModel.sideEffect) {
 
         }
     }
@@ -119,6 +122,14 @@ fun HomeScreen(
                             HomeViewContract.HomeViewEvent.OnSelectedDate(selectedDate.localDateToString())
                         )
                     }
+                )
+            }
+
+            item {
+                Spacer(
+                    modifier = Modifier
+                        .height(6.dp)
+                        .background(KBongGrayscaleGray2)
                 )
             }
 
