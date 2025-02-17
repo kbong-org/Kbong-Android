@@ -74,4 +74,6 @@ dependencies {
     // kakao
     implementation(libs.kakao.user)
     implementation(libs.kakao.auth)
+
+    implementation(libs.androidx.navigation.compose)
 }
