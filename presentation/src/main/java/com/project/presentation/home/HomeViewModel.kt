@@ -4,13 +4,14 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.project.domain.usecase.GetCalenderHistoryGameUseCase
+import com.project.presentation.home.HomeViewContract.HomeViewEvent
+import com.project.presentation.home.HomeViewContract.HomeViewSideEffect
+import com.project.presentation.home.HomeViewContract.HomeViewState
 import com.project.presentation.mvi.BaseViewModel
-import javax.inject.Inject
-import com.project.presentation.home.HomeViewContract.*
 import com.project.presentation.utils.stringToLocalDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -39,6 +40,10 @@ class HomeViewModel @Inject constructor(
 
             is HomeViewEvent.OnTabSelected -> {
                 updateSelectedTab(event.selectTab)
+            }
+
+            HomeViewEvent.OnClickAddHistory -> {
+                // postSideEffect()
             }
         }
     }

@@ -29,6 +29,7 @@ class HomeViewContract {
     sealed interface HomeViewEvent : UiEvent {
         data class OnSelectedDate(val onSelectedDate: String) : HomeViewEvent
         data class OnTabSelected(val selectTab: String) : HomeViewEvent
+        data object OnClickAddHistory : HomeViewEvent
     }
 
     /**

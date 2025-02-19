@@ -5,10 +5,9 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.HorizontalDivider
@@ -30,6 +29,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.presentation.R
+import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.utils.localDateToString
 
 @Composable
@@ -128,14 +128,24 @@ fun HomeScreen(
 
             item {
                 HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 14.dp),
                     thickness = 6.dp,
                     color = KBongGrayscaleGray2
                 )
             }
 
             item {
-
+                DayHistoryContent(
+                    selectedDate = state.selectedDate,
+                    itemCount = 1,
+                    onClickAddHistory = {
+                        homeViewEvent(
+                            HomeViewContract.HomeViewEvent.OnClickAddHistory
+                        )
+                    }
+                )
             }
         }
 
