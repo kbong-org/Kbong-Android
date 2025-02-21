@@ -17,6 +17,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.project.kbong.designsystem.tag.KBongTag
+import com.project.kbong.designsystem.tag.TagType
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongPrimary
@@ -30,6 +32,8 @@ fun DayHistory(
     stadium: String,
     type: String
 ) {
+    val fromTypeData = TagType.fromTypeData(type)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,8 +75,13 @@ fun DayHistory(
                     color = KBongGrayscaleGray7
                 )
             }
-
         }
+
+        KBongTag(
+            tagName = fromTypeData.tagName,
+            backgroundColor = fromTypeData.backgroundColor,
+            textColor = fromTypeData.textColor
+        )
     }
 }
 
