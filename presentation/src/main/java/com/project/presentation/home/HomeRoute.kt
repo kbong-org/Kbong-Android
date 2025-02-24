@@ -139,7 +139,7 @@ fun HomeScreen(
             item {
                 DayHistoryContent(
                     selectedDate = state.selectedDate,
-                    itemCount = 1,
+                    dailyLogList = state.dailyLogList,
                     onClickAddHistory = {
                         homeViewEvent(
                             HomeViewContract.HomeViewEvent.OnClickAddHistory

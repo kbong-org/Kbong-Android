@@ -7,40 +7,62 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.project.domain.model.day.DailyLog
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
 import com.project.presentation.utils.formatLocalDate
 import java.time.LocalDate
 
+private const val MAX_LOG_COUNT = 3
+
 @Composable
 fun DayHistoryContent(
     selectedDate: LocalDate,
-    itemCount: Int,
+    dailyLogList: List<DailyLog>,
     onClickAddHistory: () -> Unit
 ) {
+    val logCount = dailyLogList.size
+
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column(
+        DayHistoryHeader(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            DayHistoryHeader(
+                .padding(vertical = 19.dp, horizontal = 16.dp),
+            selectedDate = selectedDate,
+            isAddIcon = logCount < MAX_LOG_COUNT,
+            onClickAddHistory = onClickAddHistory
+        )
+        dailyLogList.forEach { item ->
+            with(item) {
+                DayHistory(
+                    awayTeam = awayTeamDisplayName,
+                    homeTeam = homeTeamDisplayName,
+                    stadium = stadiumFullName,
+                    type = type,
+                    imageList = listOf(
+                        "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
+                        //"https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
+                    )
+                )
+            }
+
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 19.dp),
-                selectedDate = selectedDate,
-                isAddIcon = itemCount < 3,
-                onClickAddHistory = onClickAddHistory
+                    .padding(vertical = 8.dp),
+                thickness = 1.dp,
+                color = KBongGrayscaleGray2
             )
-
         }
     }
 }
@@ -77,7 +99,7 @@ fun DayHistoryHeader(
 private fun PreviewDayHistoryHeader() {
     DayHistoryContent(
         selectedDate = LocalDate.of(2025, 2, 17),
-        itemCount = 1,
-        onClickAddHistory = {}
+        onClickAddHistory = {},
+        dailyLogList = listOf()
     )
 }

@@ -59,7 +59,7 @@ object DataNetworkModule {
                     val newRequest = chain.request().newBuilder().apply {
                         addHeader(
                             "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlci1pbmZvIjp7ImlkIjoyLCJuaWNrbmFtZSI6Iu2FjOyKpO2KuDExMSIsInJvbGVzIjpbIk1FTUJFUiJdfSwiaWF0IjoxNzM5OTYzMTkzLCJleHAiOjE3NDAyMjIzOTN9.TMQDMzj9iwik6ddhP6nnosVaPizTw684bZ3VySAIXsY"
+                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwidXNlci1pbmZvIjp7ImlkIjoyLCJuaWNrbmFtZSI6Iu2FjOyKpO2KuDExMSIsInJvbGVzIjpbIk1FTUJFUiJdfSwiaWF0IjoxNzQwNDAwNDY2LCJleHAiOjE3NDA2NTk2NjZ9.2WUSvIrGMMyXVKxeeKaWngoWFrzwoZHPMb5T5Ktlq9I"
                         )
                     }.build()
                     chain.proceed(newRequest)
