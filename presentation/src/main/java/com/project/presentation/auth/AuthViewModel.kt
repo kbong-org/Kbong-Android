@@ -88,13 +88,15 @@ class AuthViewModel @Inject constructor(
                 Log.d("KakaoLogin", "✅ 카카오 토큰 검증 성공, 서버에 idToken 전송")
                 val result = loginUseCase(idToken)
                 _loginResult.value = result
+
                 when (result) {
                     is LoginResult.Success -> {
                         Log.d("KakaoLogin", "✅ 로그인 성공, AccessToken: ${result.user.accessToken}")
                         refreshAuthToken(result.user.refreshToken)
                     }
                     is LoginResult.Failure -> {
-                        if (result.errorMessage.contains("U002_INVALID_TOKEN")) {
+                        // 만약 로그인 실패 에러 메시지가 "Invalid oAuth ID"를 포함하면 회원가입 필요
+                        if (result.errorMessage.contains("Invalid oAuth ID")) {
                             Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
                             _signUpResult.value = SignUpResult.Required(idToken)
                         } else {

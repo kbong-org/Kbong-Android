@@ -7,10 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,25 +35,27 @@ class MainActivity : ComponentActivity() {
             isAppearanceLightStatusBars = false
             hide(android.view.WindowInsets.Type.navigationBars())
         }
-
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             KBongTheme {
+                // 네비게이션 그래프 정의: startDestination은 "kakaoLoginScreen"으로 설정
                 NavHost(navController = navController, startDestination = "kakaoLoginScreen") {
                     composable("kakaoLoginScreen") {
                         KakaoLoginScreen(navController = navController)
                     }
-                    // 회원가입 화면: idToken을 인자로 전달 (실제 앱에서는 viewModel이나 safeArgs를 이용해 전달)
+                    // 회원가입 화면: idToken을 인자로 전달 (로그인 API에서 회원가입 필요 판단 시 사용)
                     composable(
                         route = "signUpScreen?{idToken}",
-                        arguments = listOf(navArgument("idToken") { type = NavType.StringType; defaultValue = "" })
+                        arguments = listOf(navArgument("idToken") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        })
                     ) { backStackEntry ->
                         val idToken = backStackEntry.arguments?.getString("idToken") ?: ""
                         SignUpScreen(navController = navController, idToken = idToken)
                     }
                     composable("homeScreen") {
-                        // 홈 화면 예시: 간단한 메시지 출력
                         HomeScreen(navController = navController)
                     }
                 }
