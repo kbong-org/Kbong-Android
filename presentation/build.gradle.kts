@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 val properties = Properties()
@@ -52,6 +53,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":data")) // data 모듈 의존
     implementation(project(":domain")) // domain 모듈 의존
 
     implementation(libs.androidx.core.ktx)
@@ -72,9 +74,16 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // kakao
-    implementation(libs.kakao.user)
-    implementation(libs.kakao.auth)
+    // Kakao
+    implementation(libs.kakao.all)
 
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
+    implementation(libs.hilt.navigation.compose)
+
+    // JWT
+    implementation(libs.jwtdecode)
 }

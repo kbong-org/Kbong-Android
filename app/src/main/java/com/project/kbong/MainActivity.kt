@@ -7,24 +7,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.project.kbong.designsystem.theme.KBongTheme
-import com.project.presentation.kakao.KakaoLoginScreen
-import com.project.presentation.login.LoginScreen
+import com.project.presentation.HomeScreen
+import com.project.presentation.auth.KakaoLoginScreen
+import com.project.presentation.signUp.SignUpScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,22 +33,30 @@ class MainActivity : ComponentActivity() {
         // 시스템 UI 콘텐츠 위로 확장
         WindowCompat.setDecorFitsSystemWindows(window, false)
         // 하단바 숨기기
-        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.isAppearanceLightStatusBars = false // 상태바 아이콘 색상 설정
-            controller.hide(android.view.WindowInsets.Type.navigationBars()) // 하단 네비게이션바 숨김
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            hide(android.view.WindowInsets.Type.navigationBars())
         }
 
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-
             KBongTheme {
-                NavHost(navController, startDestination = "kakao_login") {
-                    composable("kakao_login") {
+                NavHost(navController = navController, startDestination = "kakaoLoginScreen") {
+                    composable("kakaoLoginScreen") {
                         KakaoLoginScreen(navController = navController)
                     }
-                    composable("login") {
-                        LoginScreen(navController)
+                    // 회원가입 화면: idToken을 인자로 전달 (실제 앱에서는 viewModel이나 safeArgs를 이용해 전달)
+                    composable(
+                        route = "signUpScreen?{idToken}",
+                        arguments = listOf(navArgument("idToken") { type = NavType.StringType; defaultValue = "" })
+                    ) { backStackEntry ->
+                        val idToken = backStackEntry.arguments?.getString("idToken") ?: ""
+                        SignUpScreen(navController = navController, idToken = idToken)
+                    }
+                    composable("homeScreen") {
+                        // 홈 화면 예시: 간단한 메시지 출력
+                        HomeScreen(navController = navController)
                     }
                 }
             }

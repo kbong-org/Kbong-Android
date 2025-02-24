@@ -1,18 +1,8 @@
-package com.project.presentation.kakao
+package com.project.presentation.auth
 
-import com.project.presentation.R
+import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -24,12 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,19 +23,21 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.project.domain.model.LoginResult
+import com.project.presentation.R
 import kotlinx.coroutines.delay
 
 @Composable
 fun KakaoLoginScreen(
     navController: NavController,
-    viewModel: KakaoLoginViewModel = viewModel(),
+    authViewModel: AuthViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
+    val loginResult by authViewModel.loginResult.collectAsState()
 
-    // 2초 후 바텀시트 표시
     LaunchedEffect(Unit) {
         delay(2000)
         showBottomSheet = true
@@ -78,22 +65,23 @@ fun KakaoLoginScreen(
         }
 
         if (showBottomSheet) {
-            LoginBottomSheet(viewModel, navController)
+            AuthLoginBottomSheet(authViewModel, navController)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavController) {
+fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavController) {
     val context = LocalContext.current
     val pagerState = rememberPagerState(pageCount = { 4 })
+    val loginResult by authViewModel.loginResult.collectAsState()
 
     ModalBottomSheet(
-        onDismissRequest = {}, // 닫기 버튼 제거
+        onDismissRequest = {},
         sheetState = rememberModalBottomSheetState(
             skipPartiallyExpanded = true,
-            confirmValueChange = { false } // 바텀시트를 내릴 수 없도록 설정
+            confirmValueChange = { false }
         ),
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -103,16 +91,15 @@ fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavControlle
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 스와이프 가능한 텍스트
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier.height(60.dp)
             ) { page ->
                 val texts = listOf(
-                    "직관한 경기를 기록해요\n직관한 경기를 기록해요",
-                    "새로운 스포츠 경험을 기록하세요\n새로운 스포츠 경험을 기록하세요",
-                    "잊지 않고 소중한 순간을 남기세요\n잊지 않고 소중한 순간을 남기세요",
-                    "카카오로 로그인하고 시작해요!\n카카오로 로그인하고 시작해요!"
+                    "서비스를 통해 다양한 경험을 쌓으세요\n서비스를 통해 다양한 경험을 쌓으세요",
+                    "손쉽게 로그인하고 기록을 시작하세요\n손쉽게 로그인하고 기록을 시작하세요",
+                    "중요한 순간을 기록하고 저장하세요\n중요한 순간을 기록하고 저장하세요",
+                    "간편하게 로그인하고 시작하세요!\n간편하게 로그인하고 시작하세요!"
                 )
                 Box(
                     modifier = Modifier.fillMaxWidth(),
@@ -125,10 +112,7 @@ fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavControlle
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(24.dp))
-
-            // 페이지 인디케이터 (도트 간격 10dp 적용)
             Row(
                 modifier = Modifier.padding(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -142,14 +126,9 @@ fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavControlle
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(42.dp))
-
-            // 카카오 로그인 버튼
             Button(
-                onClick = {
-                    viewModel.login(context, navController)
-                },
+                onClick = { authViewModel.loginWithKakao(context) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE500)),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -161,12 +140,12 @@ fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavControlle
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_kakao), // 카카오 로고 리소스 추가
+                        painter = painterResource(id = R.drawable.ic_kakao),
                         contentDescription = "Kakao Icon",
-                        tint = Color.Unspecified, // 원래 색상을 유지하도록 설정
+                        tint = Color.Unspecified,
                         modifier = Modifier.size(24.dp)
                     )
-                    Spacer(modifier = Modifier.width(8.dp)) // 아이콘과 텍스트 간격 조정
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "카카오로 로그인",
                         fontSize = 16.sp,
@@ -175,8 +154,26 @@ fun LoginBottomSheet(viewModel: KakaoLoginViewModel, navController: NavControlle
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+
+    LaunchedEffect(loginResult) {
+        when (loginResult) {
+            is LoginResult.Success -> {
+                Log.d("KakaoLogin", "✅ 로그인 성공!")
+                navController.navigate("homeScreen")
+            }
+            is LoginResult.Failure -> {
+                val errorMessage = (loginResult as LoginResult.Failure).errorMessage
+                if (errorMessage.contains("U002_INVALID_TOKEN")) {
+                    Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
+                    navController.navigate("signUpScreen/${authViewModel.getCurrentIdToken()}")
+                } else {
+                    Log.e("KakaoLogin", "❌ 로그인 실패: $errorMessage")
+                }
+            }
+            else -> {}
         }
     }
 }

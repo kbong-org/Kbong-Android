@@ -10,13 +10,18 @@ composeFoundation = "1.7.5"
 activityCompose = "1.8.0"
 viewmodelCompose = "2.8.7"
 composeBom = "2024.04.01"
+retrofit2 = "2.11.0"
+okhttp3 = "4.9.3"
+kakao = "2.20.6"
 appcompat = "1.7.0"
 material = "1.12.0"
 hilt = "2.51.1"
 hiltNavigation = "1.2.0"
+hiltNavigationCompose = "1.2.0"
 runtimeAndroid = "1.7.8"
 storage = "1.5.0"
 uiAndroid = "1.6.6"
+jwtdecode = "2.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,14 +45,21 @@ material = { group = "com.google.android.material", name = "material", version.r
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-kakao-user = { module = "com.kakao.sdk:v2-user", version = "2.20.6" }
-kakao-auth = { module = "com.kakao.sdk:v2-auth", version = "2.20.6" }
+retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
+
+kakao-all = { group = "com.kakao.sdk", name = "v2-all", version.ref = "kakao"}
+
 androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "runtimeAndroid" }
 androidx-storage = { group = "androidx.test.services", name = "storage", version.ref = "storage" }
 androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroid" }
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.7.6" }
+
+jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -89,10 +89,13 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation)
+    implementation(libs.hilt.navigation.compose)
 
-    // kakao
-    implementation(libs.kakao.user)
-    implementation(libs.kakao.auth)
+    // Kakao
+    implementation(libs.kakao.all)
 
     implementation(libs.androidx.navigation.compose)
+
+    // JWT
+    implementation(libs.jwtdecode)
 }
