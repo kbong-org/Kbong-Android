@@ -48,16 +48,14 @@ import com.project.kbong.designsystem.theme.KBongTypography
 fun KBongTag(
     text: String,
     backgroundColor: Color,
-    borderColor: Color,
     textColor: Color,
     modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
-            .width(36.dp)
+            .wrapContentWidth()
             .height(22.dp)
             .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
             .background(backgroundColor)
             .padding(horizontal = 8.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center
@@ -132,7 +130,6 @@ fun KbongTagPreview() {
         KBongTag(
             text = "태그",
             backgroundColor = KBongPrimary10,
-            borderColor = KBongPrimary,
             textColor = KBongPrimary
         )
 
@@ -146,7 +143,6 @@ fun KbongTagPreview() {
                     KBongTag(
                         text = text,
                         backgroundColor = bgColor,
-                        borderColor = borderColor,
                         textColor = borderColor
                     )
                 }
