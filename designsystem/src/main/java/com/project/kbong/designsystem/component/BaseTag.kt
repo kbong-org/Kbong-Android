@@ -92,7 +92,7 @@ fun KBongTeamTag(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun KbongTagPreview() {
     val tags = listOf(
