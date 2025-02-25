@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -88,43 +89,6 @@ fun KBongOutlinedButton(
             style = KBongTypography.Body2Normal,
             color = textColor
         )
-    }
-}
-
-@Composable
-fun KBongTeamButton(
-    teamName: String,
-    modifier: Modifier = Modifier,
-    isSelected: Boolean = false,
-    onClick: () -> Unit
-) {
-    val teamColor = when (teamName) {
-        "키움 히어로즈" -> KBongTeamHeroes
-        "두산 베어스" -> KBongTeamBears
-        "롯데 자이언츠" -> KBongTeamGiants
-        "삼성 라이온즈" -> KBongTeamLions
-        "한화 이글즈" -> KBongTeamEagles
-        "KIA 타이거즈" -> KBongTeamTigers
-        "LG 트윈스" -> KBongTeamTwins
-        "SSG 랜더스" -> KBongTeamSsg
-        "NC 다이노스" -> KBongTeamNc
-        "KT 위즈" -> KBongTeamKTSub
-        else -> KBongPrimary
-    }
-
-    val backgroundColor = if (isSelected) teamColor else KBongGrayscaleGray1
-    val textColor = if (isSelected) Color.White else KBongGrayscaleGray10
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .background(backgroundColor, RoundedCornerShape(8.dp))
-            .clickable { onClick() }
-            .padding(horizontal = 8.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = teamName, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = textColor)
     }
 }
 
