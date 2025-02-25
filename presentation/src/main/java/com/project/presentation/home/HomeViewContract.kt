@@ -22,35 +22,7 @@ class HomeViewContract {
         val selectedDate: LocalDate = LocalDate.of(2024, 6, 21),
         val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent()),
         val firstDayOfWeek: Int = currentDate.dayOfWeek.value,
-        val dailyLogList: List<DailyLog> = listOf(
-      /*      DailyLog(
-                id = 7243,
-                awayTeamDisplayName = "KT",
-                homeTeamDisplayName = "삼성",
-                stadiumFullName = "수원 KT위즈파크",
-                emotion = "HAPPY",
-                type = "CHOICE",
-                imageList = listOf()
-            ),
-            DailyLog(
-                id = 723,
-                awayTeamDisplayName = "랜더스",
-                homeTeamDisplayName = "삼성",
-                stadiumFullName = "랜더스 필드",
-                emotion = "HAPPY",
-                type = "CHOICE",
-                imageList = listOf()
-            ),
-            DailyLog(
-                id = 723,
-                awayTeamDisplayName = "기아",
-                homeTeamDisplayName = "두산",
-                stadiumFullName = "잠실 야구장",
-                emotion = "HAPPY",
-                type = "CHOICE",
-                imageList = listOf()
-            )*/
-        )
+        val dailyLogList: List<DailyLog> = listOf()
     ) : UiState
 
     /**

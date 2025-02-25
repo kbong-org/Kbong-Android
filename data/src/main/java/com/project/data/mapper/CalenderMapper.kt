@@ -1,27 +1,18 @@
 package com.project.data.mapper
 
-import com.project.data.model.BaseModel
 import com.project.data.model.calender.HistoryDayListResponse
 import com.project.data.model.calender.HistoryDayResponse
-import com.project.domain.model.BaseModelContent
 import com.project.domain.model.calender.HistoryDayContent
 import com.project.domain.model.calender.HistoryDayListContent
 
-fun BaseModel<HistoryDayListResponse>.toDataModel(): BaseModelContent<HistoryDayListContent> {
-    return BaseModelContent(
-        isSuccess = isSuccess,
-        data = data?.toDataModel(),
-        errorResponse = errorResponse.toDataModel(),
-    )
-}
 
-private fun HistoryDayListResponse.toDataModel(): HistoryDayListContent {
+fun HistoryDayListResponse.toDomain(): HistoryDayListContent {
     return HistoryDayListContent(
-        historyDayListContent = this.historyDayResponse.map { it.toDataModel() }
+        historyDayListContent = this.historyDayResponse.map { it.toDomain() }
     )
 }
 
-private fun HistoryDayResponse.toDataModel(): HistoryDayContent {
+private fun HistoryDayResponse.toDomain(): HistoryDayContent {
     return HistoryDayContent(
         day = this.day,
         hasGame = this.hasGame,
