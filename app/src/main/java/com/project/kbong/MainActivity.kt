@@ -27,10 +27,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("WrongConstant", "UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // 시스템 UI 콘텐츠 위로 확장
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        // 하단바 숨기기
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
             hide(android.view.WindowInsets.Type.navigationBars())
@@ -39,18 +36,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             KBongTheme {
-                // 네비게이션 그래프 정의: startDestination은 "kakaoLoginScreen"으로 설정
                 NavHost(navController = navController, startDestination = "kakaoLoginScreen") {
                     composable("kakaoLoginScreen") {
                         KakaoLoginScreen(navController = navController)
                     }
-                    // 회원가입 화면: idToken을 인자로 전달 (로그인 API에서 회원가입 필요 판단 시 사용)
                     composable(
-                        route = "signUpScreen?{idToken}",
-                        arguments = listOf(navArgument("idToken") {
-                            type = NavType.StringType
-                            defaultValue = ""
-                        })
+                        route = "signUpScreen?idToken={idToken}",
+                        arguments = listOf(navArgument("idToken") { type = NavType.StringType; defaultValue = "" })
                     ) { backStackEntry ->
                         val idToken = backStackEntry.arguments?.getString("idToken") ?: ""
                         SignUpScreen(navController = navController, idToken = idToken)

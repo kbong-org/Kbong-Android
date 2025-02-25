@@ -24,6 +24,13 @@ android {
             "KAKAO_NATIVE_APP_KEY",
             "\"${properties.getProperty("KAKAO_NATIVE_APP_KEY")}\"",
         )
+
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = properties["KAKAO_NATIVE_APP_KEY"] as String
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
     }
 
     buildTypes {

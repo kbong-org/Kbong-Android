@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.domain.model.LoginResult
+import com.project.domain.model.SignUpResult
 import com.project.presentation.R
 import kotlinx.coroutines.delay
 
@@ -33,7 +34,6 @@ import kotlinx.coroutines.delay
 fun KakaoLoginScreen(
     navController: NavController,
     authViewModel: AuthViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }
     val loginResult by authViewModel.loginResult.collectAsState()
@@ -50,13 +50,16 @@ fun KakaoLoginScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
             Text(
                 text = "이미지",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Gray
             )
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "디자인 화면 다 나오고 이미지로 넣을 예정!",
                 fontSize = 16.sp,
@@ -75,7 +78,7 @@ fun KakaoLoginScreen(
 fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavController) {
     val context = LocalContext.current
     val pagerState = rememberPagerState(pageCount = { 4 })
-    val loginResult by authViewModel.loginResult.collectAsState()
+    //val loginResult by authViewModel.loginResult.collectAsState()
 
     ModalBottomSheet(
         onDismissRequest = {},
@@ -83,6 +86,7 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
             skipPartiallyExpanded = true,
             confirmValueChange = { false }
         ),
+
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(
@@ -101,6 +105,7 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                     "중요한 순간을 기록하고 저장하세요\n중요한 순간을 기록하고 저장하세요",
                     "간편하게 로그인하고 시작하세요!\n간편하게 로그인하고 시작하세요!"
                 )
+
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
@@ -112,13 +117,16 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(24.dp))
+
             Row(
                 modifier = Modifier.padding(8.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 repeat(4) { index ->
                     val isSelected = pagerState.currentPage == index
+
                     Box(
                         modifier = Modifier
                             .size(if (isSelected) 10.dp else 8.dp)
@@ -126,7 +134,9 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(42.dp))
+
             Button(
                 onClick = { authViewModel.loginWithKakao(context) },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFEE500)),
@@ -145,7 +155,9 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                         tint = Color.Unspecified,
                         modifier = Modifier.size(24.dp)
                     )
+
                     Spacer(modifier = Modifier.width(8.dp))
+
                     Text(
                         text = "카카오로 로그인",
                         fontSize = 16.sp,
@@ -154,26 +166,25 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
         }
     }
 
-    LaunchedEffect(loginResult) {
-        when (loginResult) {
-            is LoginResult.Success -> {
-                Log.d("KakaoLogin", "✅ 로그인 성공!")
-                navController.navigate("homeScreen")
-            }
-            is LoginResult.Failure -> {
-                val errorMessage = (loginResult as LoginResult.Failure).errorMessage
-                if (errorMessage.contains("U002_INVALID_TOKEN")) {
-                    Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
-                    navController.navigate("signUpScreen/${authViewModel.getCurrentIdToken()}")
-                } else {
-                    Log.e("KakaoLogin", "❌ 로그인 실패: $errorMessage")
+    // _signUpResult가 Required 상태면 회원가입 화면으로 네비게이트
+    LaunchedEffect(authViewModel.loginResult.collectAsState().value) {
+        authViewModel.loginResult.value?.let { loginResult ->
+            when (loginResult) {
+                is LoginResult.Success -> {
+                    Log.d("KakaoLogin", "✅ 로그인 성공 확인 -> 홈으로 이동")
+                    navController.navigate("homeScreen") {
+                        popUpTo("kakaoLoginScreen") { inclusive = true }
+                    }
+                }
+                is LoginResult.Failure -> {
+                    Log.e("KakaoLogin", "❌ 로그인 실패 -> 홈으로 이동 실패")
                 }
             }
-            else -> {}
         }
     }
 }

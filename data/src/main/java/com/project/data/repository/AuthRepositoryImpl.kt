@@ -11,16 +11,19 @@ import com.project.domain.repository.AuthRepository
 class AuthRepositoryImpl(private val remoteDataSource: AuthRemoteDataSource) : AuthRepository {
     override suspend fun login(idToken: String): LoginResult {
         val response = remoteDataSource.login(idToken)
+
         return if (response != null && response.isSuccess && response.data != null) {
             val domainUser = response.data.toDomainUser()
             LoginResult.Success(domainUser)
         } else {
-            LoginResult.Failure(response?.errorResponse?.message ?: "Unknown error")
+            val errorMsg = response?.errorResponse?.let { "${it.code}: ${it.message}" } ?: "Unknown error"
+            LoginResult.Failure(errorMsg)
         }
     }
 
     override suspend fun refreshToken(refreshToken: String): TokenResult {
         val response = remoteDataSource.refreshToken(refreshToken)
+
         return if (response != null && response.isSuccess && response.data != null) {
             val domainToken = response.data.toDomainToken()
             TokenResult.Success(domainToken)
@@ -31,6 +34,7 @@ class AuthRepositoryImpl(private val remoteDataSource: AuthRemoteDataSource) : A
 
     override suspend fun signUp(idToken: String, nickname: String, myTeam: String): SignUpResult {
         val response = remoteDataSource.signUp(idToken, nickname, myTeam)
+
         return if (response != null && response.isSuccess) {
             SignUpResult.Success
         } else {
