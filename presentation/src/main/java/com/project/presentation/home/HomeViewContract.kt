@@ -23,7 +23,7 @@ class HomeViewContract {
         val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent()),
         val firstDayOfWeek: Int = currentDate.dayOfWeek.value,
         val dailyLogList: List<DailyLog> = listOf(
-            DailyLog(
+      /*      DailyLog(
                 id = 7243,
                 awayTeamDisplayName = "KT",
                 homeTeamDisplayName = "삼성",
@@ -49,7 +49,7 @@ class HomeViewContract {
                 emotion = "HAPPY",
                 type = "CHOICE",
                 imageList = listOf()
-            )
+            )*/
         )
     ) : UiState
 

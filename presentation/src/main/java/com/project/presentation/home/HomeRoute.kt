@@ -30,6 +30,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.presentation.R
 import com.project.presentation.home.day.DayHistoryContent
+import com.project.presentation.home.day.EmptyDayHistoryContent
 import com.project.presentation.utils.localDateToString
 
 @Composable
@@ -136,16 +137,27 @@ fun HomeScreen(
                 )
             }
 
+
             item {
-                DayHistoryContent(
-                    selectedDate = state.selectedDate,
-                    dailyLogList = state.dailyLogList,
-                    onClickAddHistory = {
-                        homeViewEvent(
-                            HomeViewContract.HomeViewEvent.OnClickAddHistory
-                        )
-                    }
-                )
+                if (state.dailyLogList.isEmpty()){
+                    EmptyDayHistoryContent(
+                        onClickGoLog = {
+                            homeViewEvent(
+                                HomeViewContract.HomeViewEvent.OnClickAddHistory
+                            )
+                        }
+                    )
+                } else {
+                    DayHistoryContent(
+                        selectedDate = state.selectedDate,
+                        dailyLogList = state.dailyLogList,
+                        onClickAddHistory = {
+                            homeViewEvent(
+                                HomeViewContract.HomeViewEvent.OnClickAddHistory
+                            )
+                        }
+                    )
+                }
             }
         }
 
