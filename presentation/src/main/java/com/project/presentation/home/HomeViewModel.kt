@@ -62,6 +62,11 @@ class HomeViewModel @Inject constructor(
 
     private fun updateSelectedDate(selectedDate: String) {
         reduce { copy(selectedDate = selectedDate.stringToLocalDate()) }
+        getDailyLog(
+            year = state.value.selectedDate.year,
+            month = state.value.selectedDate.monthValue,
+            day = state.value.selectedDate.dayOfMonth
+        )
     }
 
     private fun updateSelectedTab(selectedTab: String) {
