@@ -31,6 +31,7 @@ import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.presentation.R
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
+import com.project.presentation.home.day.EmptyGameContent
 import com.project.presentation.utils.localDateToString
 
 @Composable
@@ -62,7 +63,9 @@ fun HomeScreen(
     homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit,
 ) {
     val homeTabTitleList = stringArrayResource(R.array.home_tab).toList()
-
+    val hasGame = state.historyDayContents.firstOrNull {
+        it.day.toInt() == state.selectedDate.dayOfMonth
+    }?.hasGame ?: false
 
     Column(
         modifier = modifier
@@ -137,26 +140,33 @@ fun HomeScreen(
                 )
             }
 
-
             item {
-                if (state.dailyLogList.isEmpty()){
-                    EmptyDayHistoryContent(
-                        onClickGoLog = {
-                            homeViewEvent(
-                                HomeViewContract.HomeViewEvent.OnClickAddHistory
-                            )
-                        }
-                    )
-                } else {
-                    DayHistoryContent(
-                        selectedDate = state.selectedDate,
-                        dailyLogList = state.dailyLogList,
-                        onClickAddHistory = {
-                            homeViewEvent(
-                                HomeViewContract.HomeViewEvent.OnClickAddHistory
-                            )
-                        }
-                    )
+                when {
+                    !hasGame -> {
+                        EmptyGameContent()
+                    }
+
+                    state.dailyLogList.isEmpty() -> {
+                        EmptyDayHistoryContent(
+                            onClickGoLog = {
+                                homeViewEvent(
+                                    HomeViewContract.HomeViewEvent.OnClickAddHistory
+                                )
+                            }
+                        )
+                    }
+
+                    else -> {
+                        DayHistoryContent(
+                            selectedDate = state.selectedDate,
+                            dailyLogList = state.dailyLogList,
+                            onClickAddHistory = {
+                                homeViewEvent(
+                                    HomeViewContract.HomeViewEvent.OnClickAddHistory
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
