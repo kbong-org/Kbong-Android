@@ -16,6 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -47,7 +48,7 @@ fun SignUpScreen(
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
 
     // 닉네임과 팀 정보를 상태로 유지
-    var nickname by remember { mutableStateOf("") }
+    var nickname by rememberSaveable { mutableStateOf("") }
     var selectedTeam by remember { mutableStateOf("") }
 
     // 회원가입 완료 후 결과를 감지하여 홈 화면으로 이동 X (회원가입 요청과 홈 이동을 분리)
@@ -69,7 +70,11 @@ fun SignUpScreen(
                 .weight(1f)
         ) { page ->
             when (page) {
-                0 -> NicknameInputScreen { nickname = it }
+                // 부모 상태인 nickname을 직접 전달하여 양방향 바인딩 적용
+                0 -> NicknameInputScreen(
+                    nickname = nickname,
+                    onNicknameEntered = { nickname = it }
+                )
                 1 -> TeamSelectionScreen(
                     nickname = nickname,
                     selectedTeam = selectedTeam,
@@ -89,7 +94,7 @@ fun SignUpScreen(
                     when (pagerState.currentPage) {
                         0 -> pagerState.animateScrollToPage(1)
                         1 -> {
-                            // 🔹 `selectedTeam`을 서버 ENUM 값으로 변환 후 회원가입 요청
+                            // `selectedTeam`을 서버 ENUM 값으로 변환 후 회원가입 요청
                             val teamEnumMap = mapOf(
                                 "KIA 타이거즈" to "KIA",
                                 "두산 베어스" to "DOOSAN",
@@ -141,8 +146,8 @@ fun SignUpScreen(
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NicknameInputScreen(onNicknameEntered: (String) -> Unit) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
+fun NicknameInputScreen(nickname: String, onNicknameEntered: (String) -> Unit) {
+
     val maxChar = 10
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -159,10 +164,12 @@ fun NicknameInputScreen(onNicknameEntered: (String) -> Unit) {
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
+
         Spacer(modifier = Modifier.height(40.dp))
+
         OutlinedTextField(
-            value = text,
-            onValueChange = { if (it.text.length <= maxChar) text = it },
+            value = nickname,
+            onValueChange = { if (it.length <= maxChar) onNicknameEntered(it) },
             placeholder = { Text("사용할 닉네임을 적어주세요", color = Color(0xFFEDEFF2)) },
             textStyle = TextStyle(fontSize = 16.sp),
             singleLine = true,
@@ -174,7 +181,7 @@ fun NicknameInputScreen(onNicknameEntered: (String) -> Unit) {
             ),
             trailingIcon = {
                 Text(
-                    text = "${text.text.length}/$maxChar",
+                    text = "${nickname.length}/$maxChar",
                     fontSize = 14.sp,
                     modifier = Modifier.padding(end = 16.dp)
                 )
@@ -185,10 +192,8 @@ fun NicknameInputScreen(onNicknameEntered: (String) -> Unit) {
         //TODO: 추후 버튼 통일 예정
         Button(
             onClick = {
-                keyboardController?.hide()
-                onNicknameEntered(text.text) // 닉네임 저장
-            },
-            enabled = text.text.isNotEmpty(),
+                keyboardController?.hide() },
+            enabled = nickname.isNotEmpty(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
