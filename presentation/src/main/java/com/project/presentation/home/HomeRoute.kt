@@ -36,7 +36,7 @@ import com.project.presentation.utils.localDateToString
 
 @Composable
 fun HomeRoute(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
@@ -58,7 +58,7 @@ fun HomeRoute(
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     state: HomeViewContract.HomeViewState,
     homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit,
 ) {
