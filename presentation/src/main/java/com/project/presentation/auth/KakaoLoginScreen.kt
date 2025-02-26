@@ -182,8 +182,23 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
                     }
                 }
                 is LoginResult.Failure -> {
-                    Log.e("KakaoLogin", "❌ 로그인 실패 -> 홈으로 이동 실패")
+                    Log.w("KakaoLogin", "⚠️ 로그인 실패 -> 홈으로 이동 실패")
                 }
+            }
+        }
+    }
+
+    // 추가: 회원가입 필요 상태(SignUpResult.Required)를 감지하여 회원가입 화면으로 이동
+    LaunchedEffect(authViewModel.signUpResult.collectAsState().value) {
+        authViewModel.signUpResult.value?.let { signUpResult ->
+            when (signUpResult) {
+                is SignUpResult.Required -> {
+                    Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
+                    navController.navigate("signUpScreen?idToken=${signUpResult.idToken}") {
+                        popUpTo("kakaoLoginScreen") { inclusive = true }
+                    }
+                }
+                else -> { /* 다른 상태는 필요시 처리 */ }
             }
         }
     }
