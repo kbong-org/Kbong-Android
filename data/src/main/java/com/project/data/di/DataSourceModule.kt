@@ -1,6 +1,8 @@
 package com.project.data.di
 
 
+import com.project.data.datasource.AuthRemoteDataSource
+import com.project.data.datasource.AuthRemoteDataSourceImpl
 import com.project.data.datasource.calender.CalenderDataSource
 import com.project.data.datasource.calender.CalenderDataSourceImpl
 import dagger.Binds
@@ -17,4 +19,8 @@ abstract class DataSourceModule {
         calenderDataSourceImpl: CalenderDataSourceImpl,
     ): CalenderDataSource
 
+    @Binds
+    abstract fun provideAuthRemoteDataSource(
+        authRemoteDataSourceImpl: AuthRemoteDataSourceImpl
+    ): AuthRemoteDataSource
 }

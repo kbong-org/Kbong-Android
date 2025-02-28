@@ -1,6 +1,8 @@
 package com.project.data.di
 
+import com.project.data.repository.AuthRepositoryImpl
 import com.project.data.repositoryimpl.calender.CalenderRepositoryImpl
+import com.project.domain.repository.AuthRepository
 import com.project.domain.repository.calender.CalenderRepository
 import dagger.Binds
 import dagger.Module
@@ -15,5 +17,10 @@ abstract class RepositoryModule {
     abstract fun provideCalenderRepository(
         calenderRepositoryImpl: CalenderRepositoryImpl,
     ): CalenderRepository
+
+    @Binds
+    abstract fun provideAuthRepository(
+        authRepository: AuthRepositoryImpl
+    ): AuthRepository
 
 }

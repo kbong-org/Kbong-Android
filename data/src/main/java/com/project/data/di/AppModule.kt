@@ -17,6 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/*
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -65,4 +66,4 @@ object AppModule {
     @Provides
     fun provideSignUpUseCase(authRepository: AuthRepository): SignUpUseCase =
         SignUpUseCase(authRepository)
-}
+}*/
