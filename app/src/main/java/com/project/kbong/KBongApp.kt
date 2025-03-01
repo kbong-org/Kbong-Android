@@ -40,64 +40,74 @@ fun KBongApp(
     Scaffold(
         containerColor = Color.Transparent,
         bottomBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(1.dp, KBongGrayscaleGray2, RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                    .background(Color.White)
-            ) {
-                NavigationBar(
-                    modifier = Modifier.fillMaxWidth(),
-                    containerColor =  Color.Transparent,
-                    content = {
-                        Row {
-                            appState.bottomBarDestination.forEach { destination ->
-                                val isSelected =
-                                    appState.currentDestination.isSelectedBottomNaviPage(destination)
-                                NavigationBarItem(
-                                    selected = isSelected,
-                                    onClick = {
-                                        appState.navigateToBottomNavigationDestination(destination)
-                                    },
-                                    icon = {
-                                        Icon(
-                                            painter = if (isSelected) {
-                                                painterResource(id = destination.selectedIcon)
-                                            } else {
-                                                painterResource(
-                                                    id = destination.unselectedIcon,
-                                                )
-                                            },
-                                            contentDescription = null,
-                                            tint = Color.Unspecified
+            if (!appState.isBottomBarVisible()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            1.dp,
+                            KBongGrayscaleGray2,
+                            RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                        )
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                        .background(Color.White)
+                ) {
+                    NavigationBar(
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = Color.Transparent,
+                        content = {
+                            Row {
+                                appState.bottomBarDestination.forEach { destination ->
+                                    val isSelected =
+                                        appState.currentDestination.isSelectedBottomNaviPage(
+                                            destination
                                         )
-                                    },
-                                    colors = NavigationBarItemDefaults.colors(
-                                        selectedIconColor = KBongGrayscaleGray9,
-                                        unselectedIconColor = KBongGrayscaleGray4,
-                                        indicatorColor = Color.Transparent,
-                                    ),
-                                    label = {
-                                        Text(
-                                            text = stringResource(destination.routeName),
-                                            style = KBongTypography.Caption1Medium.copy(fontSize = 12.sp),
-                                            color = if (isSelected) KBongGrayscaleGray9 else KBongGrayscaleGray4,
-                                        )
-                                    },
-                                    alwaysShowLabel = true,
-                                )
+                                    NavigationBarItem(
+                                        selected = isSelected,
+                                        onClick = {
+                                            appState.navigateToBottomNavigationDestination(
+                                                destination
+                                            )
+                                        },
+                                        icon = {
+                                            Icon(
+                                                painter = if (isSelected) {
+                                                    painterResource(id = destination.selectedIcon)
+                                                } else {
+                                                    painterResource(
+                                                        id = destination.unselectedIcon,
+                                                    )
+                                                },
+                                                contentDescription = null,
+                                                tint = Color.Unspecified
+                                            )
+                                        },
+                                        colors = NavigationBarItemDefaults.colors(
+                                            selectedIconColor = KBongGrayscaleGray9,
+                                            unselectedIconColor = KBongGrayscaleGray4,
+                                            indicatorColor = Color.Transparent,
+                                        ),
+                                        label = {
+                                            Text(
+                                                text = stringResource(destination.routeName),
+                                                style = KBongTypography.Caption1Medium.copy(fontSize = 12.sp),
+                                                color = if (isSelected) KBongGrayscaleGray9 else KBongGrayscaleGray4,
+                                            )
+                                        },
+                                        alwaysShowLabel = true,
+                                    )
+                                }
                             }
-                        }
-                    },
-                )
+                        },
+                    )
+                }
             }
         }
     ) { innerPadding ->
         MainNavHost(
             appState = appState,
             modifier = Modifier.padding(innerPadding),
-            startDestination = NavigationRoute.CalenderScreen.route
+            startDestination = NavigationRoute.KaKaoLoginScreen.route
         )
     }
 }

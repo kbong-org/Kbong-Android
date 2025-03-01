@@ -2,7 +2,17 @@ package com.project.presentation.auth
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -14,7 +24,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,16 +41,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.navOptions
+import com.project.data.LocalNavController
 import com.project.domain.model.LoginResult
 import com.project.domain.model.SignUpResult
 import com.project.presentation.R
+import com.project.presentation.home.navigateToHome
+import com.project.presentation.navigation.NavigationRoute
+import com.project.presentation.signUp.navigateToSignUp
 import kotlinx.coroutines.delay
 
 @Composable
 fun KakaoLoginScreen(
-    navController: NavController,
     authViewModel: AuthViewModel = hiltViewModel(),
 ) {
+    val navController: NavController = LocalNavController.current
     var showBottomSheet by remember { mutableStateOf(false) }
     val loginResult by authViewModel.loginResult.collectAsState()
 
@@ -177,10 +198,13 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
             when (loginResult) {
                 is LoginResult.Success -> {
                     Log.d("KakaoLogin", "✅ 로그인 성공 확인 -> 홈으로 이동")
-                    navController.navigate("homeScreen") {
-                        popUpTo("kakaoLoginScreen") { inclusive = true }
-                    }
+                    navController.navigateToHome(
+                        navOptions = navOptions {
+                            popUpTo(NavigationRoute.KaKaoLoginScreen.route) { inclusive = true }
+                        }
+                    )
                 }
+
                 is LoginResult.Failure -> {
                     Log.w("KakaoLogin", "⚠️ 로그인 실패 -> 홈으로 이동 실패")
                 }
@@ -194,11 +218,16 @@ fun AuthLoginBottomSheet(authViewModel: AuthViewModel, navController: NavControl
             when (signUpResult) {
                 is SignUpResult.Required -> {
                     Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
-                    navController.navigate("signUpScreen?idToken=${signUpResult.idToken}") {
-                        popUpTo("kakaoLoginScreen") { inclusive = true }
-                    }
+                    navController.navigateToSignUp(
+                        idToken = signUpResult.idToken,
+                        navOptions = navOptions {
+                            popUpTo(NavigationRoute.KaKaoLoginScreen.route) { inclusive = true }
+                        }
+                    )
                 }
-                else -> { /* 다른 상태는 필요시 처리 */ }
+
+                else -> { /* 다른 상태는 필요시 처리 */
+                }
             }
         }
     }

@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.project.presentation.home.HomeRoute
+import com.project.data.LocalNavController
+import com.project.presentation.auth.kakaoLoginNavigation
 import com.project.presentation.home.homeNavigation
 import com.project.presentation.my.myNavigation
+import com.project.presentation.signUp.signUpNavigation
 
 @Composable
 fun MainNavHost(
@@ -20,6 +22,8 @@ fun MainNavHost(
             navController = appState.navController,
             startDestination = startDestination,
         ) {
+            kakaoLoginNavigation()
+            signUpNavigation(navController = appState.navController)
             homeNavigation()
             myNavigation()
         }

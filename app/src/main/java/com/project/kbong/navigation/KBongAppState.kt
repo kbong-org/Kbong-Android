@@ -1,7 +1,5 @@
 package com.project.kbong.navigation
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
@@ -12,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.project.presentation.home.navigateToHome
 import com.project.presentation.my.navigateToMy
+import com.project.presentation.navigation.NavigationRoute
 
 
 @Composable
@@ -49,7 +48,8 @@ class KBongAppState(
     @Composable
     fun isBottomBarVisible(): Boolean {
         return when (currentDestination?.route) {
-
+            NavigationRoute.KaKaoLoginScreen.route -> true
+            NavigationRoute.SignUpScreen.route -> true
             else -> false
         }
     }
