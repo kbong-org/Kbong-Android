@@ -31,6 +31,7 @@ class HomeViewContract {
     sealed interface HomeViewEvent : UiEvent {
         data class OnSelectedDate(val onSelectedDate: String) : HomeViewEvent
         data class OnTabSelected(val selectTab: String) : HomeViewEvent
+        data object OnClickMonth : HomeViewEvent
         data object OnClickAddHistory : HomeViewEvent
     }
 
@@ -38,6 +39,6 @@ class HomeViewContract {
      * SideEffect로 발생되는 이벤트를 정의
      */
     sealed interface HomeViewSideEffect : UiSideEffect {
-
+        data object ShowDatePicker : HomeViewSideEffect
     }
 }

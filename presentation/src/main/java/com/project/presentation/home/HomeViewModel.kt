@@ -53,6 +53,10 @@ class HomeViewModel @Inject constructor(
             HomeViewEvent.OnClickAddHistory -> {
                 // postSideEffect()
             }
+
+            HomeViewEvent.OnClickMonth -> {
+                postSideEffect(HomeViewSideEffect.ShowDatePicker)
+            }
         }
     }
 
