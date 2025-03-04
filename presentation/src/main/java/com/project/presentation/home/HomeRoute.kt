@@ -34,13 +34,13 @@ import com.project.kbong.designsystem.tab.KBongTabBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
+import com.project.kbong.designsystem.utils.DateUtil.toDay
 import com.project.presentation.R
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
 import com.project.presentation.home.day.EmptyGameContent
 import com.project.presentation.utils.localDateToString
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
@@ -71,7 +71,11 @@ fun HomeRoute(
             DatePickerModal(
                 selectedDate = state.selectedDate,
                 onDateSelected = { date ->
-                    Log.d(TAG, "HomeRoute: $date")
+                    viewModel.intent(
+                        event = HomeViewContract.HomeViewEvent.OnSelectedDate(
+                            (date ?: toDay()).localDateToString()
+                        )
+                    )
                 },
                 onDismiss = {
                     isShowDatePicker = false
@@ -146,7 +150,8 @@ fun HomeScreen(
 
             item {
                 Log.d(TAG, "HomeScreen: state ${state.historyDayContents}")
-                Log.d(TAG, "HomeScreen: state ${state.currentDate}") // 2025-02-10
+                Log.d(TAG, "HomeScreen: state ${state.currentDate}")
+                Log.d(TAG, "HomeScreen: state ${state.selectedDate}")
 
                 HorizontalCalendar(
                     currentDate = state.currentDate,
