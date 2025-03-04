@@ -21,6 +21,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,6 +63,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -110,4 +112,7 @@ dependencies {
 
     // JWT
     implementation(libs.jwtdecode)
+
+    // desugar
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }

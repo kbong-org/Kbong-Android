@@ -50,6 +50,9 @@ dependencies {
     implementation(libs.hilt.navigation)
     implementation(libs.hilt.navigation.compose)
 
+    // gson
+    implementation(libs.gson)
+
     // retrofit2
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.converter.gson)

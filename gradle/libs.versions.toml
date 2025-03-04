@@ -13,6 +13,7 @@ composeBom = "2024.04.01"
 retrofit2 = "2.11.0"
 okhttp3 = "4.9.3"
 kakao = "2.20.6"
+gson = "2.10.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 hilt = "2.51.1"
@@ -22,6 +23,9 @@ runtimeAndroid = "1.7.8"
 storage = "1.5.0"
 uiAndroid = "1.6.6"
 jwtdecode = "2.0.2"
+inject = "1"
+coil = "3.0.4"
+desugarJdkLibs = "2.0.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,11 +46,14 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigation" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
-
+inject = { group = "javax.inject", name = "javax.inject", version.ref = "inject" }
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil"}
+coil-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
 retrofit2-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
 okhttp3-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp3" }
@@ -60,6 +67,11 @@ androidx-ui-android = { group = "androidx.compose.ui", name = "ui-android", vers
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version = "2.7.6" }
 
 jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" }
+
+## Desugaring
+# 26 버전이 필요한 API를 21 버전에서도 사용할 수 있게 해주는 라이브러리
+# 대표적으로는 LocalDateTIme, LocalDate, ZondedDateTime과 같은 유틸리티 함수 들
+desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

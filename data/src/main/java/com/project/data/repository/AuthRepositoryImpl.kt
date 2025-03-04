@@ -7,8 +7,11 @@ import com.project.domain.model.LoginResult
 import com.project.domain.model.SignUpResult
 import com.project.domain.model.TokenResult
 import com.project.domain.repository.AuthRepository
+import javax.inject.Inject
 
-class AuthRepositoryImpl(private val remoteDataSource: AuthRemoteDataSource) : AuthRepository {
+class AuthRepositoryImpl @Inject constructor(
+    private val remoteDataSource: AuthRemoteDataSource
+) : AuthRepository {
     override suspend fun login(idToken: String): LoginResult {
         val response = remoteDataSource.login(idToken)
 

@@ -69,3 +69,5 @@ val KBongStatusDestructive = Color(0xFFF65353)
 val KBongAccentButtonBlue = Color(0xFF1898EC)
 
 val KBongBackground = Color(0xFFDBDDE3)
+
+val KBongImageCount = Color(0x80171719)

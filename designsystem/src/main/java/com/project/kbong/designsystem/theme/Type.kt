@@ -1,6 +1,5 @@
 package com.project.kbong.designsystem.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -27,6 +26,7 @@ object KBongTypography {
             Font(R.font.pretendard_bold, FontWeight.Bold),
             Font(R.font.pretendard_medium, FontWeight.SemiBold),
             Font(R.font.pretendard_regular, FontWeight.Normal),
+            Font(R.font.pretendard_medium, FontWeight.Medium),
             Font(R.font.pretendard_light, FontWeight.Light),
             Font(R.font.pretendard_thin, FontWeight.Thin),
         ),
@@ -82,7 +82,7 @@ object KBongTypography {
     )
 
     val Label1Normal = baseTextStyle.copy(
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Medium,
         fontSize = FontSizeTokens.Label1,
         letterSpacing = 0.0145.em,
         lineHeight = 20.sp
@@ -102,8 +102,22 @@ object KBongTypography {
         lineHeight = 18.sp
     )
 
+    val Label2Medium = baseTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = FontSizeTokens.Label2,
+        letterSpacing = 0.0194.em,
+        lineHeight = 18.sp
+    )
+
     val Caption1 = baseTextStyle.copy(
         fontWeight = FontWeight.Normal,
+        fontSize = FontSizeTokens.Caption1,
+        letterSpacing = 0.0252.em,
+        lineHeight = 16.sp
+    )
+
+    val Caption1Medium = baseTextStyle.copy(
+        fontWeight = FontWeight.Medium,
         fontSize = FontSizeTokens.Caption1,
         letterSpacing = 0.0252.em,
         lineHeight = 16.sp
@@ -113,6 +127,13 @@ object KBongTypography {
         fontWeight = FontWeight.Normal,
         fontSize = FontSizeTokens.Caption2,
         letterSpacing = 0.0311.em,
+        lineHeight = 14.sp
+    )
+
+    val CalenderHeader = baseTextStyle.copy(
+        fontWeight = FontWeight.Medium,
+        fontSize = FontSizeTokens.Label1,
+        letterSpacing = (-0.02).em,
         lineHeight = 14.sp
     )
 }
