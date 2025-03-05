@@ -24,7 +24,6 @@ fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     currentDate: LocalDate,
     selectedDate: LocalDate,
-    firstDayOfWeek: Int,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
     ){
@@ -53,7 +52,6 @@ fun HorizontalCalendar(
 
         CalendarMonthItem(
             modifier = Modifier.fillMaxWidth(),
-            firstDayOfWeek = firstDayOfWeek,
             currentDate = currentDate,
             selectedDate = selectedDate,
             historyDayContentList = historyDayContentList,

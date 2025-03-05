@@ -20,20 +20,14 @@ class HomeViewModel @Inject constructor(
     private val getDailyLogUseCase: GetDailyLogUseCase,
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewSideEffect>() {
 
-
     init {
-        getCalenderHistoryGame(
-            year = state.value.currentDate.year,
-            month = state.value.currentDate.monthValue
-            /* year = 2024,
-             month = 6*/
-        )
+        loadInitialData()
+    }
 
-        getDailyLog(
-            year = state.value.currentDate.year,
-            month = state.value.currentDate.monthValue,
-            day = state.value.currentDate.dayOfMonth
-        )
+    private fun loadInitialData() {
+        val currentDate = state.value.currentDate
+        getCalenderHistoryGame(currentDate.year, currentDate.monthValue)
+        getDailyLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
     }
 
     override fun createInitialState(): HomeViewState {
@@ -65,12 +59,23 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateSelectedDate(selectedDate: String) {
+        val beforeMonth = state.value.selectedDate.monthValue
         reduce { copy(selectedDate = selectedDate.stringToLocalDate()) }
-        getDailyLog(
-            year = state.value.selectedDate.year,
-            month = state.value.selectedDate.monthValue,
-            day = state.value.selectedDate.dayOfMonth
-        )
+        with(state.value.selectedDate) {
+            getDailyLog(
+                year = year,
+                month = monthValue,
+                day = dayOfMonth
+            )
+            // 선택한 달이 전에 선택한 달과 다를때
+            if (beforeMonth != monthValue) {
+                getCalenderHistoryGame(
+                    year = year,
+                    month = monthValue
+                )
+            }
+        }
+
     }
 
     private fun updateSelectedTab(selectedTab: String) {

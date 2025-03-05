@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,7 +33,7 @@ import com.project.kbong.designsystem.tab.KBongTabBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
-import com.project.kbong.designsystem.utils.DateUtil.toDay
+import com.project.kbong.designsystem.utils.DateUtil.today
 import com.project.presentation.R
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
@@ -73,7 +72,7 @@ fun HomeRoute(
                 onDateSelected = { date ->
                     viewModel.intent(
                         event = HomeViewContract.HomeViewEvent.OnSelectedDate(
-                            (date ?: toDay()).localDateToString()
+                            (date ?: today()).localDateToString()
                         )
                     )
                 },
@@ -137,7 +136,7 @@ fun HomeScreen(
 
             item {
                 DateTopContent(
-                    currentMonth = "2",
+                    currentMonth = "${state.selectedDate.monthValue}",
                     myTeam = "두산 베어스",
                     teamColor = KBongTeamBears,
                     onClickMonth = {
@@ -156,7 +155,6 @@ fun HomeScreen(
                 HorizontalCalendar(
                     currentDate = state.currentDate,
                     selectedDate = state.selectedDate,
-                    firstDayOfWeek = state.firstDayOfWeek,
                     historyDayContentList = state.historyDayContents,
                     onSelectedDate = { selectedDate ->
                         homeViewEvent(
