@@ -1,7 +1,5 @@
-package com.project.kbong.designsystem.calender
+package com.project.kbong.designsystem.calendar
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import java.time.LocalDate
 
 @Composable

@@ -130,7 +130,7 @@ object KBongTypography {
         lineHeight = 14.sp
     )
 
-    val CalenderHeader = baseTextStyle.copy(
+    val CalendarHeader = baseTextStyle.copy(
         fontWeight = FontWeight.Medium,
         fontSize = FontSizeTokens.Label1,
         letterSpacing = (-0.02).em,

@@ -1,9 +1,9 @@
 package com.project.data.di
 
 import com.project.data.repository.AuthRepositoryImpl
-import com.project.data.repositoryimpl.calender.CalenderRepositoryImpl
+import com.project.data.repositoryimpl.calendar.CalendarRepositoryImpl
 import com.project.domain.repository.AuthRepository
-import com.project.domain.repository.calender.CalenderRepository
+import com.project.domain.repository.calendar.CalendarRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,9 +14,9 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun provideCalenderRepository(
-        calenderRepositoryImpl: CalenderRepositoryImpl,
-    ): CalenderRepository
+    abstract fun provideCalendarRepository(
+        calendarRepositoryImpl: CalendarRepositoryImpl,
+    ): CalendarRepository
 
     @Binds
     abstract fun provideAuthRepository(

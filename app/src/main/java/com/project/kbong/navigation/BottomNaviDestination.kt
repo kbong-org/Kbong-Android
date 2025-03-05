@@ -8,10 +8,10 @@ enum class BottomNaviDestination(
     val unselectedIcon: Int,
     val routeName: Int,
 ) {
-    CALENDER(
-        selectedIcon = R.drawable.bottom_calender_select,
-        unselectedIcon = R.drawable.bottom_calender_unselect,
-        routeName = R.string.calender,
+    CALENDAR(
+        selectedIcon = R.drawable.bottom_calendar_select,
+        unselectedIcon = R.drawable.bottom_calendar_unselect,
+        routeName = R.string.calendar,
     ),
     MY(
         selectedIcon = R.drawable.bottom_mypage_select,

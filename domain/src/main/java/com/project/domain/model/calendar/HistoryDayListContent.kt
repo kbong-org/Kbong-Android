@@ -1,4 +1,4 @@
-package com.project.domain.model.calender
+package com.project.domain.model.calendar
 
 
 data class HistoryDayListContent(

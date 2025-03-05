@@ -1,6 +1,6 @@
 package com.project.presentation.home
 
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import com.project.domain.model.day.DailyLog
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect

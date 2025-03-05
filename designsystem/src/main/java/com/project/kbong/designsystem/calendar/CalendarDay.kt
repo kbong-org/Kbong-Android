@@ -1,4 +1,4 @@
-package com.project.kbong.designsystem.calender
+package com.project.kbong.designsystem.calendar
 
 
 import androidx.compose.foundation.Image
@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2

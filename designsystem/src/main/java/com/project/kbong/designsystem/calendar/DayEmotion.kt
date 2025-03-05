@@ -1,4 +1,4 @@
-package com.project.kbong.designsystem.calender
+package com.project.kbong.designsystem.calendar
 
 import androidx.annotation.DrawableRes
 import com.project.kbong.designsystem.R

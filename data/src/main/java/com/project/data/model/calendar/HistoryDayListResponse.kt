@@ -1,4 +1,4 @@
-package com.project.data.model.calender
+package com.project.data.model.calendar
 
 import com.google.gson.annotations.SerializedName
 

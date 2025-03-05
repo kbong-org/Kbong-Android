@@ -2,11 +2,11 @@ package com.project.domain.usecase
 
 import com.project.domain.model.BaseModelContent
 import com.project.domain.model.day.DailyLogList
-import com.project.domain.repository.calender.CalenderRepository
+import com.project.domain.repository.calendar.CalendarRepository
 import javax.inject.Inject
 
 class GetDailyLogUseCase @Inject constructor(
-    private val calenderRepository: CalenderRepository
+    private val calendarRepository: CalendarRepository
 ) {
 
     suspend operator fun invoke(
@@ -14,6 +14,6 @@ class GetDailyLogUseCase @Inject constructor(
         month: Int,
         day: Int
     ): BaseModelContent<DailyLogList> {
-        return calenderRepository.getDailyLog(year, month, day)
+        return calendarRepository.getDailyLog(year, month, day)
     }
 }

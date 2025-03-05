@@ -1,9 +1,9 @@
 package com.project.data.mapper
 
-import com.project.data.model.calender.HistoryDayListResponse
-import com.project.data.model.calender.HistoryDayResponse
-import com.project.domain.model.calender.HistoryDayContent
-import com.project.domain.model.calender.HistoryDayListContent
+import com.project.data.model.calendar.HistoryDayListResponse
+import com.project.data.model.calendar.HistoryDayResponse
+import com.project.domain.model.calendar.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayListContent
 
 
 fun HistoryDayListResponse.toDomain(): HistoryDayListContent {
