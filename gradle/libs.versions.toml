@@ -26,6 +26,7 @@ jwtdecode = "2.0.2"
 inject = "1"
 coil = "3.0.4"
 desugarJdkLibs = "2.0.4"
+datastorePreferences = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -72,6 +73,7 @@ jwtdecode = { module = "com.auth0.android:jwtdecode", version.ref = "jwtdecode" 
 # 26 버전이 필요한 API를 21 버전에서도 사용할 수 있게 해주는 라이브러리
 # 대표적으로는 LocalDateTIme, LocalDate, ZondedDateTime과 같은 유틸리티 함수 들
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdkLibs" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

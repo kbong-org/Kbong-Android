@@ -2,8 +2,10 @@ package com.project.data.di
 
 import com.project.data.repository.AuthRepositoryImpl
 import com.project.data.repositoryimpl.calendar.CalendarRepositoryImpl
+import com.project.data.repositoryimpl.user.UserDataStoreRepositoryImpl
 import com.project.domain.repository.AuthRepository
 import com.project.domain.repository.calendar.CalendarRepository
+import com.project.domain.repository.user.UserDataStoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,5 +24,10 @@ abstract class RepositoryModule {
     abstract fun provideAuthRepository(
         authRepository: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    abstract fun provideUserDataStoreRepository(
+        userDataStoreRepositoryImpl: UserDataStoreRepositoryImpl
+    ): UserDataStoreRepository
 
 }
