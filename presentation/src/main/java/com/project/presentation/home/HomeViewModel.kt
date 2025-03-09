@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.project.domain.usecase.calendar.GetCalendarHistoryGameUseCase
 import com.project.domain.usecase.calendar.GetDailyLogUseCase
+import com.project.domain.usecase.calendar.GetGameLogUseCase
 import com.project.presentation.home.HomeViewContract.HomeViewEvent
 import com.project.presentation.home.HomeViewContract.HomeViewSideEffect
 import com.project.presentation.home.HomeViewContract.HomeViewState
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getCalendarHistoryGameUseCase: GetCalendarHistoryGameUseCase,
     private val getDailyLogUseCase: GetDailyLogUseCase,
+    private val getGameLogUseCase: GetGameLogUseCase,
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewSideEffect>() {
 
     init {
@@ -28,6 +30,7 @@ class HomeViewModel @Inject constructor(
         val currentDate = state.value.currentDate
         getCalendarHistoryGame(currentDate.year, currentDate.monthValue)
         getDailyLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+        getGameCalendar(currentDate.year, currentDate.monthValue)
     }
 
     override fun createInitialState(): HomeViewState {
@@ -122,5 +125,33 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+    // 월별 경기 일정 가져오기
+    private fun getGameCalendar(year: Int, monthValue: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getGameLogUseCase(year, monthValue)
+            }.onSuccess { response ->
+                if (response.isSuccess) {
+                    response.data?.let { data ->
+                        reduce {
+                            copy(
+                                myTeamDisplayName = data.myTeamDisplayName,
+                                gameDayContents = data.gameDayContent
+                            )
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "getGameCalendar else : ${response.errorResponse}")
+                    errorReduce()
+                }
+            }.onFailure {
+                Log.e(TAG, "getGameCalendar Error ${it.message}")
+                errorReduce()
+            }
+        }
+    }
+
 
 }

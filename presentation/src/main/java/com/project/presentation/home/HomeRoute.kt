@@ -137,7 +137,7 @@ fun HomeScreen(
             item {
                 DateTopContent(
                     currentMonth = "${state.selectedDate.monthValue}",
-                    myTeam = "두산 베어스",
+                    myTeam = state.myTeamDisplayName,
                     teamColor = KBongTeamBears,
                     onClickMonth = {
                         homeViewEvent(
@@ -151,6 +151,7 @@ fun HomeScreen(
                 Log.d(TAG, "HomeScreen: state ${state.historyDayContents}")
                 Log.d(TAG, "HomeScreen: state ${state.currentDate}")
                 Log.d(TAG, "HomeScreen: state ${state.selectedDate}")
+                Log.d(TAG, "HomeScreen: state ${state.gameDayContents}")
 
                 HorizontalCalendar(
                     selectedDate = state.selectedDate,
