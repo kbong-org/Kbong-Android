@@ -14,7 +14,6 @@ import java.time.LocalDate
 @Composable
 fun CalendarMonthItem(
     modifier: Modifier,
-    currentDate: LocalDate,
     selectedDate: LocalDate,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
@@ -46,11 +45,21 @@ fun CalendarMonthItem(
                         if (index in adjustedFirstDayOfWeek..<totalItems) {
                             val contentIndex = index - firstDayOfWeek
                             val historyDayContent = historyDayContentList[contentIndex]
-                            val conversionLocalDate = LocalDate.of(
-                                currentDate.year,
-                                currentDate.month,
-                                historyDayContent.day.toInt()
-                            )
+                            val day = historyDayContent.day.toInt()
+                            val lastDayOfMonth = selectedDate.lengthOfMonth()
+                            val conversionLocalDate = if (day <= lastDayOfMonth) {
+                                LocalDate.of(
+                                    selectedDate.year,
+                                    selectedDate.month,
+                                    day
+                                )
+                            } else {
+                                LocalDate.of(
+                                    selectedDate.year,
+                                    selectedDate.month,
+                                    lastDayOfMonth
+                                )
+                            }
                             CalendarDay(
                                 modifier = Modifier.align(Alignment.Center),
                                 selectedDate = selectedDate,
