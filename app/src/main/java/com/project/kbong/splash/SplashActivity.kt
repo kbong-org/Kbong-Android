@@ -1,4 +1,4 @@
-package com.project.kbong
+package com.project.kbong.splash
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import com.project.kbong.MainActivity
 import com.project.kbong.designsystem.theme.KBongTheme
 import com.project.presentation.splash.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint

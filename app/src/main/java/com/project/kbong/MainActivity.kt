@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.project.kbong.SplashActivity.Companion.IS_TOKEN
 import com.project.kbong.designsystem.theme.KBongTheme
+import com.project.kbong.splash.SplashActivity.Companion.IS_TOKEN
 import com.project.presentation.navigation.NavigationRoute
 import dagger.hilt.android.AndroidEntryPoint
 

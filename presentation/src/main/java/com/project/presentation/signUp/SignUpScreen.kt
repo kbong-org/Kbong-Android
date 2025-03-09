@@ -48,9 +48,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.navOptions
 import com.project.data.LocalNavController
 import com.project.presentation.R
 import com.project.presentation.auth.AuthViewModel
+import com.project.presentation.home.navigateToHome
+import com.project.presentation.navigation.NavigationRoute
 import kotlinx.coroutines.launch
 
 @Composable
@@ -134,9 +137,11 @@ fun SignUpScreen(
                         }
                         2 -> {
                             // 2번(회원가입 완료 화면)에서 "시작하기" 버튼 클릭 시 홈으로 이동
-                            navController.navigate("homeScreen") {
-                                popUpTo("signUpScreen") { inclusive = true }
-                            }
+                            navController.navigateToHome(
+                                navOptions = navOptions {
+                                    popUpTo(NavigationRoute.SignUpScreen.route) { inclusive = true }
+                                }
+                            )
                         }
                     }
                 }

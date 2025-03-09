@@ -1,4 +1,4 @@
-package com.project.kbong
+package com.project.kbong.splash
 
 import android.content.ContentValues.TAG
 import android.util.Log

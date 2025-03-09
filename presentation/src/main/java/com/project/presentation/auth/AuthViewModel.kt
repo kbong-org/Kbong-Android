@@ -1,5 +1,6 @@
 package com.project.presentation.auth
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,9 +12,11 @@ import com.kakao.sdk.user.UserApiClient
 import com.project.domain.model.LoginResult
 import com.project.domain.model.SignUpResult
 import com.project.domain.model.TokenResult
+import com.project.domain.model.user.TokenData
 import com.project.domain.usecase.LoginUseCase
 import com.project.domain.usecase.RefreshTokenUseCase
 import com.project.domain.usecase.SignUpUseCase
+import com.project.domain.usecase.user.UpdateUserTokenUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +27,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val refreshTokenUseCase: RefreshTokenUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
+    private val updateUserTokenUseCase: UpdateUserTokenUseCase
 ) : ViewModel() {
 
     private val _loginResult = MutableStateFlow<LoginResult?>(null)
@@ -102,6 +106,12 @@ class AuthViewModel @Inject constructor(
                     is LoginResult.Success -> {
                         Log.d("KakaoLogin", "✅ 로그인 성공, AccessToken: ${result.user.accessToken}")
                         refreshAuthToken(result.user.refreshToken)
+                        updateUserToken(
+                            token = TokenData(
+                                accessToken = result.user.accessToken,
+                                refreshToken = result.user.refreshToken
+                            )
+                        )
                     }
 
                     is LoginResult.Failure -> {
@@ -149,7 +159,11 @@ class AuthViewModel @Inject constructor(
             _refreshTokenResult.value = result
 
             when (result) {
-                is TokenResult.Success -> Log.d("KakaoLogin", "✅ 토큰 갱신 성공, 새로운 AccessToken: ${result.token.accessToken}")
+                is TokenResult.Success -> Log.d(
+                    "KakaoLogin",
+                    "✅ 토큰 갱신 성공, 새로운 AccessToken: ${result.token.accessToken}"
+                )
+
                 is TokenResult.Failure -> Log.e("KakaoLogin", "❌ 토큰 갱신 실패: ${result.errorMessage}")
             }
         }
@@ -181,6 +195,18 @@ class AuthViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("KakaoLogin", "❌ `idToken` 검증 실패: ${e.localizedMessage}")
             false
+        }
+    }
+
+    private fun updateUserToken(token: TokenData) {
+        viewModelScope.launch {
+            runCatching {
+                updateUserTokenUseCase(userTokenData = token)
+            }.onSuccess {
+                Log.d(TAG, "updateUserToken: 성공")
+            }.onFailure {
+                Log.e(TAG, "updateUserToken: ${it.message}")
+            }
         }
     }
 }

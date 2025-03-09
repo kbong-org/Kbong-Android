@@ -1,4 +1,4 @@
-package com.project.kbong
+package com.project.kbong.splash
 
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
