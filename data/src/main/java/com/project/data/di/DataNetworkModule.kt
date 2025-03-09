@@ -1,5 +1,6 @@
 package com.project.data.di
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.project.domain.usecase.user.GetUserTokenUseCase
@@ -63,6 +64,7 @@ object DataNetworkModule {
                         val accessToken = getUserTokenUseCase().accessToken
                         val newRequest = chain.request().newBuilder().apply {
                             if (accessToken.isNotEmpty()) {
+                                Log.d(TAG, "accessToken $accessToken")
                                 addHeader(
                                     "Authorization",
                                     "Bearer $accessToken"

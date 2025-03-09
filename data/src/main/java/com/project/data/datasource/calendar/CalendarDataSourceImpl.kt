@@ -1,6 +1,7 @@
 package com.project.data.datasource.calendar
 
 import com.project.data.model.BaseModel
+import com.project.data.model.calendar.GameDayListResponse
 import com.project.data.model.calendar.HistoryDayListResponse
 import com.project.data.model.day.DailyLogListResponse
 import com.project.data.service.CalendarService
@@ -18,5 +19,9 @@ class CalendarDataSourceImpl @Inject constructor(
 
     override suspend fun getDailyLog(year: Int, month: Int, day: Int): BaseModel<DailyLogListResponse> {
         return calendarService.getDailyLog(year, month, day)
+    }
+
+    override suspend fun getGameList(year: Int, month: Int): BaseModel<GameDayListResponse> {
+        return calendarService.getGameList(year, month)
     }
 }

@@ -30,7 +30,7 @@ import com.project.kbong.designsystem.utils.DateUtil
 import java.time.LocalDate
 
 @Composable
-fun CalendarDay(
+fun HistoryCalendarDay(
     modifier: Modifier = Modifier,
     selectedDate: LocalDate,
     conversionLocalDate: LocalDate,
@@ -70,8 +70,7 @@ fun CalendarDay(
 
         if (
             historyDayContent.emotion.isNullOrEmpty() &&
-            //DateUtil.toDay() <= selectedDate
-            LocalDate.of(2024, 6, 21) >= conversionLocalDate
+            DateUtil.today() <= selectedDate
         ) {
             Box(
                 modifier = Modifier
@@ -98,7 +97,7 @@ fun CalendarDay(
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
 @Composable
 private fun PreviewCalendarDay() {
-    CalendarDay(
+    HistoryCalendarDay(
         selectedDate = LocalDate.now(),
         conversionLocalDate = LocalDate.of(2024, 6, 21),
         historyDayContent = HistoryDayContent("10", true, null),

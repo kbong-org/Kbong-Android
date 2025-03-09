@@ -1,4 +1,4 @@
-package com.project.domain.usecase
+package com.project.domain.usecase.calendar
 
 import com.project.domain.model.BaseModelContent
 import com.project.domain.model.day.DailyLogList

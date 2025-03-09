@@ -60,7 +60,7 @@ fun CalendarMonthItem(
                                     lastDayOfMonth
                                 )
                             }
-                            CalendarDay(
+                            HistoryCalendarDay(
                                 modifier = Modifier.align(Alignment.Center),
                                 selectedDate = selectedDate,
                                 historyDayContent = historyDayContent,

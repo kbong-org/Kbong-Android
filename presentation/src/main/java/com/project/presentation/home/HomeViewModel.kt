@@ -3,8 +3,8 @@ package com.project.presentation.home
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.project.domain.usecase.GetCalendarHistoryGameUseCase
-import com.project.domain.usecase.GetDailyLogUseCase
+import com.project.domain.usecase.calendar.GetCalendarHistoryGameUseCase
+import com.project.domain.usecase.calendar.GetDailyLogUseCase
 import com.project.presentation.home.HomeViewContract.HomeViewEvent
 import com.project.presentation.home.HomeViewContract.HomeViewSideEffect
 import com.project.presentation.home.HomeViewContract.HomeViewState
