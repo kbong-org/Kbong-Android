@@ -7,8 +7,9 @@ import com.project.data.utils.fromJsonString
 import com.project.data.utils.toJsonString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class KBongDataStoreImpl(
+class KBongDataStoreImpl @Inject constructor(
     context: Context,
 ) : KBongDataStore {
     private val datastore = context.datastore

@@ -7,10 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.runtime.LaunchedEffect
 import com.project.kbong.MainActivity
 import com.project.kbong.designsystem.theme.KBongTheme
 import com.project.presentation.splash.SplashScreen
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("CustomSplashScreen")
 @AndroidEntryPoint
@@ -26,16 +28,23 @@ class SplashActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            KBongTheme {
-                SplashScreen(
-                    onTimeout = {
-                        val intent = Intent(this@SplashActivity, MainActivity::class.java).apply {
-                            putExtra(IS_TOKEN, viewModel.state.value.isToken)
+            LaunchedEffect(Unit) {
+                viewModel.sideEffect.collectLatest { sideEffect ->
+                    when (sideEffect) {
+                        is SplashViewContract.SplashViewSideEffect.StartMainActivity -> {
+                            val intent =
+                                Intent(this@SplashActivity, MainActivity::class.java).apply {
+                                    putExtra(IS_TOKEN, sideEffect.isToken)
+                                }
+                            startActivity(intent)
+                            finish()
                         }
-                        startActivity(intent)
-                        finish()
                     }
-                )
+                }
+
+            }
+            KBongTheme {
+                SplashScreen()
             }
         }
     }

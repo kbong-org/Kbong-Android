@@ -11,7 +11,7 @@ class SplashViewContract {
      * 현재 화면에 필요한 상태들을 모아둔다.
      */
     data class SplashViewState(
-        val isToken: Boolean = false
+        val temp: String = ""
     ) : UiState
 
     /**
@@ -25,6 +25,6 @@ class SplashViewContract {
      * SideEffect로 발생되는 이벤트를 정의
      */
     sealed interface SplashViewSideEffect : UiSideEffect {
-
+        data class StartMainActivity(val isToken: Boolean) : SplashViewSideEffect
     }
 }

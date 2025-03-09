@@ -64,7 +64,10 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun handleKakaoLoginResult(token: com.kakao.sdk.auth.model.OAuthToken?, error: Throwable?) {
+    private fun handleKakaoLoginResult(
+        token: com.kakao.sdk.auth.model.OAuthToken?,
+        error: Throwable?
+    ) {
 
         if (error != null) {
             Log.e("KakaoLogin", "❌ 카카오 로그인 실패: ${error.message}", error)
@@ -98,24 +101,23 @@ class AuthViewModel @Inject constructor(
 
                 Log.d("KakaoLogin", "✅ 카카오 토큰 검증 성공, 서버에 idToken 전송")
 
-                val result = loginUseCase(idToken)
-                _loginResult.value = result
 
-                when (result) {
+                when (val result = loginUseCase(idToken)) {
 
                     is LoginResult.Success -> {
-                        Log.d("KakaoLogin", "✅ 로그인 성공, AccessToken: ${result.user.accessToken}")
+
+                        // suspend 함수 직접 호출
                         refreshAuthToken(result.user.refreshToken)
-                        updateUserToken(
-                            token = TokenData(
-                                accessToken = result.user.accessToken,
-                                refreshToken = result.user.refreshToken
-                            )
-                        )
+
+                        // 위 작업이 완료된 후 실행됨
+                        _loginResult.value = LoginResult.Success(result.user)
+
                     }
 
                     is LoginResult.Failure -> {
                         Log.e("KakaoLogin", "❌ 로그인 실패: ${result.errorMessage}")
+
+                        _loginResult.value = LoginResult.Failure(result.errorMessage)
 
                         if (result.errorMessage.contains("U002_INVALID_TOKEN")) {
                             Log.d("KakaoLogin", "🚀 회원가입 필요, 회원가입 화면으로 이동")
@@ -151,18 +153,23 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun refreshAuthToken(refreshToken: String) {
-
-        viewModelScope.launch {
-
-            val result = refreshTokenUseCase(refreshToken)
+    suspend fun refreshAuthToken(refreshToken: String): TokenResult {
+        return refreshTokenUseCase(refreshToken).also { result ->
             _refreshTokenResult.value = result
 
             when (result) {
-                is TokenResult.Success -> Log.d(
-                    "KakaoLogin",
-                    "✅ 토큰 갱신 성공, 새로운 AccessToken: ${result.token.accessToken}"
-                )
+                is TokenResult.Success -> {
+                    Log.d(
+                        "KakaoLogin",
+                        "✅ 토큰 갱신 성공, 새로운 AccessToken: ${result.token.accessToken}"
+                    )
+                    updateUserToken(
+                        token = TokenData(
+                            accessToken = result.token.accessToken,
+                            refreshToken = result.token.refreshToken
+                        )
+                    )
+                }
 
                 is TokenResult.Failure -> Log.e("KakaoLogin", "❌ 토큰 갱신 실패: ${result.errorMessage}")
             }
@@ -198,15 +205,13 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    private fun updateUserToken(token: TokenData) {
-        viewModelScope.launch {
-            runCatching {
-                updateUserTokenUseCase(userTokenData = token)
-            }.onSuccess {
-                Log.d(TAG, "updateUserToken: 성공")
-            }.onFailure {
-                Log.e(TAG, "updateUserToken: ${it.message}")
-            }
+    private suspend fun updateUserToken(token: TokenData) {
+        runCatching {
+            updateUserTokenUseCase(userTokenData = token)
+        }.onSuccess {
+            Log.d(TAG, "updateUserToken: 성공")
+        }.onFailure {
+            Log.e(TAG, "updateUserToken: ${it.message}")
         }
     }
 }

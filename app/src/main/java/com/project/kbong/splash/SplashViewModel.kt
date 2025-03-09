@@ -34,12 +34,18 @@ class SplashViewModel @Inject constructor(
                 getUserTokenUseCase()
             }.onSuccess { token ->
                 val isToken = token.accessToken.isNotEmpty()
-                reduce {
-                    copy(isToken = isToken)
-                }
+                mainPostSideEffect(isToken = isToken)
             }.onFailure {
                 Log.e(TAG, "getUserToken: ${it.message}")
             }
         }
+    }
+
+    private fun mainPostSideEffect(isToken: Boolean) {
+        postSideEffect(
+            SplashViewContract.SplashViewSideEffect.StartMainActivity(
+                isToken = isToken
+            )
+        )
     }
 }
