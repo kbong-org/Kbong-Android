@@ -26,6 +26,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTeamGray10
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.DateUtil
 import java.time.LocalDate
 
 @Composable
@@ -40,8 +41,7 @@ fun CalendarDay(
     val isSelected = historyDayContent.day == selectedDate.dayOfMonth.toString()
     val currentDateColor = when {
         isSelected -> KBongPrimary
-        LocalDate.of(2024, 6, 21) == conversionLocalDate -> KBongGrayscaleGray1
-        // DateUtil.toDay() == conversionLocalDate -> KBongGrayscaleGray1
+        DateUtil.today() == conversionLocalDate -> KBongGrayscaleGray1
         else -> KBongGrayscaleGray0
     }
     val emotion = when (val painterId = DayEmotion.fromDescription(historyDayContent.emotion)) {

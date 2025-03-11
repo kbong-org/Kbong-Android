@@ -2,10 +2,12 @@ package com.project.data.di
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.project.domain.usecase.user.GetUserTokenUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -47,7 +49,8 @@ object DataNetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        httpLoggingInterceptor: HttpLoggingInterceptor
+        httpLoggingInterceptor: HttpLoggingInterceptor,
+        getUserTokenUseCase: GetUserTokenUseCase
     ): OkHttpClient {
         return OkHttpClient.Builder().apply {
             connectTimeout(40, TimeUnit.SECONDS)
@@ -56,12 +59,18 @@ object DataNetworkModule {
             addInterceptor(httpLoggingInterceptor)
             addInterceptor { chain ->
                 try {
-                    val newRequest = chain.request().newBuilder().apply {
-                        addHeader(
-                            "Authorization",
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwidXNlci1pbmZvIjp7ImlkIjo4LCJuaWNrbmFtZSI6IuyngOqyjCIsInJvbGVzIjpbIk1FTUJFUiJdfSwiaWF0IjoxNzQxMTM1MDQ1LCJleHAiOjE3NDEzOTQyNDV9.ChFX5yztwvWF6svN9_yEl1dc2OUVPXI09XoG4rNXda8"
-                        )
-                    }.build()
+                    val newRequest = runBlocking {
+                        val accessToken = getUserTokenUseCase().accessToken
+                        val newRequest = chain.request().newBuilder().apply {
+                            if (accessToken.isNotEmpty()) {
+                                addHeader(
+                                    "Authorization",
+                                    "Bearer $accessToken"
+                                )
+                            }
+                        }.build()
+                        return@runBlocking newRequest
+                    }
                     chain.proceed(newRequest)
                 } catch (e: Exception) {
                     Log.e("OkHttp", "Error in interceptor", e)

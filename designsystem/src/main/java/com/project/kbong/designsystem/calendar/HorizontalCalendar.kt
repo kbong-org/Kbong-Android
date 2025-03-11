@@ -22,7 +22,6 @@ import java.time.LocalDate
 @Composable
 fun HorizontalCalendar(
     modifier: Modifier = Modifier,
-    currentDate: LocalDate,
     selectedDate: LocalDate,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
@@ -52,7 +51,6 @@ fun HorizontalCalendar(
 
         CalendarMonthItem(
             modifier = Modifier.fillMaxWidth(),
-            currentDate = currentDate,
             selectedDate = selectedDate,
             historyDayContentList = historyDayContentList,
             onSelectedDate = { selectedDate ->

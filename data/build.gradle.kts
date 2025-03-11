@@ -57,4 +57,7 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.okhttp3.logging.interceptor)
+
+    // datastorePreferences
+    implementation(libs.datastore.preferences)
 }

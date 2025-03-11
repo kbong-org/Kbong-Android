@@ -153,7 +153,6 @@ fun HomeScreen(
                 Log.d(TAG, "HomeScreen: state ${state.selectedDate}")
 
                 HorizontalCalendar(
-                    currentDate = state.currentDate,
                     selectedDate = state.selectedDate,
                     historyDayContentList = state.historyDayContents,
                     onSelectedDate = { selectedDate ->

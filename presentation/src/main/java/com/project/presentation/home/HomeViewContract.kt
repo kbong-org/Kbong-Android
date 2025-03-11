@@ -18,8 +18,6 @@ class HomeViewContract {
         val currentDate: LocalDate = LocalDate.now(),
         val selectedDate: LocalDate = LocalDate.now(),
         val selectTab: String = "직관기록",
-        // val currentDate: LocalDate = LocalDate.of(2024,6,1),
-        // val selectedDate: LocalDate = LocalDate.of(2024, 6, 21),
         val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent()),
         val dailyLogList: List<DailyLog> = listOf()
     ) : UiState

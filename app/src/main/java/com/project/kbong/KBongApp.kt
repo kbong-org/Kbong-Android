@@ -31,11 +31,11 @@ import com.project.kbong.navigation.BottomNaviDestination
 import com.project.kbong.navigation.KBongAppState
 import com.project.kbong.navigation.MainNavHost
 import com.project.kbong.navigation.rememberKBongAppState
-import com.project.presentation.navigation.NavigationRoute
 
 @Composable
 fun KBongApp(
     appState: KBongAppState = rememberKBongAppState(),
+    startDestination: String,
 ) {
     Scaffold(
         containerColor = Color.Transparent,
@@ -107,7 +107,7 @@ fun KBongApp(
         MainNavHost(
             appState = appState,
             modifier = Modifier.padding(innerPadding),
-            startDestination = NavigationRoute.KaKaoLoginScreen.route
+            startDestination = startDestination
         )
     }
 }
