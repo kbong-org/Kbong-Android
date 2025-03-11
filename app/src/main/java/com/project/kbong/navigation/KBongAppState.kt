@@ -40,7 +40,7 @@ class KBongAppState(
                 restoreState = true
             }
         when (bottomNavigationDestination) {
-            BottomNaviDestination.CALENDER -> navController.navigateToHome(bottomNavigationOption)
+            BottomNaviDestination.CALENDAR -> navController.navigateToHome(bottomNavigationOption)
             BottomNaviDestination.MY -> navController.navigateToMy(bottomNavigationOption)
         }
     }

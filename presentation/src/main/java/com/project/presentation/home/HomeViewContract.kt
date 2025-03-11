@@ -1,6 +1,6 @@
 package com.project.presentation.home
 
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import com.project.domain.model.day.DailyLog
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
@@ -15,13 +15,12 @@ class HomeViewContract {
      */
     data class HomeViewState(
         val isError: Boolean = false,
-      //  val currentDate: LocalDate = LocalDate.now(),
-       // val selectedDate: LocalDate = LocalDate.now(),
+        val currentDate: LocalDate = LocalDate.now(),
+        val selectedDate: LocalDate = LocalDate.now(),
         val selectTab: String = "직관기록",
-        val currentDate: LocalDate = LocalDate.of(2024,6,1),
-        val selectedDate: LocalDate = LocalDate.of(2024, 6, 21),
+        // val currentDate: LocalDate = LocalDate.of(2024,6,1),
+        // val selectedDate: LocalDate = LocalDate.of(2024, 6, 21),
         val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent()),
-        val firstDayOfWeek: Int = currentDate.dayOfWeek.value,
         val dailyLogList: List<DailyLog> = listOf()
     ) : UiState
 
@@ -31,6 +30,7 @@ class HomeViewContract {
     sealed interface HomeViewEvent : UiEvent {
         data class OnSelectedDate(val onSelectedDate: String) : HomeViewEvent
         data class OnTabSelected(val selectTab: String) : HomeViewEvent
+        data object OnClickMonth : HomeViewEvent
         data object OnClickAddHistory : HomeViewEvent
     }
 
@@ -38,6 +38,6 @@ class HomeViewContract {
      * SideEffect로 발생되는 이벤트를 정의
      */
     sealed interface HomeViewSideEffect : UiSideEffect {
-
+        data object ShowDatePicker : HomeViewSideEffect
     }
 }

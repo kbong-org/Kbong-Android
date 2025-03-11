@@ -1,7 +1,7 @@
 package com.project.data.di
 
-import com.project.domain.repository.calender.CalenderRepository
-import com.project.domain.usecase.GetCalenderHistoryGameUseCase
+import com.project.domain.repository.calendar.CalendarRepository
+import com.project.domain.usecase.GetCalendarHistoryGameUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,10 +15,10 @@ object UseCaseModule {
     @Singleton
     @Provides
     fun provideUpdateUserDataStoreUseCase(
-        calenderRepository: CalenderRepository,
-    ): GetCalenderHistoryGameUseCase {
-        return GetCalenderHistoryGameUseCase(
-            calenderRepository = calenderRepository,
+        calendarRepository: CalendarRepository,
+    ): GetCalendarHistoryGameUseCase {
+        return GetCalendarHistoryGameUseCase(
+            calendarRepository = calendarRepository,
         )
     }
 

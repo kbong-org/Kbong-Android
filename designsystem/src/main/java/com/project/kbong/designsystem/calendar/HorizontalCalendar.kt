@@ -1,4 +1,4 @@
-package com.project.kbong.designsystem.calender
+package com.project.kbong.designsystem.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import com.project.kbong.designsystem.R
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongTypography
@@ -24,7 +24,6 @@ fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     currentDate: LocalDate,
     selectedDate: LocalDate,
-    firstDayOfWeek: Int,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
     ){
@@ -43,7 +42,7 @@ fun HorizontalCalendar(
                     modifier = Modifier.weight(1F),
                     text = text,
                     textAlign = TextAlign.Center,
-                    style = KBongTypography.CalenderHeader,
+                    style = KBongTypography.CalendarHeader,
                     color = KBongGrayscaleGray5
                 )
             }
@@ -53,7 +52,6 @@ fun HorizontalCalendar(
 
         CalendarMonthItem(
             modifier = Modifier.fillMaxWidth(),
-            firstDayOfWeek = firstDayOfWeek,
             currentDate = currentDate,
             selectedDate = selectedDate,
             historyDayContentList = historyDayContentList,

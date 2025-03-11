@@ -1,4 +1,4 @@
-package com.project.kbong.designsystem.calender
+package com.project.kbong.designsystem.calendar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,19 +8,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.project.domain.model.calender.HistoryDayContent
+import com.project.domain.model.calendar.HistoryDayContent
 import java.time.LocalDate
 
 @Composable
 fun CalendarMonthItem(
     modifier: Modifier,
-    firstDayOfWeek: Int,
     currentDate: LocalDate,
     selectedDate: LocalDate,
     historyDayContentList: List<HistoryDayContent>,
     onSelectedDate: (LocalDate) -> Unit
 ) {
-
+    // 현재 월의 1일 계산
+    val firstDayOfMonth = selectedDate.withDayOfMonth(1)
+    // 해당 월의 1일의 요일 계산 (7: 일요일, 1: 월요일, ..., 6: 토요일)
+    val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value
+    // 일요일을 0으로, 나머지 요일을 1-6으로 조정
+    val adjustedFirstDayOfWeek = if (firstDayOfWeek == 7) 0 else firstDayOfWeek
     // 전체 아이템 수 계산 (빈 공간 + 실제 날짜)
     val totalItems = firstDayOfWeek + historyDayContentList.size
     // 필요한 행 수 계산 (7일씩 표시)
@@ -39,7 +43,7 @@ fun CalendarMonthItem(
                     Box(
                         modifier = Modifier.weight(1f)
                     ) {
-                        if (index in firstDayOfWeek..<totalItems) {
+                        if (index in adjustedFirstDayOfWeek..<totalItems) {
                             val contentIndex = index - firstDayOfWeek
                             val historyDayContent = historyDayContentList[contentIndex]
                             val conversionLocalDate = LocalDate.of(

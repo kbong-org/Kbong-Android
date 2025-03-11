@@ -7,11 +7,11 @@ import androidx.navigation.compose.composable
 import com.project.presentation.navigation.NavigationRoute
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) =
-    navigate(NavigationRoute.CalenderScreen.route, navOptions)
+    navigate(NavigationRoute.CalendarScreen.route, navOptions)
 
 fun NavGraphBuilder.homeNavigation() {
     composable(
-        route = NavigationRoute.CalenderScreen.route,
+        route = NavigationRoute.CalendarScreen.route,
     ) {
         HomeRoute()
     }

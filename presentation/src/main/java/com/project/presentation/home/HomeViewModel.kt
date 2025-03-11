@@ -3,7 +3,7 @@ package com.project.presentation.home
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.project.domain.usecase.GetCalenderHistoryGameUseCase
+import com.project.domain.usecase.GetCalendarHistoryGameUseCase
 import com.project.domain.usecase.GetDailyLogUseCase
 import com.project.presentation.home.HomeViewContract.HomeViewEvent
 import com.project.presentation.home.HomeViewContract.HomeViewSideEffect
@@ -16,24 +16,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCalenderHistoryGameUseCase: GetCalenderHistoryGameUseCase,
+    private val getCalendarHistoryGameUseCase: GetCalendarHistoryGameUseCase,
     private val getDailyLogUseCase: GetDailyLogUseCase,
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewSideEffect>() {
 
-
     init {
-        getCalenderHistoryGame(
-            year = state.value.currentDate.year,
-            month = state.value.currentDate.monthValue
-            /* year = 2024,
-             month = 6*/
-        )
+        loadInitialData()
+    }
 
-        getDailyLog(
-            year = state.value.currentDate.year,
-            month = state.value.currentDate.monthValue,
-            day = state.value.currentDate.dayOfMonth
-        )
+    private fun loadInitialData() {
+        val currentDate = state.value.currentDate
+        getCalendarHistoryGame(currentDate.year, currentDate.monthValue)
+        getDailyLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
     }
 
     override fun createInitialState(): HomeViewState {
@@ -53,6 +47,10 @@ class HomeViewModel @Inject constructor(
             HomeViewEvent.OnClickAddHistory -> {
                 // postSideEffect()
             }
+
+            HomeViewEvent.OnClickMonth -> {
+                postSideEffect(HomeViewSideEffect.ShowDatePicker)
+            }
         }
     }
 
@@ -61,12 +59,23 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateSelectedDate(selectedDate: String) {
+        val beforeMonth = state.value.selectedDate.monthValue
         reduce { copy(selectedDate = selectedDate.stringToLocalDate()) }
-        getDailyLog(
-            year = state.value.selectedDate.year,
-            month = state.value.selectedDate.monthValue,
-            day = state.value.selectedDate.dayOfMonth
-        )
+        with(state.value.selectedDate) {
+            getDailyLog(
+                year = year,
+                month = monthValue,
+                day = dayOfMonth
+            )
+            // 선택한 달이 전에 선택한 달과 다를때
+            if (beforeMonth != monthValue) {
+                getCalendarHistoryGame(
+                    year = year,
+                    month = monthValue
+                )
+            }
+        }
+
     }
 
     private fun updateSelectedTab(selectedTab: String) {
@@ -74,21 +83,21 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getCalenderHistoryGame(year: Int, month: Int) {
+    fun getCalendarHistoryGame(year: Int, month: Int) {
         viewModelScope.launch {
             runCatching {
-                getCalenderHistoryGameUseCase(year, month)
+                getCalendarHistoryGameUseCase(year, month)
             }.onSuccess { response ->
                 if (response.isSuccess) {
                     response.data?.let { data ->
                         reduce { copy(historyDayContents = data.historyDayListContent) }
                     }
                 } else {
-                    Log.e(TAG, "getCalenderHistoryGame else : ${response.errorResponse}")
+                    Log.e(TAG, "getCalendarHistoryGame else : ${response.errorResponse}")
                     errorReduce()
                 }
             }.onFailure {
-                Log.e(TAG, "getCalenderHistoryGame: ${it.message}")
+                Log.e(TAG, "getCalendarHistoryGame: ${it.message}")
                 errorReduce()
             }
         }

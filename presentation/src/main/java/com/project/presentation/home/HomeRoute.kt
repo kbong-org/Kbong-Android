@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -22,12 +26,14 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.project.kbong.designsystem.calender.HorizontalCalendar
+import com.project.kbong.designsystem.calendar.HorizontalCalendar
+import com.project.kbong.designsystem.datepicker.DatePickerModal
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.tab.KBongTabBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
+import com.project.kbong.designsystem.utils.DateUtil.today
 import com.project.presentation.R
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
@@ -40,20 +46,44 @@ fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsState()
+    var isShowDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        when (viewModel.sideEffect) {
-
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                HomeViewContract.HomeViewSideEffect.ShowDatePicker -> {
+                    isShowDatePicker = true
+                }
+            }
         }
+
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        HomeScreen(
+            modifier = modifier,
+            state = state,
+            homeViewEvent = { event ->
+                viewModel.intent(event)
+            }
+        )
+        if (isShowDatePicker) {
+            DatePickerModal(
+                selectedDate = state.selectedDate,
+                onDateSelected = { date ->
+                    viewModel.intent(
+                        event = HomeViewContract.HomeViewEvent.OnSelectedDate(
+                            (date ?: today()).localDateToString()
+                        )
+                    )
+                },
+                onDismiss = {
+                    isShowDatePicker = false
+                }
+            )
+        }
+
     }
 
-    HomeScreen(
-        modifier = modifier,
-        state = state,
-        homeViewEvent = { event ->
-            viewModel.intent(event)
-        }
-    )
 }
 
 @Composable
@@ -106,21 +136,25 @@ fun HomeScreen(
 
             item {
                 DateTopContent(
-                    currentMonth = "2",
+                    currentMonth = "${state.selectedDate.monthValue}",
                     myTeam = "두산 베어스",
                     teamColor = KBongTeamBears,
-                    onClickMonth = {}
+                    onClickMonth = {
+                        homeViewEvent(
+                            HomeViewContract.HomeViewEvent.OnClickMonth
+                        )
+                    }
                 )
             }
 
             item {
                 Log.d(TAG, "HomeScreen: state ${state.historyDayContents}")
-                Log.d(TAG, "HomeScreen: state ${state.currentDate}") // 2025-02-10
+                Log.d(TAG, "HomeScreen: state ${state.currentDate}")
+                Log.d(TAG, "HomeScreen: state ${state.selectedDate}")
 
                 HorizontalCalendar(
                     currentDate = state.currentDate,
                     selectedDate = state.selectedDate,
-                    firstDayOfWeek = state.firstDayOfWeek,
                     historyDayContentList = state.historyDayContents,
                     onSelectedDate = { selectedDate ->
                         homeViewEvent(
