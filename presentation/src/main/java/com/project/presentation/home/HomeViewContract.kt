@@ -1,8 +1,8 @@
 package com.project.presentation.home
 
+import com.project.domain.model.calendar.GameDayContent
 import com.project.domain.model.calendar.HistoryDayContent
 import com.project.domain.model.day.DailyLog
-import com.project.domain.model.day.GameDayContent
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
 import com.project.presentation.mvi.UiState

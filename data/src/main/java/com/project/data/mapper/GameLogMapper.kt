@@ -2,8 +2,8 @@ package com.project.data.mapper
 
 import com.project.data.model.calendar.GameDayListResponse
 import com.project.data.model.calendar.GameDayResponse
-import com.project.domain.model.day.GameDayContent
-import com.project.domain.model.day.GameDayListContent
+import com.project.domain.model.calendar.GameDayContent
+import com.project.domain.model.calendar.GameDayListContent
 
 
 fun GameDayListResponse.toDomain(): GameDayListContent {

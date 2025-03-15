@@ -1,4 +1,4 @@
-package com.project.domain.model.day
+package com.project.domain.model.calendar
 
 
 data class GameDayListContent(

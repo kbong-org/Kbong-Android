@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.project.domain.model.calendar.GameDayContent
 import com.project.domain.model.calendar.HistoryDayContent
-import com.project.domain.model.day.GameDayContent
 import com.project.kbong.designsystem.R
 import java.time.LocalDate
 

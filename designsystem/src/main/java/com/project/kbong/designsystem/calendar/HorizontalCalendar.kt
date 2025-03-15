@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.project.domain.model.calendar.GameDayContent
 import com.project.domain.model.calendar.HistoryDayContent
-import com.project.domain.model.day.GameDayContent
 import com.project.kbong.designsystem.R
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongTypography
