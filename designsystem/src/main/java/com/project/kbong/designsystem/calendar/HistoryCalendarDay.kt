@@ -70,7 +70,8 @@ fun HistoryCalendarDay(
 
         if (
             historyDayContent.emotion.isNullOrEmpty() &&
-            DateUtil.today() <= selectedDate
+            DateUtil.today().dayOfMonth >= historyDayContent.day.toInt() &&
+            historyDayContent.hasGame
         ) {
             Box(
                 modifier = Modifier
