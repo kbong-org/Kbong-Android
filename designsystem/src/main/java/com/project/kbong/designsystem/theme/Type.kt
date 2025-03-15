@@ -18,6 +18,7 @@ object FontSizeTokens {
     val Label2 = 13.sp
     val Caption1 = 12.sp
     val Caption2 = 11.sp
+    val Caption3 = 10.sp
 }
 
 object KBongTypography {
@@ -128,6 +129,11 @@ object KBongTypography {
         fontSize = FontSizeTokens.Caption2,
         letterSpacing = 0.0311.em,
         lineHeight = 14.sp
+    )
+
+    val Caption3Bold = baseTextStyle.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = FontSizeTokens.Caption3,
     )
 
     val CalendarHeader = baseTextStyle.copy(
