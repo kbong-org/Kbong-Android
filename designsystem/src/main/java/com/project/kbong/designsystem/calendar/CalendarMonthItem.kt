@@ -7,15 +7,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.project.domain.model.calendar.HistoryDayContent
+import com.project.domain.model.day.GameDayContent
+import com.project.kbong.designsystem.R
 import java.time.LocalDate
 
 @Composable
 fun CalendarMonthItem(
     modifier: Modifier,
     selectedDate: LocalDate,
+    selectTab: String,
+    isMyTeam: Boolean,
     historyDayContentList: List<HistoryDayContent>,
+    gameDayListContent: List<GameDayContent>,
     onSelectedDate: (LocalDate) -> Unit
 ) {
     // 현재 월의 1일 계산
@@ -44,35 +50,67 @@ fun CalendarMonthItem(
                     ) {
                         if (index in adjustedFirstDayOfWeek..<totalItems) {
                             val contentIndex = index - firstDayOfWeek
-                            val historyDayContent = historyDayContentList[contentIndex]
-                            val day = historyDayContent.day.toInt()
-                            val lastDayOfMonth = selectedDate.lengthOfMonth()
-                            val conversionLocalDate = if (day <= lastDayOfMonth) {
-                                LocalDate.of(
-                                    selectedDate.year,
-                                    selectedDate.month,
-                                    day
-                                )
-                            } else {
-                                LocalDate.of(
-                                    selectedDate.year,
-                                    selectedDate.month,
-                                    lastDayOfMonth
-                                )
-                            }
-                            HistoryCalendarDay(
-                                modifier = Modifier.align(Alignment.Center),
-                                selectedDate = selectedDate,
-                                historyDayContent = historyDayContent,
-                                conversionLocalDate = conversionLocalDate,
-                                onSelectedDate = {
-                                    onSelectedDate(conversionLocalDate)
+
+                            when (selectTab) {
+                                stringResource(R.string.game_history) -> {
+                                    val historyDayContent = historyDayContentList[contentIndex]
+                                    val day = historyDayContent.day.toInt()
+
+                                    val conversionLocalDate =
+                                        calculateConversionDate(day, selectedDate)
+
+                                    HistoryCalendarDay(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        selectedDate = selectedDate,
+                                        historyDayContent = historyDayContent,
+                                        conversionLocalDate = conversionLocalDate,
+                                        onSelectedDate = {
+                                            onSelectedDate(conversionLocalDate)
+                                        }
+                                    )
                                 }
-                            )
+
+                                stringResource(R.string.game_schedule) -> {
+                                    val gameDayContent = gameDayListContent[contentIndex]
+                                    val day = gameDayContent.day.toInt()
+
+                                    val conversionLocalDate =
+                                        calculateConversionDate(day, selectedDate)
+
+                                    GameCalendarDay(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        selectedDate = selectedDate,
+                                        gameDayContent = gameDayContent,
+                                        isMyTeam = isMyTeam,
+                                        conversionLocalDate = conversionLocalDate,
+                                        onSelectedDate = {
+                                            onSelectedDate(conversionLocalDate)
+                                        }
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    }
+}
+
+
+private fun calculateConversionDate(day: Int, selectedDate: LocalDate): LocalDate {
+    val lastDayOfMonth = selectedDate.lengthOfMonth()
+    return if (day <= lastDayOfMonth) {
+        LocalDate.of(
+            selectedDate.year,
+            selectedDate.month,
+            day
+        )
+    } else {
+        LocalDate.of(
+            selectedDate.year,
+            selectedDate.month,
+            lastDayOfMonth
+        )
     }
 }

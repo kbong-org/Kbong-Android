@@ -156,6 +156,9 @@ fun HomeScreen(
                 HorizontalCalendar(
                     selectedDate = state.selectedDate,
                     historyDayContentList = state.historyDayContents,
+                    gameDayListContent = state.gameDayContents,
+                    selectTab = state.selectTab,
+                    isMyTeam = state.myTeamDisplayName.isNotEmpty(),
                     onSelectedDate = { selectedDate ->
                         homeViewEvent(
                             HomeViewContract.HomeViewEvent.OnSelectedDate(selectedDate.localDateToString())

@@ -36,8 +36,8 @@ enum class GameResultType(
     );
 
     companion object {
-        fun fromTypeData(type: String): GameResultType {
-            return GameResultType.entries.find { it.type == type } ?: WIN
+        fun fromTypeData(type: String?): GameResultType? {
+            return GameResultType.entries.find { it.type == type }
         }
     }
 

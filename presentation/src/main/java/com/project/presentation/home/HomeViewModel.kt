@@ -137,7 +137,7 @@ class HomeViewModel @Inject constructor(
                     response.data?.let { data ->
                         reduce {
                             copy(
-                                myTeamDisplayName = data.myTeamDisplayName,
+                                myTeamDisplayName = data.myTeamDisplayName ?: "",
                                 gameDayContents = data.gameDayContent
                             )
                         }

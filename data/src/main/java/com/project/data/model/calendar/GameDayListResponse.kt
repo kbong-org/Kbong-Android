@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GameDayListResponse(
     @SerializedName("myTeamDisplayName")
-    val myTeamDisplayName: String,
+    val myTeamDisplayName: String? = null,
 
     @SerializedName("days")
     val gameDayResponse: List<GameDayResponse>
