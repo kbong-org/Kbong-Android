@@ -30,8 +30,16 @@ fun CalendarMonthItem(
     val firstDayOfWeek = firstDayOfMonth.dayOfWeek.value
     // 일요일을 0으로, 나머지 요일을 1-6으로 조정
     val adjustedFirstDayOfWeek = if (firstDayOfWeek == 7) 0 else firstDayOfWeek
+
+    // 현재 선택된 탭에 따라 적절한 데이터 리스트 선택
+    val contentList = when (selectTab) {
+        stringResource(R.string.game_history) -> historyDayContentList
+        stringResource(R.string.game_schedule) -> gameDayListContent
+        else -> emptyList()
+    }
+
     // 전체 아이템 수 계산 (빈 공간 + 실제 날짜)
-    val totalItems = firstDayOfWeek + historyDayContentList.size
+    val totalItems = firstDayOfWeek + contentList.size
     // 필요한 행 수 계산 (7일씩 표시)
     val rows = (totalItems + 6) / 7
 

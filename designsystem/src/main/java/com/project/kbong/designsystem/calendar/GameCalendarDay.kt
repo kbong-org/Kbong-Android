@@ -68,7 +68,7 @@ fun GameCalendarDay(
         if (
             !isMyTeam ||
             gameDayContent.hasGame &&
-            DateUtil.today().dayOfMonth <= gameDayContent.day.toInt()
+            DateUtil.today() <= conversionLocalDate
         ) {
             Box(
                 modifier = Modifier
@@ -103,6 +103,5 @@ private fun PreviewCalendarDay() {
         onSelectedDate = {
 
         },
-
     )
 }

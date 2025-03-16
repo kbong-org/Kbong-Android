@@ -70,7 +70,7 @@ fun HistoryCalendarDay(
 
         if (
             historyDayContent.emotion.isNullOrEmpty() &&
-            DateUtil.today().dayOfMonth >= historyDayContent.day.toInt() &&
+            DateUtil.today() >= conversionLocalDate &&
             historyDayContent.hasGame
         ) {
             Box(

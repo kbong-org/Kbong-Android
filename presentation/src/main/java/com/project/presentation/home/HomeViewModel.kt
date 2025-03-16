@@ -209,16 +209,16 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateData() {
-        val currentDate = state.value.currentDate
+        val selectedDate = state.value.selectedDate
         when (state.value.selectTab) {
             "직관기록" -> {
-                getCalendarHistoryGame(currentDate.year, currentDate.monthValue)
-                getDailyLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+                getCalendarHistoryGame(selectedDate.year, selectedDate.monthValue)
+                getDailyLog(selectedDate.year, selectedDate.monthValue, selectedDate.dayOfMonth)
             }
 
             "경기일정" -> {
-                getGameCalendar(currentDate.year, currentDate.monthValue)
-                getDailyGameLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+                getGameCalendar(selectedDate.year, selectedDate.monthValue)
+                getDailyGameLog(selectedDate.year, selectedDate.monthValue, selectedDate.dayOfMonth)
             }
         }
     }
