@@ -2,6 +2,7 @@ package com.project.presentation.home
 
 import com.project.domain.model.calendar.GameDayContent
 import com.project.domain.model.calendar.HistoryDayContent
+import com.project.domain.model.day.DailyGameLog
 import com.project.domain.model.day.DailyLog
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
@@ -21,8 +22,9 @@ class HomeViewContract {
         val selectTab: String = "직관기록",
         val historyDayContents: List<HistoryDayContent> = listOf(HistoryDayContent()),
         val dailyLogList: List<DailyLog> = listOf(),
+        val dailyGameLogList: List<DailyGameLog> = listOf(),
         val gameDayContents: List<GameDayContent> = listOf(),
-        val myTeamDisplayName: String = ""
+        val myTeamDisplayName: String = "",
     ) : UiState
 
     /**
