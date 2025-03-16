@@ -61,6 +61,13 @@ object KBongTypography {
         lineHeight = 24.sp
     )
 
+    val Body1NormalSemiBold = baseTextStyle.copy(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = FontSizeTokens.Body1,
+        letterSpacing = 0.057.em,
+        lineHeight = 24.sp
+    )
+
     val Body1Reading = baseTextStyle.copy(
         fontWeight = FontWeight.Medium,
         fontSize = FontSizeTokens.Body1,
@@ -105,6 +112,13 @@ object KBongTypography {
 
     val Label2Medium = baseTextStyle.copy(
         fontWeight = FontWeight.Medium,
+        fontSize = FontSizeTokens.Label2,
+        letterSpacing = 0.0194.em,
+        lineHeight = 18.sp
+    )
+
+    val Label2Regular = baseTextStyle.copy(
+        fontWeight = FontWeight.Normal,
         fontSize = FontSizeTokens.Label2,
         letterSpacing = 0.0194.em,
         lineHeight = 18.sp

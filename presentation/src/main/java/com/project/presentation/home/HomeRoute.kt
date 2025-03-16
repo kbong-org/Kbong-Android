@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,6 +36,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.kbong.designsystem.utils.DateUtil.today
 import com.project.presentation.R
+import com.project.presentation.home.day.DayGameHistoryContent
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
 import com.project.presentation.home.day.EmptyGameContent
@@ -93,9 +95,14 @@ fun HomeScreen(
     homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit,
 ) {
     val homeTabTitleList = stringArrayResource(R.array.home_tab).toList()
-    val hasGame = state.historyDayContents.firstOrNull {
-        it.day.toInt() == state.selectedDate.dayOfMonth
-    }?.hasGame ?: false
+    val selectedDay = state.selectedDate.dayOfMonth
+
+    val hasGame = if (state.selectTab == stringResource(R.string.game_history)) {
+        state.historyDayContents.firstOrNull { it.day.toInt() == selectedDay }?.hasGame ?: false
+    } else {
+        state.gameDayContents.firstOrNull { it.day.toInt() == selectedDay }?.hasGame ?: false
+    }
+
 
     Column(
         modifier = modifier
@@ -183,7 +190,7 @@ fun HomeScreen(
                         EmptyGameContent()
                     }
 
-                    state.dailyLogList.isEmpty() -> {
+                    state.dailyLogList.isEmpty() && state.selectTab == stringResource(R.string.game_history) -> {
                         EmptyDayHistoryContent(
                             onClickGoLog = {
                                 homeViewEvent(
@@ -193,7 +200,8 @@ fun HomeScreen(
                         )
                     }
 
-                    else -> {
+                    // 직관기록 일별 컨텐츠
+                    state.selectTab == stringResource(R.string.game_history) -> {
                         DayHistoryContent(
                             selectedDate = state.selectedDate,
                             dailyLogList = state.dailyLogList,
@@ -202,6 +210,15 @@ fun HomeScreen(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory
                                 )
                             }
+                        )
+                    }
+
+
+                    // 일별 경기기록
+                    else -> {
+                        DayGameHistoryContent(
+                            modifier = Modifier.padding(top = 20.dp),
+                            dailyGameLogList = state.dailyGameLogList
                         )
                     }
                 }
