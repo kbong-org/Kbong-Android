@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.project.data.LocalNavController
 import com.project.presentation.auth.kakaoLoginNavigation
 import com.project.presentation.home.homeNavigation
+import com.project.presentation.logwrite.logWriteNavigation
 import com.project.presentation.my.myNavigation
 import com.project.presentation.signUp.signUpNavigation
 
@@ -26,6 +27,7 @@ fun MainNavHost(
             signUpNavigation(navController = appState.navController)
             homeNavigation()
             myNavigation()
+            logWriteNavigation()
         }
     }
 }

@@ -5,4 +5,5 @@ sealed class NavigationRoute(val route: String) {
     data object SignUpScreen : NavigationRoute("signup")
     data object CalendarScreen : NavigationRoute("calendar")
     data object MyScreen : NavigationRoute("my")
+    data object LogWriteTeamSelectScreen : NavigationRoute("logWriteSelect")
 }
