@@ -1,5 +1,6 @@
 package com.project.presentation.my
 
+import com.project.domain.model.user.UserInfoContent
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
 import com.project.presentation.mvi.UiState
@@ -10,7 +11,8 @@ class MyContract {
      * 현재 화면에 필요한 상태들을 모아둔다.
      */
     data class MyViewState(
-        val temp: String = ""
+        val isError: Boolean = false,
+        val userInfoContent: UserInfoContent = UserInfoContent()
     ) : UiState
 
     /**
