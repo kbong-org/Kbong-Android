@@ -19,17 +19,19 @@ import com.project.kbong.designsystem.theme.KBongTypography
 @Composable
 fun KBongTag(
     modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+    roundedCornerShapeDp: Int = 8,
     tagName: String,
     backgroundColor: Color,
     textColor: Color
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(roundedCornerShapeDp.dp))
             .background(backgroundColor)
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
+            modifier = textModifier,
             text = tagName,
             color = textColor,
             style = KBongTypography.Caption2.copy(fontWeight = FontWeight.SemiBold)

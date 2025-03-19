@@ -18,6 +18,7 @@ object FontSizeTokens {
     val Label2 = 13.sp
     val Caption1 = 12.sp
     val Caption2 = 11.sp
+    val Caption3 = 10.sp
 }
 
 object KBongTypography {
@@ -55,6 +56,13 @@ object KBongTypography {
 
     val Body1Normal = baseTextStyle.copy(
         fontWeight = FontWeight.Medium,
+        fontSize = FontSizeTokens.Body1,
+        letterSpacing = 0.057.em,
+        lineHeight = 24.sp
+    )
+
+    val Body1NormalSemiBold = baseTextStyle.copy(
+        fontWeight = FontWeight.SemiBold,
         fontSize = FontSizeTokens.Body1,
         letterSpacing = 0.057.em,
         lineHeight = 24.sp
@@ -109,6 +117,13 @@ object KBongTypography {
         lineHeight = 18.sp
     )
 
+    val Label2Regular = baseTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = FontSizeTokens.Label2,
+        letterSpacing = 0.0194.em,
+        lineHeight = 18.sp
+    )
+
     val Caption1 = baseTextStyle.copy(
         fontWeight = FontWeight.Normal,
         fontSize = FontSizeTokens.Caption1,
@@ -128,6 +143,11 @@ object KBongTypography {
         fontSize = FontSizeTokens.Caption2,
         letterSpacing = 0.0311.em,
         lineHeight = 14.sp
+    )
+
+    val Caption3Bold = baseTextStyle.copy(
+        fontWeight = FontWeight.Bold,
+        fontSize = FontSizeTokens.Caption3,
     )
 
     val CalendarHeader = baseTextStyle.copy(

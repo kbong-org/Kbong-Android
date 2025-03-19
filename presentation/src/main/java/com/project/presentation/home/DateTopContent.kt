@@ -49,22 +49,23 @@ fun DateTopContent(
                 contentDescription = "monthArrow",
             )
         }
-        Box(
-            modifier = Modifier
-                .padding(top = 18.dp, bottom = 14.dp, end = 16.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .align(Alignment.CenterEnd)
-                .background(teamColor)
-        ) {
-            Text(
+        if (myTeam.isNotEmpty()) {
+            Box(
                 modifier = Modifier
-                    .padding(vertical = 8.dp, horizontal = 14.dp),
-                text = myTeam,
-                color = Color.White,
-                style = KBongTypography.Caption1,
-            )
+                    .padding(top = 18.dp, bottom = 14.dp, end = 16.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .align(Alignment.CenterEnd)
+                    .background(teamColor)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp, horizontal = 14.dp),
+                    text = myTeam,
+                    color = Color.White,
+                    style = KBongTypography.Caption1,
+                )
+            }
         }
-
     }
 }
 

@@ -3,8 +3,10 @@ package com.project.presentation.home
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
-import com.project.domain.usecase.GetCalendarHistoryGameUseCase
-import com.project.domain.usecase.GetDailyLogUseCase
+import com.project.domain.usecase.calendar.GetCalendarHistoryGameUseCase
+import com.project.domain.usecase.calendar.GetDailyGameLogUseCase
+import com.project.domain.usecase.calendar.GetDailyLogUseCase
+import com.project.domain.usecase.calendar.GetGameLogUseCase
 import com.project.presentation.home.HomeViewContract.HomeViewEvent
 import com.project.presentation.home.HomeViewContract.HomeViewSideEffect
 import com.project.presentation.home.HomeViewContract.HomeViewState
@@ -18,6 +20,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getCalendarHistoryGameUseCase: GetCalendarHistoryGameUseCase,
     private val getDailyLogUseCase: GetDailyLogUseCase,
+    private val getGameLogUseCase: GetGameLogUseCase,
+    private val getDailyGameLogUseCase: GetDailyGameLogUseCase
 ) : BaseViewModel<HomeViewState, HomeViewEvent, HomeViewSideEffect>() {
 
     init {
@@ -28,6 +32,8 @@ class HomeViewModel @Inject constructor(
         val currentDate = state.value.currentDate
         getCalendarHistoryGame(currentDate.year, currentDate.monthValue)
         getDailyLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
+        getGameCalendar(currentDate.year, currentDate.monthValue)
+        getDailyGameLog(currentDate.year, currentDate.monthValue, currentDate.dayOfMonth)
     }
 
     override fun createInitialState(): HomeViewState {
@@ -37,11 +43,20 @@ class HomeViewModel @Inject constructor(
     override suspend fun handleEvent(event: HomeViewEvent) {
         when (event) {
             is HomeViewEvent.OnSelectedDate -> {
-                updateSelectedDate(event.onSelectedDate)
+                when (state.value.selectTab) {
+                    "직관기록" -> {
+                        updateLogSelectedDate(event.onSelectedDate)
+                    }
+
+                    "경기일정" -> {
+                        updateGameLogSelectedDate(event.onSelectedDate)
+                    }
+                }
             }
 
             is HomeViewEvent.OnTabSelected -> {
                 updateSelectedTab(event.selectTab)
+                updateData()
             }
 
             HomeViewEvent.OnClickAddHistory -> {
@@ -58,7 +73,7 @@ class HomeViewModel @Inject constructor(
         reduce { copy(isError = true) }
     }
 
-    private fun updateSelectedDate(selectedDate: String) {
+    private fun updateLogSelectedDate(selectedDate: String) {
         val beforeMonth = state.value.selectedDate.monthValue
         reduce { copy(selectedDate = selectedDate.stringToLocalDate()) }
         with(state.value.selectedDate) {
@@ -75,7 +90,25 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
+    }
 
+    private fun updateGameLogSelectedDate(selectedDate: String) {
+        val beforeMonth = state.value.selectedDate.monthValue
+        reduce { copy(selectedDate = selectedDate.stringToLocalDate()) }
+        with(state.value.selectedDate) {
+            getDailyGameLog(
+                year = year,
+                monthValue = monthValue,
+                dayOfMonth = dayOfMonth
+            )
+            // 선택한 달이 전에 선택한 달과 다를때
+            if (beforeMonth != monthValue) {
+                getGameCalendar(
+                    year = year,
+                    monthValue = monthValue
+                )
+            }
+        }
     }
 
     private fun updateSelectedTab(selectedTab: String) {
@@ -83,7 +116,7 @@ class HomeViewModel @Inject constructor(
     }
 
 
-    fun getCalendarHistoryGame(year: Int, month: Int) {
+    private fun getCalendarHistoryGame(year: Int, month: Int) {
         viewModelScope.launch {
             runCatching {
                 getCalendarHistoryGameUseCase(year, month)
@@ -122,5 +155,73 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+
+    // 월별 경기 일정 가져오기
+    private fun getGameCalendar(year: Int, monthValue: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getGameLogUseCase(year, monthValue)
+            }.onSuccess { response ->
+                if (response.isSuccess) {
+                    response.data?.let { data ->
+                        reduce {
+                            copy(
+                                myTeamDisplayName = data.myTeamDisplayName ?: "",
+                                gameDayContents = data.gameDayContent
+                            )
+                        }
+                    }
+                } else {
+                    Log.e(TAG, "getGameCalendar else : ${response.errorResponse}")
+                    errorReduce()
+                }
+            }.onFailure {
+                Log.e(TAG, "getGameCalendar Error ${it.message}")
+                errorReduce()
+            }
+        }
+    }
+
+    private fun getDailyGameLog(year: Int, monthValue: Int, dayOfMonth: Int) {
+        viewModelScope.launch {
+            runCatching {
+                getDailyGameLogUseCase(
+                    year = year,
+                    month = monthValue,
+                    day = dayOfMonth
+                )
+            }.onSuccess { response ->
+                if (response.isSuccess) {
+                    response.data?.let {
+                        reduce { copy(dailyGameLogList = it.dailyGameLogList) }
+                    }
+                } else {
+                    Log.e(TAG, "getDailyGameLog else : ${response.errorResponse}")
+                    errorReduce()
+                }
+
+            }.onFailure {
+                Log.e(TAG, "getDailyGameLog: ${it.message}")
+                errorReduce()
+            }
+        }
+    }
+
+    private fun updateData() {
+        val selectedDate = state.value.selectedDate
+        when (state.value.selectTab) {
+            "직관기록" -> {
+                getCalendarHistoryGame(selectedDate.year, selectedDate.monthValue)
+                getDailyLog(selectedDate.year, selectedDate.monthValue, selectedDate.dayOfMonth)
+            }
+
+            "경기일정" -> {
+                getGameCalendar(selectedDate.year, selectedDate.monthValue)
+                getDailyGameLog(selectedDate.year, selectedDate.monthValue, selectedDate.dayOfMonth)
+            }
+        }
+    }
+
 
 }

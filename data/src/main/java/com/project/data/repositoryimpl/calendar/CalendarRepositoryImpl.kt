@@ -4,7 +4,9 @@ import com.project.data.datasource.calendar.CalendarDataSource
 import com.project.data.mapper.toBaseDomain
 import com.project.data.mapper.toDomain
 import com.project.domain.model.BaseModelContent
+import com.project.domain.model.calendar.GameDayListContent
 import com.project.domain.model.calendar.HistoryDayListContent
+import com.project.domain.model.day.DailyGameLogList
 import com.project.domain.model.day.DailyLogList
 import com.project.domain.repository.calendar.CalendarRepository
 import javax.inject.Inject
@@ -31,5 +33,22 @@ class CalendarRepositoryImpl @Inject constructor(
         return calendarDataSource.getDailyLog(year = year, month = month, day = day).toBaseDomain {
             it.toDomain()
         }
+    }
+
+    override suspend fun getGameList(year: Int, month: Int): BaseModelContent<GameDayListContent> {
+        return calendarDataSource.getGameList(year = year, month = month).toBaseDomain {
+            it.toDomain()
+        }
+    }
+
+    override suspend fun getDailyGameLog(
+        year: Int,
+        month: Int,
+        day: Int
+    ): BaseModelContent<DailyGameLogList> {
+        return calendarDataSource.getDailyGameLog(year = year, month = month, day = day)
+            .toBaseDomain {
+                it.toDomain()
+            }
     }
 }

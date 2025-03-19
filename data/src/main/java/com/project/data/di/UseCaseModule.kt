@@ -2,7 +2,7 @@ package com.project.data.di
 
 import com.project.domain.repository.calendar.CalendarRepository
 import com.project.domain.repository.user.UserDataStoreRepository
-import com.project.domain.usecase.GetCalendarHistoryGameUseCase
+import com.project.domain.usecase.calendar.GetCalendarHistoryGameUseCase
 import com.project.domain.usecase.user.GetUserTokenUseCase
 import dagger.Module
 import dagger.Provides

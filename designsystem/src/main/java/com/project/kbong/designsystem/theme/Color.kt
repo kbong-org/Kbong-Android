@@ -65,9 +65,12 @@ val KBongGrayscaleGray10 = Color(0xFF171719)
 val KBongGrayscaleGray11 = Color(0xFF000000)
 
 val KBongStatusDestructive = Color(0xFFF65353)
+val KBongStatusDestructive10 = Color(0x1AF65353)
 
 val KBongAccentButtonBlue = Color(0xFF1898EC)
 
 val KBongBackground = Color(0xFFDBDDE3)
 
 val KBongImageCount = Color(0x80171719)
+
+val KBongAccentButtonBlue10 = Color(0x191898EC)

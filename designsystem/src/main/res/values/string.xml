@@ -2,4 +2,6 @@
 <resources>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
+    <string name="game_history">직관기록</string>
+    <string name="game_schedule">경기일정</string>
 </resources>

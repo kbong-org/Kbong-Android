@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.project.domain.model.calendar.GameDayContent
 import com.project.domain.model.calendar.HistoryDayContent
 import com.project.kbong.designsystem.R
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
@@ -23,9 +24,12 @@ import java.time.LocalDate
 fun HorizontalCalendar(
     modifier: Modifier = Modifier,
     selectedDate: LocalDate,
+    selectTab: String,
+    isMyTeam: Boolean,
     historyDayContentList: List<HistoryDayContent>,
+    gameDayListContent: List<GameDayContent>,
     onSelectedDate: (LocalDate) -> Unit
-    ){
+) {
     val weekTextList = stringArrayResource(R.array.week_text).toList()
 
     Column(
@@ -53,6 +57,9 @@ fun HorizontalCalendar(
             modifier = Modifier.fillMaxWidth(),
             selectedDate = selectedDate,
             historyDayContentList = historyDayContentList,
+            gameDayListContent = gameDayListContent,
+            isMyTeam = isMyTeam,
+            selectTab = selectTab,
             onSelectedDate = { selectedDate ->
                 onSelectedDate(selectedDate)
             },
