@@ -13,6 +13,6 @@ fun NavGraphBuilder.myNavigation() {
     composable(
         route = NavigationRoute.MyScreen.route,
     ) {
-        //MyRoute()
+        MyRoute()
     }
 }
