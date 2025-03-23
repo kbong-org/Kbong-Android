@@ -96,6 +96,13 @@ object KBongTypography {
         lineHeight = 20.sp
     )
 
+    val Label1Regular = baseTextStyle.copy(
+        fontWeight = FontWeight.Normal,
+        fontSize = FontSizeTokens.Label1,
+        letterSpacing = 0.0145.em,
+        lineHeight = 20.sp
+    )
+
     val Label1Reading = baseTextStyle.copy(
         fontWeight = FontWeight.SemiBold,
         fontSize = FontSizeTokens.Label1,
