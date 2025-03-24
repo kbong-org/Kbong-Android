@@ -27,3 +27,6 @@ fun LocalDate.formatLocalDate(): String {
 
     return this.format(formatter)
 }
+
+fun String.stringToFormatLocalData(): String =
+    this.stringToLocalDate().formatLocalDate()

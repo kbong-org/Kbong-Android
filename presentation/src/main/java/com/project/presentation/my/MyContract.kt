@@ -4,6 +4,7 @@ import com.project.domain.model.user.UserInfoContent
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
 import com.project.presentation.mvi.UiState
+import com.project.presentation.my.ui.CATALOG
 
 class MyContract {
 
@@ -12,14 +13,15 @@ class MyContract {
      */
     data class MyViewState(
         val isError: Boolean = false,
-        val userInfoContent: UserInfoContent = UserInfoContent()
+        val userInfoContent: UserInfoContent = UserInfoContent(),
+        val selectViewType: String = CATALOG
     ) : UiState
 
     /**
      * 액션 정의
      */
     sealed interface MyViewEvent : UiEvent {
-
+        data class OnClickSelectViewType(val type: String) : MyViewEvent
     }
 
     /**

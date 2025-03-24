@@ -9,10 +9,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.project.domain.model.user.UserInfoContent
+import com.project.presentation.my.ui.CATALOG
+import com.project.presentation.my.ui.LIST
+import com.project.presentation.my.ui.MyBottomContent
 import com.project.presentation.my.ui.MyTopBar
 import com.project.presentation.my.ui.MyTopContent
 import com.project.presentation.my.ui.VisitedGameContent
@@ -22,17 +26,23 @@ fun MyRoute(
     viewModel: MyViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val myTeamType = MyTeamType.fromTypeData(state.userInfoContent.myTeam.code)
+    val myTeamType = MyTeamType.fromTypeData(state.userInfoContent.myTeam.fullName)
+
     MyScreen(
         state = state,
-        myTeamType = myTeamType
+        myTeamType = myTeamType,
+        event = { event ->
+            viewModel.intent(event)
+        }
     )
+
 }
 
 @Composable
 fun MyScreen(
     state: MyContract.MyViewState,
-    myTeamType: MyTeamType
+    myTeamType: MyTeamType,
+    event: (MyContract.MyViewEvent) -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -72,7 +82,20 @@ fun MyScreen(
                 visitedGames = state.userInfoContent.visitedGames
             )
 
-
+            MyBottomContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(horizontal = 16.dp),
+                dailyLog = state.userInfoContent.dailyLog,
+                isCatalogSelect = state.selectViewType == CATALOG,
+                isListSelect = state.selectViewType == LIST,
+                onClickViewType = { type ->
+                    event.invoke(
+                        MyContract.MyViewEvent.OnClickSelectViewType(type)
+                    )
+                }
+            )
         }
     }
 }
@@ -87,6 +110,7 @@ fun PreviewMyScreen() {
     )
     MyScreen(
         state = state,
-        myTeamType = MyTeamType.KIA
+        myTeamType = MyTeamType.KIA,
+        event = {}
     )
 }

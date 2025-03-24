@@ -49,9 +49,11 @@ fun DayHistoryContent(
         dailyLogList.forEach { item ->
             with(item) {
                 DayHistory(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                     awayTeam = awayTeamDisplayName,
                     homeTeam = homeTeamDisplayName,
                     stadium = stadiumFullName,
+                    imageCount = item.imageList.size,
                     type = type,
                     imageList = listOf(
                         "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",

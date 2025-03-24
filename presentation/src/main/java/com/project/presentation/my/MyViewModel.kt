@@ -24,6 +24,7 @@ class MyViewModel @Inject constructor(
 
     override suspend fun handleEvent(event: MyContract.MyViewEvent) {
         when (event) {
+            is MyContract.MyViewEvent.OnClickSelectViewType -> updateSelectViewType(event.type)
             else -> Unit
         }
     }
@@ -51,4 +52,10 @@ class MyViewModel @Inject constructor(
             }
         }
     }
+
+
+    private fun updateSelectViewType(type: String) {
+        reduce { copy(selectViewType = type) }
+    }
+
 }

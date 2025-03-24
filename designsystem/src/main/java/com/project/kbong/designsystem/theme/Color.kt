@@ -76,4 +76,5 @@ val KBongImageCount = Color(0x80171719)
 val KBongAccentButtonBlue10 = Color(0x191898EC)
 
 val myPageBackgroundRed = Color(0xFFFFE8E8)
+val myPageBackgroundBlue = Color(0xFFE8F3FF)
 val VisitedCardBackground = Color(0x99FFFFFF)
