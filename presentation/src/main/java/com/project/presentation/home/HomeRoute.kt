@@ -192,6 +192,9 @@ fun HomeScreen(
 
                     state.dailyLogList.isEmpty() && state.selectTab == stringResource(R.string.game_history) -> {
                         EmptyDayHistoryContent(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 30.dp, bottom = 32.dp),
                             onClickGoLog = {
                                 homeViewEvent(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory

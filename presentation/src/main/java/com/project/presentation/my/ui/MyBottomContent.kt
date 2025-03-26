@@ -1,11 +1,14 @@
 package com.project.presentation.my.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.project.domain.model.user.Logs
 import com.project.domain.model.user.MyPageDailyLog
+import com.project.presentation.home.day.EmptyDayHistoryContent
 
 const val CATALOG = "CATALOG"
 const val LIST = "LIST"
@@ -27,9 +30,23 @@ fun MyBottomContent(
             isListSelect = isListSelect,
             onClickViewType = onClickViewType
         )
-        MyBottomMainContent(
-            dailyLog = dailyLog
-        )
+        if (dailyLog.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1F),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyDayHistoryContent(
+                    isGoLogButton = false
+                )
+            }
+
+        } else {
+            MyBottomMainContent(
+                dailyLog = dailyLog
+            )
+        }
     }
 }
 
@@ -38,20 +55,20 @@ fun MyBottomContent(
 private fun PreviewMyBottomContent() {
     MyBottomContent(
         dailyLog = listOf(
-            MyPageDailyLog(
-                date = "2025-03-24",
-                logs = listOf(
-                    Logs(
-                        id = 4677,
-                        awayTeamDisplayName = "삼성",
-                        homeTeamDisplayName = "KT",
-                        stadiumFullName = "수원 KT위즈 파크",
-                        type = "FREE",
-                        imagePath = "",
-                        imageCount = 3
-                    )
-                )
-            )
+            /* MyPageDailyLog(
+                 date = "2025-03-24",
+                 logs = listOf(
+                     Logs(
+                         id = 4677,
+                         awayTeamDisplayName = "삼성",
+                         homeTeamDisplayName = "KT",
+                         stadiumFullName = "수원 KT위즈 파크",
+                         type = "FREE",
+                         imagePath = "",
+                         imageCount = 3
+                     )
+                 )
+             )*/
         ),
         onClickViewType = {}
     )
