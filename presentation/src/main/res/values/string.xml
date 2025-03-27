@@ -8,4 +8,6 @@
     <string name="game_schedule">경기일정</string>
     <string name="my_team_visited_score">마이팀 직관 승점</string>
     <string name="my_team_visited_percent">마이팀 직관 승률</string>
+    <string name="setting">설정</string>
+    <string name="latest_version">최신 버전</string>
 </resources>

@@ -8,6 +8,7 @@ import com.project.data.LocalNavController
 import com.project.presentation.auth.kakaoLoginNavigation
 import com.project.presentation.home.homeNavigation
 import com.project.presentation.my.myNavigation
+import com.project.presentation.setting.settingNavigation
 import com.project.presentation.signUp.signUpNavigation
 
 @Composable
@@ -26,6 +27,7 @@ fun MainNavHost(
             signUpNavigation(navController = appState.navController)
             homeNavigation()
             myNavigation()
+            settingNavigation(navController = appState.navController)
         }
     }
 }

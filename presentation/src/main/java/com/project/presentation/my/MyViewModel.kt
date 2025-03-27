@@ -25,6 +25,8 @@ class MyViewModel @Inject constructor(
     override suspend fun handleEvent(event: MyContract.MyViewEvent) {
         when (event) {
             is MyContract.MyViewEvent.OnClickSelectViewType -> updateSelectViewType(event.type)
+            MyContract.MyViewEvent.OnClickSetting -> postSideEffect(MyContract.MyViewSideEffect.NavigateToSetting)
+            MyContract.MyViewEvent.OnClickBack -> postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
             else -> Unit
         }
     }
@@ -40,7 +42,12 @@ class MyViewModel @Inject constructor(
             }.onSuccess { response ->
                 if (response.isSuccess) {
                     response.data?.let {
-                        reduce { copy(userInfoContent = it) }
+                        reduce {
+                            copy(
+                                userInfoContent = it,
+                                myTeamType = MyTeamType.fromTypeData(it.myTeam.fullName)
+                            )
+                        }
                     }
                 } else {
                     Log.e(TAG, "getUserInfoData else : ${response.errorResponse}")

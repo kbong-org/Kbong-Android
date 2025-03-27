@@ -14,7 +14,8 @@ class MyContract {
     data class MyViewState(
         val isError: Boolean = false,
         val userInfoContent: UserInfoContent = UserInfoContent(),
-        val selectViewType: String = CATALOG
+        val selectViewType: String = CATALOG,
+        val myTeamType: MyTeamType = MyTeamType.fromTypeData(userInfoContent.myTeam.fullName)
     ) : UiState
 
     /**
@@ -22,12 +23,15 @@ class MyContract {
      */
     sealed interface MyViewEvent : UiEvent {
         data class OnClickSelectViewType(val type: String) : MyViewEvent
+        data object OnClickSetting : MyViewEvent
+        data object OnClickBack : MyViewEvent
     }
 
     /**
      * SideEffect로 발생되는 이벤트를 정의
      */
     sealed interface MyViewSideEffect : UiSideEffect {
-
+        data object NavigateToBack : MyViewSideEffect
+        data object NavigateToSetting : MyViewSideEffect
     }
 }
