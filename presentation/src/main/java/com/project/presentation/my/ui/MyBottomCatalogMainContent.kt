@@ -21,7 +21,7 @@ import com.project.presentation.home.day.DayHistory
 import com.project.presentation.utils.stringToFormatLocalData
 
 @Composable
-fun MyBottomMainContent(
+fun MyBottomCatalogMainContent(
     dailyLog: List<MyPageDailyLog>
 ) {
     LazyColumn(
@@ -60,7 +60,7 @@ fun MyBottomMainContent(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun PreviewMyBottomMainContent() {
-    MyBottomMainContent(
+    MyBottomCatalogMainContent(
         dailyLog = listOf(
             MyPageDailyLog(
                 date = "2025-03-24",
