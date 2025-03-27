@@ -9,7 +9,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import com.project.presentation.R
 
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier) {
@@ -20,7 +19,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
     ) {
         Image(
             modifier = Modifier.align(Alignment.Center),
-            painter = painterResource(R.drawable.ic_splash_logo),
+            painter = painterResource(com.project.kbong.designsystem.R.drawable.kbong_splash),
             contentDescription = null
         )
     }

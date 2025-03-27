@@ -25,8 +25,8 @@ fun MyTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            modifier = Modifier.size(width = 48.dp, height = 26.dp),
-            painter = painterResource(R.drawable.kbong),
+            modifier = Modifier.size(width = 83.dp, height = 22.dp),
+            painter = painterResource(com.project.kbong.designsystem.R.drawable.kbong_img),
             contentDescription = "kbong"
         )
         Spacer(modifier = Modifier.weight(1F))
