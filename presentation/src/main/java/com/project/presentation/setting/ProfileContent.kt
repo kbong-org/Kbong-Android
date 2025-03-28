@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.project.kbong.designsystem.component.BaseSettingContent
 import com.project.kbong.designsystem.tag.KBongTag
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongTypography
@@ -23,27 +24,22 @@ fun ProfileContent(
     nickName: String,
     myTeamType: MyTeamType,
 ) {
-    Row(
+    BaseSettingContent(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = nickName,
-            style = KBongTypography.Heading1,
-            color = KBongGrayscaleGray8
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        KBongTag(
-            tagName = myTeamType.teamName,
-            backgroundColor = myTeamType.teamSub10Color,
-            textColor = myTeamType.teamTagBackgroundColor
-        )
-        Spacer(modifier = Modifier.weight(1F))
-        Image(
-            painter = painterResource(com.project.kbong.designsystem.R.drawable.right_arrow),
-            contentDescription = "right arrow"
-        )
-    }
+        leftContent = {
+            Text(
+                text = nickName,
+                style = KBongTypography.Heading1,
+                color = KBongGrayscaleGray8
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            KBongTag(
+                tagName = myTeamType.teamName,
+                backgroundColor = myTeamType.teamSub10Color,
+                textColor = myTeamType.teamTagBackgroundColor
+            )
+        }
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
