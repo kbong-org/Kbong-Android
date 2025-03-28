@@ -10,4 +10,6 @@
     <string name="my_team_visited_percent">마이팀 직관 승률</string>
     <string name="setting">설정</string>
     <string name="latest_version">최신 버전</string>
+    <string name="logout">로그아웃</string>
+    <string name="withdrawal">탈퇴하기</string>
 </resources>

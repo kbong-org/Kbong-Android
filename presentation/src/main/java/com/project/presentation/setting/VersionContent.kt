@@ -15,6 +15,7 @@ import com.project.presentation.R
 @Composable
 fun VersionContent(
     modifier: Modifier = Modifier,
+    isLatestVersion: Boolean = false,
     versionCode: String,
 ) {
     Row(
@@ -27,10 +28,12 @@ fun VersionContent(
             color = KBongGrayscaleGray8
         )
         Spacer(modifier = Modifier.weight(1F))
-        Text(
-            text = stringResource(R.string.latest_version),
-            style = KBongTypography.Heading2Medium,
-            color = KBongGrayscaleGray5
-        )
+        if (isLatestVersion){
+            Text(
+                text = stringResource(R.string.latest_version),
+                style = KBongTypography.Heading2Medium,
+                color = KBongGrayscaleGray5
+            )
+        }
     }
 }
