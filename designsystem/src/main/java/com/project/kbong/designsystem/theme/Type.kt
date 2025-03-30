@@ -74,9 +74,15 @@ object KBongTypography {
         letterSpacing = 0.057.em,
         lineHeight = 24.sp
     )
-
     val Body1Reading = baseTextStyle.copy(
         fontWeight = FontWeight.Medium,
+        fontSize = FontSizeTokens.Body1,
+        letterSpacing = 0.057.em,
+        lineHeight = 26.sp
+    )
+
+    val Body1Regular = baseTextStyle.copy(
+        fontWeight = FontWeight.Normal,
         fontSize = FontSizeTokens.Body1,
         letterSpacing = 0.057.em,
         lineHeight = 26.sp

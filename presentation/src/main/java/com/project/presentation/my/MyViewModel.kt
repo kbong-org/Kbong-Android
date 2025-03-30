@@ -27,6 +27,15 @@ class MyViewModel @Inject constructor(
             is MyContract.MyViewEvent.OnClickSelectViewType -> updateSelectViewType(event.type)
             MyContract.MyViewEvent.OnClickSetting -> postSideEffect(MyContract.MyViewSideEffect.NavigateToSetting)
             MyContract.MyViewEvent.OnClickBack -> postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
+            MyContract.MyViewEvent.SettingEvent.OnClickProfileEdit ->
+                postSideEffect(MyContract.MyViewSideEffect.NavigateToProfileEdit)
+
+            is MyContract.MyViewEvent.ProfileEditEvent.OnClickEditMenu -> postSideEffect(
+                MyContract.MyViewSideEffect.ChangeProfileEditType(event.type)
+            )
+
+            is MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname -> updateNickname(event.nickname)
+
             else -> Unit
         }
     }
@@ -65,4 +74,7 @@ class MyViewModel @Inject constructor(
         reduce { copy(selectViewType = type) }
     }
 
+    private fun updateNickname(nickName: String) {
+        reduce { copy(nickname = nickName) }
+    }
 }

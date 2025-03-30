@@ -23,12 +23,12 @@ import com.project.data.LocalNavController
 import com.project.kbong.designsystem.component.BaseSettingContent
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
-import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
 import com.project.presentation.my.MyContract
 import com.project.presentation.my.MyViewModel
+import com.project.presentation.setting.edit.navigateToProfileEdit
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -44,6 +44,9 @@ fun SettingRoute(
             when (sideEffect) {
                 MyContract.MyViewSideEffect.NavigateToBack -> {
                     navController.popBackStack()
+                }
+                MyContract.MyViewSideEffect.NavigateToProfileEdit -> {
+                    navController.navigateToProfileEdit()
                 }
 
                 else -> Unit
@@ -80,7 +83,9 @@ fun SettingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-
+                    event(
+                        MyContract.MyViewEvent.SettingEvent.OnClickProfileEdit
+                    )
                 }
                 .padding(horizontal = 20.dp, vertical = 24.dp),
             nickName = state.userInfoContent.nickname,

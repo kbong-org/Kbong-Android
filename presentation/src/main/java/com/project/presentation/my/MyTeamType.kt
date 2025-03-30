@@ -34,6 +34,7 @@ enum class MyTeamType(
     val teamSub10Color: Color,
     val isBlueStadium: Boolean = true,
     val lottieFile: Drawable? = null,
+    val infoImage: Int
 ) {
     DOOSAN(
         teamName = "두산 베어스",
@@ -41,7 +42,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamBearsSub10,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongTeamBears,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     ),
 
     LOTTE(
@@ -50,7 +52,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamGiantsSub10,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongTeamGiants,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     ),
 
     SAMSUNG(
@@ -59,7 +62,8 @@ enum class MyTeamType(
         isBlueStadium = true,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongTeamLions,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     ),
 
     SSG(
@@ -68,7 +72,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamSsgSub10,
         backgroundColor = myPageBackgroundRed,
         teamTagBackgroundColor = KBongTeamSsg,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
     NC(
@@ -77,7 +82,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamNcSub10,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongTeamNc,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     ),
 
     LG(
@@ -86,7 +92,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamTwins10,
         backgroundColor = myPageBackgroundRed,
         teamTagBackgroundColor = KBongTeamTwins,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
     KIWOOM(
@@ -95,7 +102,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamHeroesSub10,
         backgroundColor = myPageBackgroundRed,
         teamTagBackgroundColor = KBongTeamHeroes,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
     KT(
@@ -104,7 +112,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamGray2,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongTeamGray10,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     ),
 
     HANHWA(
@@ -113,7 +122,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamEaglesSub10,
         backgroundColor = myPageBackgroundRed,
         teamTagBackgroundColor = KBongTeamEagles,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
 
@@ -123,7 +133,8 @@ enum class MyTeamType(
         teamSub10Color = KBongTeamTigersSub10,
         backgroundColor = myPageBackgroundRed,
         teamTagBackgroundColor = KBongTeamTigers,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
     NONE(
@@ -132,7 +143,8 @@ enum class MyTeamType(
         teamSub10Color = KBongPrimary10,
         backgroundColor = myPageBackgroundBlue,
         teamTagBackgroundColor = KBongPrimary,
-        lottieFile = null
+        lottieFile = null,
+        infoImage = com.project.kbong.designsystem.R.drawable.blue_info_edit
     );
 
     companion object {
