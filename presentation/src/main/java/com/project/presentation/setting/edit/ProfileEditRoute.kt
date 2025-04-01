@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,6 +52,7 @@ fun ProfileEditRoute(
     var profileEditType: ProfileEditType by remember {
         mutableStateOf(ProfileEditType.NONE)
     }
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
 
 
@@ -62,81 +64,72 @@ fun ProfileEditRoute(
                 }
 
                 is MyContract.MyViewSideEffect.ChangeProfileEditType -> {
-                    Log.d(TAG, "1111111 ${profileEditType}")
-                    snackbarHostState.showSnackbar("")
-
                     profileEditType = sideEffect.type
+                }
+
+                MyContract.MyViewSideEffect.ShowSnackbar -> {
+                    snackbarHostState.showSnackbar(state.snackbarMessage)
                 }
 
                 else -> Unit
             }
         }
     }
-    Log.d(TAG, "state.profileEditType ${profileEditType}")
 
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState,
-                snackbar = {
-                    KBongSnackbar(
-                        modifier = Modifier
-                            //  .align(Alignment.BottomCenter)
-                            .padding(
-                                bottom = 20.dp,
-                            ),
-                        text = "성공적으로 저장 저장"
-                    )
-                    /*  OketSnackBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                start = 20.dp,
-                                end = 20.dp,
-                                bottom = SNACKBAR_BOTTOM_PADDING.dp,
-                            ),
-                        snackbarMessage = state.errorMsg,
-                    )*/
-                },
-            )
-        },
-        content = { contentPadding ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding)
-            ) {
-                when (profileEditType) {
-                    ProfileEditType.NICKNAME -> {
-                        NicknameEditScreen(
-                            nickname = state.nickname,
-                            onTextChange = {
-                                viewModel.intent(
-                                    MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname(it)
-                                )
-                            },
-                            onClickBackButton = {
-                                viewModel.intent(
-                                    MyContract.MyViewEvent.OnClickBack
-                                )
-                            }
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        when (profileEditType) {
+            ProfileEditType.NICKNAME -> {
+                NicknameEditScreen(
+                    nickname = state.nickname,
+                    onTextChange = {
+                        viewModel.intent(
+                            MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname(it)
+                        )
+                    },
+                    onClickBackButton = {
+                        viewModel.intent(
+                            MyContract.MyViewEvent.OnClickBack
+                        )
+                    },
+                    onClickNicknameSave = {
+                        viewModel.intent(
+                            MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave(
+                                context.getString(R.string.nickname_save_snackbar)
+                            )
                         )
                     }
 
-                    ProfileEditType.SUPPORT_TEAM -> {}
-                    ProfileEditType.BIRTHDAY -> {}
-                    ProfileEditType.GENDER -> {}
-                    ProfileEditType.NONE -> {
-                        ProfileEditScreen(
-                            state = state,
-                            event = { viewModel.intent(it) }
-                        )
-                    }
-                }
+                )
+            }
+
+            ProfileEditType.SUPPORT_TEAM -> {}
+            ProfileEditType.BIRTHDAY -> {}
+            ProfileEditType.GENDER -> {}
+            ProfileEditType.NONE -> {
+                ProfileEditScreen(
+                    state = state,
+                    event = { viewModel.intent(it) }
+                )
             }
         }
-    )
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(
+                    bottom = 20.dp,
+                )
+        ) {
+            KBongSnackbar(
+                text = state.snackbarMessage
+            )
+        }
+    }
+
 
 }
 

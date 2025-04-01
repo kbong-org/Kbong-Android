@@ -35,6 +35,7 @@ class MyViewModel @Inject constructor(
             )
 
             is MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname -> updateNickname(event.nickname)
+            is MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave -> updateSnackbar(event.snackbarMessage)
 
             else -> Unit
         }
@@ -76,5 +77,10 @@ class MyViewModel @Inject constructor(
 
     private fun updateNickname(nickName: String) {
         reduce { copy(nickname = nickName) }
+    }
+
+    private fun updateSnackbar(message: String) {
+        reduce { copy(snackbarMessage = message) }
+        postSideEffect(MyContract.MyViewSideEffect.ShowSnackbar)
     }
 }

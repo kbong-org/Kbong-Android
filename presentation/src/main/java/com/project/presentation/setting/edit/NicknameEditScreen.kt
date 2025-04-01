@@ -29,7 +29,8 @@ import com.project.presentation.R
 fun NicknameEditScreen(
     nickname: String = "",
     onTextChange: (String) -> Unit,
-    onClickBackButton: () -> Unit
+    onClickBackButton: () -> Unit,
+    onClickNicknameSave: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
@@ -69,7 +70,7 @@ fun NicknameEditScreen(
                 .padding(horizontal = 16.dp),
             title = stringResource(R.string.save),
             enabled = beforeNickname != nickname,
-            onClick = {}
+            onClick = onClickNicknameSave
         )
 
     }
@@ -81,7 +82,8 @@ private fun PreviewNicknameEditScreen() {
     NicknameEditScreen(
         nickname = "",
         onClickBackButton = {},
-        onTextChange = {}
+        onTextChange = {},
+        onClickNicknameSave = {}
     )
 
 }
