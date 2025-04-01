@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.project.domain.usecase.user.GetUserInfoUseCase
+import com.project.domain.usecase.user.UpdateNicknameUseCase
 import com.project.presentation.mvi.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -11,7 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyViewModel @Inject constructor(
-    private val getUserInfoUseCase: GetUserInfoUseCase
+    private val getUserInfoUseCase: GetUserInfoUseCase,
+    private val updateNicknameUseCase: UpdateNicknameUseCase,
 ) : BaseViewModel<MyContract.MyViewState, MyContract.MyViewEvent, MyContract.MyViewSideEffect>() {
 
     init {
@@ -34,15 +36,21 @@ class MyViewModel @Inject constructor(
                 MyContract.MyViewSideEffect.ChangeProfileEditType(event.type)
             )
 
-            is MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname -> updateNickname(event.nickname)
-            is MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave -> updateSnackbar(event.snackbarMessage)
+            is MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname -> updateNicknameState(
+                event.nickname
+            )
+
+            is MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave -> {
+                updateNickname(event.snackbarMessage)
+            }
 
             else -> Unit
         }
     }
 
-    private fun errorReduce() {
+    private fun errorReduce(errorMessage: String) {
         reduce { copy(isError = true) }
+        updateSnackbar(errorMessage)
     }
 
     private fun getUserInfoData() {
@@ -61,11 +69,11 @@ class MyViewModel @Inject constructor(
                     }
                 } else {
                     Log.e(TAG, "getUserInfoData else : ${response.errorResponse}")
-                    errorReduce()
+                    errorReduce(response.errorResponse.message)
                 }
             }.onFailure {
                 Log.e(TAG, "getUserInfoData: ${it.message}")
-                errorReduce()
+                errorReduce(it.message?:"네트워크 에러")
             }
         }
     }
@@ -75,12 +83,34 @@ class MyViewModel @Inject constructor(
         reduce { copy(selectViewType = type) }
     }
 
-    private fun updateNickname(nickName: String) {
+    private fun updateNicknameState(nickName: String) {
         reduce { copy(nickname = nickName) }
     }
 
     private fun updateSnackbar(message: String) {
         reduce { copy(snackbarMessage = message) }
         postSideEffect(MyContract.MyViewSideEffect.ShowSnackbar)
+    }
+
+
+    private fun updateNickname(snackbarMessage: String) {
+        viewModelScope.launch {
+            runCatching {
+                updateNicknameUseCase(state.value.nickname)
+            }.onSuccess { response ->
+                if (response.isSuccess) {
+                    response.data?.let {
+                        updateSnackbar(snackbarMessage)
+                    }
+                    postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
+                } else {
+                    Log.e(TAG, "updateNickname else : ${response.errorResponse}")
+                    errorReduce(response.errorResponse.message)
+                }
+            }.onFailure {
+                Log.e(TAG, "updateNickname: ${it.message}")
+                errorReduce(it.message?:"네트워크 에러")
+            }
+        }
     }
 }

@@ -7,5 +7,5 @@ interface UserDataSource {
 
     suspend fun getUserInfo(): BaseModel<UserInfoResponse>
 
-
+    suspend fun updateNickname(nickname: String): BaseModel<UserInfoResponse>
 }

@@ -82,6 +82,7 @@ fun ProfileEditRoute(
     ) {
         when (profileEditType) {
             ProfileEditType.NICKNAME -> {
+                Log.d(TAG, "ProfileEditRoute: ${state.nickname}")
                 NicknameEditScreen(
                     nickname = state.nickname,
                     onTextChange = {

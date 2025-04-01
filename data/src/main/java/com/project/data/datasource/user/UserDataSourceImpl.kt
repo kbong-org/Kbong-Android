@@ -12,4 +12,8 @@ class UserDataSourceImpl @Inject constructor(
     override suspend fun getUserInfo(): BaseModel<UserInfoResponse> {
         return userService.getUserInfo()
     }
+
+    override suspend fun updateNickname(nickname: String): BaseModel<UserInfoResponse> {
+        return userService.updateNickname(nickname)
+    }
 }

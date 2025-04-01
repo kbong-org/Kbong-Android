@@ -17,4 +17,10 @@ class UserRepositoryImpl @Inject constructor(
             it.toDomain()
         }
     }
+
+    override suspend fun updateNickname(nickname: String): BaseModelContent<UserInfoContent> {
+        return userDataSource.updateNickname(nickname).toBaseDomain {
+            it.toDomain()  // Assuming the API returns the updated user info after the nickname update
+        }
+    }
 }

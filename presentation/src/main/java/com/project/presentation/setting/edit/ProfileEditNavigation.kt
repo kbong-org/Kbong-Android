@@ -1,6 +1,7 @@
 package com.project.presentation.setting.edit
 
 import androidx.compose.runtime.remember
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -17,8 +18,9 @@ fun NavGraphBuilder.profileEditNavigation(navController: NavHostController) {
     composable(
         route = NavigationRoute.ProfileEditScreen.route,
     ) { navBackStack ->
+
         val parentEntry = remember(navBackStack) {
-            navController.getBackStackEntry(NavigationRoute.MyScreen.route)
+            navController.getBackStackEntry(NavigationRoute.SettingScreen.route)
         }
 
         val viewModel = viewModel<MyViewModel>(parentEntry)
@@ -28,3 +30,4 @@ fun NavGraphBuilder.profileEditNavigation(navController: NavHostController) {
         )
     }
 }
+
