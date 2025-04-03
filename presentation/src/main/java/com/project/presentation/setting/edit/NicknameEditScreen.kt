@@ -35,7 +35,6 @@ fun NicknameEditScreen(
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
     val beforeNickname = remember { nickname }
-    Log.d(TAG, "NicknameEditScreen: $beforeNickname")
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +68,7 @@ fun NicknameEditScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             title = stringResource(R.string.save),
-            enabled = beforeNickname != nickname,
+            enabled = beforeNickname != nickname || nickname.isNotEmpty(),
             onClick = onClickNicknameSave
         )
 

@@ -60,7 +60,9 @@ fun ProfileEditRoute(
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 MyContract.MyViewSideEffect.NavigateToBack -> {
-                    navController.popBackStack()
+                    viewModel.intent(
+                        MyContract.MyViewEvent.ProfileEditEvent.OnClickEditMenu(ProfileEditType.NONE)
+                    )
                 }
 
                 is MyContract.MyViewSideEffect.ChangeProfileEditType -> {
@@ -76,15 +78,22 @@ fun ProfileEditRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.intent(
+            MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname(
+                state.userInfoContent.nickname
+            )
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         when (profileEditType) {
             ProfileEditType.NICKNAME -> {
-                Log.d(TAG, "ProfileEditRoute: ${state.nickname}")
                 NicknameEditScreen(
-                    nickname = state.nickname,
+                    nickname = state.newNickname,
                     onTextChange = {
                         viewModel.intent(
                             MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname(it)

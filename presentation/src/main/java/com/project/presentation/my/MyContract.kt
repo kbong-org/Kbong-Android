@@ -17,7 +17,7 @@ class MyContract {
         val userInfoContent: UserInfoContent = UserInfoContent(),
         val selectViewType: String = CATALOG,
         val myTeamType: MyTeamType = MyTeamType.fromTypeData(userInfoContent.myTeam.fullName),
-        val nickname: String = "",
+        val newNickname: String = "",
         val snackbarMessage: String = ""
     ) : UiState
 
@@ -36,7 +36,7 @@ class MyContract {
 
         sealed interface ProfileEditEvent : UiEvent {
             data class OnClickEditMenu(val type: ProfileEditType) : MyViewEvent
-            data class OnChangedNickname(val nickname: String) : MyViewEvent
+            data class OnChangedNickname(val newNickname: String) : MyViewEvent
             data class OnClickNicknameSave(val snackbarMessage: String) : MyViewEvent
         }
     }

@@ -37,7 +37,7 @@ class MyViewModel @Inject constructor(
             )
 
             is MyContract.MyViewEvent.ProfileEditEvent.OnChangedNickname -> updateNicknameState(
-                event.nickname
+                event.newNickname
             )
 
             is MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave -> {
@@ -84,7 +84,7 @@ class MyViewModel @Inject constructor(
     }
 
     private fun updateNicknameState(nickName: String) {
-        reduce { copy(nickname = nickName) }
+        reduce { copy(newNickname = nickName) }
     }
 
     private fun updateSnackbar(message: String) {
@@ -96,7 +96,7 @@ class MyViewModel @Inject constructor(
     private fun updateNickname(snackbarMessage: String) {
         viewModelScope.launch {
             runCatching {
-                updateNicknameUseCase(state.value.nickname)
+                updateNicknameUseCase(state.value.newNickname)
             }.onSuccess { response ->
                 if (response.isSuccess) {
                     response.data?.let {

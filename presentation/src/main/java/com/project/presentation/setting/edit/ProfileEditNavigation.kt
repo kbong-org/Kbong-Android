@@ -20,7 +20,7 @@ fun NavGraphBuilder.profileEditNavigation(navController: NavHostController) {
     ) { navBackStack ->
 
         val parentEntry = remember(navBackStack) {
-            navController.getBackStackEntry(NavigationRoute.SettingScreen.route)
+            navController.getBackStackEntry(NavigationRoute.MyScreen.route)
         }
 
         val viewModel = viewModel<MyViewModel>(parentEntry)
