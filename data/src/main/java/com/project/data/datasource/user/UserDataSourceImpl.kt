@@ -2,6 +2,7 @@ package com.project.data.datasource.user
 
 import com.project.data.model.BaseModel
 import com.project.data.model.user.UserInfoResponse
+import com.project.data.request.user.UpdateNicknameRequest
 import com.project.data.service.UserService
 import javax.inject.Inject
 
@@ -14,6 +15,6 @@ class UserDataSourceImpl @Inject constructor(
     }
 
     override suspend fun updateNickname(nickname: String): BaseModel<UserInfoResponse> {
-        return userService.updateNickname(nickname)
+        return userService.updateNickname(UpdateNicknameRequest(nickname))
     }
 }

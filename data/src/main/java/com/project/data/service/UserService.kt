@@ -2,9 +2,10 @@ package com.project.data.service
 
 import com.project.data.model.BaseModel
 import com.project.data.model.user.UserInfoResponse
+import com.project.data.request.user.UpdateNicknameRequest
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
-import retrofit2.http.Query
 
 interface UserService {
 
@@ -13,6 +14,6 @@ interface UserService {
 
     @PUT("api/v1/users/me/nickname")
     suspend fun updateNickname(
-        @Query("nickname") nickname: String
+        @Body updateNicknameRequest: UpdateNicknameRequest
     ): BaseModel<UserInfoResponse>
 }
