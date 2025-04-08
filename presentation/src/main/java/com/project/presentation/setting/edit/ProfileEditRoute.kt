@@ -1,7 +1,5 @@
 package com.project.presentation.setting.edit
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -27,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -54,6 +52,7 @@ fun ProfileEditRoute(
     }
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
 
     LaunchedEffect(Unit) {
@@ -66,6 +65,7 @@ fun ProfileEditRoute(
                 }
 
                 is MyContract.MyViewSideEffect.ChangeProfileEditType -> {
+                    snackbarHostState.currentSnackbarData?.dismiss()
                     profileEditType = sideEffect.type
                 }
 
@@ -105,6 +105,7 @@ fun ProfileEditRoute(
                         )
                     },
                     onClickNicknameSave = {
+                        keyboardController?.hide()
                         viewModel.intent(
                             MyContract.MyViewEvent.ProfileEditEvent.OnClickNicknameSave(
                                 context.getString(R.string.nickname_save_snackbar)

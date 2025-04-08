@@ -1,7 +1,5 @@
 package com.project.presentation.setting.edit
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -68,7 +66,7 @@ fun NicknameEditScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             title = stringResource(R.string.save),
-            enabled = beforeNickname != nickname || nickname.isNotEmpty(),
+            enabled = beforeNickname != nickname && nickname.isNotEmpty(),
             onClick = onClickNicknameSave
         )
 

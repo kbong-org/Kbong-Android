@@ -7,6 +7,7 @@ import com.project.domain.usecase.user.GetUserInfoUseCase
 import com.project.domain.usecase.user.UpdateNicknameUseCase
 import com.project.presentation.mvi.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -60,6 +61,7 @@ class MyViewModel @Inject constructor(
             }.onSuccess { response ->
                 if (response.isSuccess) {
                     response.data?.let {
+                        Log.d(TAG, "getUserInfoData: it $it")
                         reduce {
                             copy(
                                 userInfoContent = it,
@@ -99,10 +101,12 @@ class MyViewModel @Inject constructor(
                 updateNicknameUseCase(state.value.newNickname)
             }.onSuccess { response ->
                 if (response.isSuccess) {
+                    postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
+                    delay(150)
                     response.data?.let {
                         updateSnackbar(snackbarMessage)
                     }
-                    postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
+                    getUserInfoData()
                 } else {
                     Log.e(TAG, "updateNickname else : ${response.errorResponse}")
                     errorReduce(response.errorResponse.message)
