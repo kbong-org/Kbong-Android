@@ -2,8 +2,10 @@ package com.project.data.di
 
 import com.project.data.repository.AuthRepositoryImpl
 import com.project.data.repositoryimpl.calendar.CalendarRepositoryImpl
+import com.project.data.repositoryimpl.log.DayRepositoryImpl
 import com.project.data.repositoryimpl.user.UserDataStoreRepositoryImpl
 import com.project.domain.repository.AuthRepository
+import com.project.domain.repository.DayRepository
 import com.project.domain.repository.calendar.CalendarRepository
 import com.project.domain.repository.user.UserDataStoreRepository
 import dagger.Binds
@@ -30,4 +32,8 @@ abstract class RepositoryModule {
         userDataStoreRepositoryImpl: UserDataStoreRepositoryImpl
     ): UserDataStoreRepository
 
+    @Binds
+    abstract fun provideDayRepository(
+        dayRepositoryImpl: DayRepositoryImpl
+    ): DayRepository
 }

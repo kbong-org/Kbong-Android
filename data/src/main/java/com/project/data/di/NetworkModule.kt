@@ -3,6 +3,7 @@ package com.project.data.di
 
 import com.project.data.remote.AuthService
 import com.project.data.service.CalendarService
+import com.project.data.service.LogService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +28,9 @@ object NetworkModule {
     fun provideAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideLogService(retrofit: Retrofit): LogService {
+        return retrofit.create(LogService::class.java)
+    }
 }
