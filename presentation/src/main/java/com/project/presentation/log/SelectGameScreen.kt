@@ -104,7 +104,7 @@ fun SelectGameScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .background(Color.White) // 버튼 아래 배경 색
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
