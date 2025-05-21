@@ -13,6 +13,7 @@ import com.project.presentation.R
 
 @Composable
 fun BottomActionBar(
+    modifier: Modifier = Modifier,
     onPhotoClick: () -> Unit,
     onTemplateClick: () -> Unit,
     isPhotoAddEnabled: Boolean

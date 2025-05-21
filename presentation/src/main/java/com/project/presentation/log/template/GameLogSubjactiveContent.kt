@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
@@ -26,6 +27,8 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray4
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
 import com.project.domain.model.question.ShortQuestion
+import com.project.kbong.designsystem.theme.KBongPrimary
+import com.project.kbong.designsystem.theme.KBongPrimary10
 
 @Composable
 fun GameLogSubjectiveContent(
@@ -39,36 +42,40 @@ fun GameLogSubjectiveContent(
     onRefreshQuestion: () -> Unit // 질문 바꾸기 버튼 콜백 추가
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(KBongPrimary10)
+                .clickable { onRefreshQuestion() }
+                .padding(horizontal = 14.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                question?.questionText
-                    ?: "오늘 경기를 보면서 '야, 야구장에서만 느낄 수 있는 기분이다!' 했던 순간이 있다면?",
-                style = KBongTypography.Heading2,
-                modifier = Modifier.weight(1f)
+            Image(
+                painter = painterResource(id = R.drawable.refresh),
+                contentDescription = "질문 바꾸기 아이콘",
+                modifier = Modifier.size(14.dp)
             )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            // 질문 바꾸기 버튼 추가
+            Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "질문 바꾸기",
                 style = KBongTypography.Label2Medium,
-                color = Color(0xFF6B7AFF),
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFEFF2FF))
-                    .clickable { onRefreshQuestion() }
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                color = KBongPrimary
             )
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            question?.questionText
+                ?: "오늘 경기를 보면서 '야, 야구장에서만 느낄 수 있는 기분이다!' 했던 순간이 있다면?",
+            style = KBongTypography.Heading2
+        )
 
         Spacer(modifier = Modifier.height(24.dp))
 
         Divider(
-            thickness = 2.dp,
+            thickness = 1.dp,
             color = KBongGrayscaleGray1,
         )
 
@@ -140,7 +147,7 @@ fun GameLogSubjectiveContent(
 
         if (text.isNotBlank()) {
             Text(
-                text = "${'$'}{text.length}/100",
+                text = "${text.length}/100",
                 style = KBongTypography.Label2Medium,
                 color = KBongGrayscaleGray4,
                 modifier = Modifier.align(Alignment.Start)

@@ -6,16 +6,19 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -23,16 +26,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.project.domain.model.day.DailyGameLog
-import com.project.domain.model.log.ChoiceLogRequest
 import com.project.domain.model.log.Emotion
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.log.Dialog.CancelWritingDialog
 import com.project.presentation.log.component.BottomActionBar
@@ -190,102 +196,133 @@ fun GameLogWriteRoute(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        KBongTopBar(
-            isBackButton = true,
-            onClickBackButton = { showCancelDialog = true },
-            leftContent = {
-                Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Text(text = gameInfo.awayTeamDisplayName)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "vs")
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = gameInfo.homeTeamDisplayName)
-                }
-            },
-            rightContent = {
-                // 서버 전송 로직과 연결
-                Text(
-                    "글 올리기",
-                    modifier = Modifier.clickable { handleSubmit() }
+        // 스크롤 가능한 콘텐츠 (패딩 확보)
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 58.dp) // BottomActionBar 높이만큼 패딩
+        ) {
+            item {
+                KBongTopBar(
+                    isBackButton = true,
+                    onClickBackButton = { showCancelDialog = true },
+                    leftContent = {
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text(
+                            text = buildAnnotatedString {
+                                withStyle(style = KBongTypography.Heading2.toSpanStyle()) {
+                                    append(gameInfo.awayTeamDisplayName)
+                                    append(" ")
+                                }
+                                withStyle(
+                                    style = KBongTypography.Heading2.toSpanStyle().copy(color = KBongPrimary)
+                                ) {
+                                    append("vs")
+                                }
+                                withStyle(style = KBongTypography.Heading2.toSpanStyle()) {
+                                    append(" ${gameInfo.homeTeamDisplayName}")
+                                }
+                            }
+                        )
+                    },
+                    rightContent = {
+                        Text(
+                            "글 올리기",
+                            modifier = Modifier.clickable { handleSubmit() }
+                        )
+                    }
                 )
             }
-        )
 
-        HeaderGameInfo(
-            game = gameInfo,
-            selectedDate = selectedDate,
-            selectedEmotion = selectedEmotion,
-            onEmotionSelected = { selectedEmotion = it }
-        )
+            item {
+                HeaderGameInfo(
+                    game = gameInfo,
+                    selectedDate = selectedDate,
+                    selectedEmotion = selectedEmotion,
+                    onEmotionSelected = { selectedEmotion = it }
+                )
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            item { Spacer(modifier = Modifier.height(16.dp)) }
 
-        when (inputType) {
-            LogInputType.TEXT -> GameLogTextContent(
-                imageUris = imageUris,
-                onAddImage = { imagePickerLauncher.launch("image/*") },
-                onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
-                canAdd = canAddPhoto,
-                text = text,
-                onTextChange = { text = it }
-            )
+            item {
+                when (inputType) {
+                    LogInputType.TEXT -> GameLogTextContent(
+                        imageUris = imageUris,
+                        onAddImage = { imagePickerLauncher.launch("image/*") },
+                        onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
+                        canAdd = canAddPhoto,
+                        text = text,
+                        onTextChange = { text = it }
+                    )
 
-            LogInputType.OBJECTIVE -> GameLogObjectiveContent(
-                imageUris = imageUris,
-                onAddImage = { imagePickerLauncher.launch("image/*") },
-                onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
-                canAdd = canAddPhoto,
-                selectedOption = selectedObjectiveOption,
-                onSelectOption = {
-                    selectedObjectiveOption = it
-                    val question = currentObjectiveQuestion
-                    val answerId = question?.answerOptions?.firstOrNull { opt -> opt.text == it }?.id
-                    if (question != null && answerId != null) {
-                        viewModel.saveObjectiveAnswer(question.questionId, answerId)
-                    }
-                },
-                question = currentObjectiveQuestion,
-                currentPage = currentObjectivePage + 1,
-                onPageChange = {
-                    currentObjectivePage = it - 1
-                    val question = choiceQuestions.getOrNull(currentObjectivePage)
-                    val savedAnswerId = question?.questionId?.let(viewModel::getObjectiveAnswer)
-                    selectedObjectiveOption = question?.answerOptions
-                        ?.firstOrNull { opt -> opt.id == savedAnswerId }
-                        ?.text
-                },
-                onRefreshQuestion = {
-                    viewModel.refreshChoiceQuestionAt(currentObjectivePage)
+                    LogInputType.OBJECTIVE -> GameLogObjectiveContent(
+                        imageUris = imageUris,
+                        onAddImage = { imagePickerLauncher.launch("image/*") },
+                        onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
+                        canAdd = canAddPhoto,
+                        selectedOption = selectedObjectiveOption,
+                        onSelectOption = {
+                            selectedObjectiveOption = it
+                            val question = currentObjectiveQuestion
+                            val answerId = question?.answerOptions?.firstOrNull { opt -> opt.text == it }?.id
+                            if (question != null && answerId != null) {
+                                viewModel.saveObjectiveAnswer(question.questionId, answerId)
+                            }
+                        },
+                        question = currentObjectiveQuestion,
+                        currentPage = currentObjectivePage + 1,
+                        onPageChange = {
+                            currentObjectivePage = it - 1
+                            val question = choiceQuestions.getOrNull(currentObjectivePage)
+                            val savedAnswerId = question?.questionId?.let(viewModel::getObjectiveAnswer)
+                            selectedObjectiveOption = question?.answerOptions
+                                ?.firstOrNull { opt -> opt.id == savedAnswerId }
+                                ?.text
+                        },
+                        onRefreshQuestion = {
+                            viewModel.refreshChoiceQuestionAt(currentObjectivePage)
+                        }
+                    )
+
+                    LogInputType.SUBJECTIVE -> GameLogSubjectiveContent(
+                        imageUris = imageUris,
+                        onAddImage = { imagePickerLauncher.launch("image/*") },
+                        onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
+                        canAdd = canAddPhoto,
+                        text = text,
+                        onTextChange = { text = it },
+                        question = shortQuestion,
+                        onRefreshQuestion = { viewModel.loadShortQuestion() }
+                    )
                 }
-            )
+            }
 
-            LogInputType.SUBJECTIVE -> GameLogSubjectiveContent(
-                imageUris = imageUris,
-                onAddImage = { imagePickerLauncher.launch("image/*") },
-                onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
-                canAdd = canAddPhoto,
-                text = text,
-                onTextChange = { text = it },
-                question = shortQuestion, // 질문 전달
-                onRefreshQuestion = { viewModel.loadShortQuestion() } // 새 질문 요청
-            )
+            item {
+                Spacer(modifier = Modifier.height(24.dp)) // 끝 여백 추가
+            }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        BottomActionBar(
-            onPhotoClick = {
-                if (canAddPhoto) imagePickerLauncher.launch("image/*")
-            },
-            onTemplateClick = { isTemplateSheetVisible = true },
-            isPhotoAddEnabled = canAddPhoto
-        )
+        // 하단 고정 바텀바
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
+            BottomActionBar(
+                onPhotoClick = {
+                    if (canAddPhoto) imagePickerLauncher.launch("image/*")
+                },
+                onTemplateClick = { isTemplateSheetVisible = true },
+                isPhotoAddEnabled = canAddPhoto
+            )
+        }
     }
 
     if (isTemplateSheetVisible) {
