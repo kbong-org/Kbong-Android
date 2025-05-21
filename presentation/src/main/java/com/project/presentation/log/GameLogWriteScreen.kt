@@ -1,6 +1,7 @@
 package com.project.presentation.log
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -11,6 +12,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -28,6 +33,8 @@ import com.project.domain.model.day.DailyGameLog
 import com.project.domain.model.log.ChoiceLogRequest
 import com.project.domain.model.log.Emotion
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.presentation.log.Dialog.CancelWritingDialog
 import com.project.presentation.log.component.BottomActionBar
 import com.project.presentation.log.component.GameLogObjectiveContent
 import com.project.presentation.log.component.GameLogSubjectiveContent
@@ -82,6 +89,13 @@ fun GameLogWriteRoute(
                 ) }
                 ?.text
         )
+    }
+
+    var showCancelDialog by remember { mutableStateOf(false) }
+
+    // 시스템 뒤로가기 핸들링
+    BackHandler {
+        showCancelDialog = true
     }
 
     LaunchedEffect(inputType) {
@@ -183,20 +197,20 @@ fun GameLogWriteRoute(
     ) {
         KBongTopBar(
             isBackButton = true,
-            onClickBackButton = { navController.popBackStack() },
+            onClickBackButton = { showCancelDialog = true },
             leftContent = {
                 Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                     Spacer(modifier = Modifier.width(16.dp))
-                    androidx.compose.material3.Text(text = gameInfo.awayTeamDisplayName)
+                    Text(text = gameInfo.awayTeamDisplayName)
                     Spacer(modifier = Modifier.width(8.dp))
-                    androidx.compose.material3.Text(text = "vs")
+                    Text(text = "vs")
                     Spacer(modifier = Modifier.width(8.dp))
-                    androidx.compose.material3.Text(text = gameInfo.homeTeamDisplayName)
+                    Text(text = gameInfo.homeTeamDisplayName)
                 }
             },
             rightContent = {
                 // 서버 전송 로직과 연결
-                androidx.compose.material3.Text(
+                Text(
                     "글 올리기",
                     modifier = Modifier.clickable { handleSubmit() }
                 )
@@ -282,6 +296,18 @@ fun GameLogWriteRoute(
                 isTemplateSheetVisible = false
             },
             onDismiss = { isTemplateSheetVisible = false }
+        )
+    }
+
+    if (showCancelDialog) {
+        CancelWritingDialog(
+            onConfirm = {
+                showCancelDialog = false
+                navController.popBackStack()
+            },
+            onDismiss = {
+                showCancelDialog = false
+            }
         )
     }
 }
