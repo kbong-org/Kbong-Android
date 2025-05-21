@@ -126,8 +126,8 @@ fun HomeScreen(
             modifier = Modifier.background(KBongGrayscaleGray0),
             leftContent = {
                 Image(
-                    modifier = Modifier.size(width = 41.dp, height = 21.dp),
-                    painter = painterResource(id = R.drawable.kbong),
+                    modifier = Modifier.size(width = 83.dp, height = 22.dp),
+                    painter = painterResource(id = com.project.kbong.designsystem.R.drawable.title),
                     contentDescription = ""
                 )
             },

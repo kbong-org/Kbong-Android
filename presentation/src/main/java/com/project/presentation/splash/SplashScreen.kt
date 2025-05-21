@@ -20,7 +20,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
     ) {
         Image(
             modifier = Modifier.align(Alignment.Center),
-            painter = painterResource(R.drawable.ic_splash_logo),
+            painter = painterResource(R.drawable.splash),
             contentDescription = null
         )
     }
