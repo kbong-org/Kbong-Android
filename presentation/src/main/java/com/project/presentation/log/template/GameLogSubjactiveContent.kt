@@ -25,6 +25,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray4
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
+import com.project.domain.model.question.ShortQuestion
 
 @Composable
 fun GameLogSubjectiveContent(
@@ -33,13 +34,37 @@ fun GameLogSubjectiveContent(
     onDeleteImage: (Int) -> Unit,
     canAdd: Boolean,
     text: String,
-    onTextChange: (String) -> Unit
+    onTextChange: (String) -> Unit,
+    question: ShortQuestion?, // 질문 모델 추가
+    onRefreshQuestion: () -> Unit // 질문 바꾸기 버튼 콜백 추가
 ) {
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-        Text(
-            "오늘 경기를 보면서 '야, 야구장에서만 느낄 수 있는 기분이다!' 했던 순간이 있다면?",
-            style = KBongTypography.Heading2
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                question?.questionText
+                    ?: "오늘 경기를 보면서 '야, 야구장에서만 느낄 수 있는 기분이다!' 했던 순간이 있다면?",
+                style = KBongTypography.Heading2,
+                modifier = Modifier.weight(1f)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            // 질문 바꾸기 버튼 추가
+            Text(
+                text = "질문 바꾸기",
+                style = KBongTypography.Label2Medium,
+                color = Color(0xFF6B7AFF),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color(0xFFEFF2FF))
+                    .clickable { onRefreshQuestion() }
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
 
         Divider(
@@ -115,7 +140,7 @@ fun GameLogSubjectiveContent(
 
         if (text.isNotBlank()) {
             Text(
-                text = "${text.length}/100",
+                text = "${'$'}{text.length}/100",
                 style = KBongTypography.Label2Medium,
                 color = KBongGrayscaleGray4,
                 modifier = Modifier.align(Alignment.Start)

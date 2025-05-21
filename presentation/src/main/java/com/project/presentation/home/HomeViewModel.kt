@@ -61,6 +61,7 @@ class HomeViewModel @Inject constructor(
 
             HomeViewEvent.OnClickAddHistory -> {
                 // postSideEffect()
+                postSideEffect(HomeViewSideEffect.NavigateToSelectGame(state.value.selectedDate))
             }
 
             HomeViewEvent.OnClickMonth -> {

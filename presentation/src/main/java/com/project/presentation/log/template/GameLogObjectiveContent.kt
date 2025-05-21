@@ -5,10 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,9 +26,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
-import com.project.presentation.R
+import com.project.domain.model.question.ChoiceQuestion
 import com.project.kbong.designsystem.theme.KBongTypography
-import androidx.compose.material3.Text
+import com.project.presentation.R
 
 @Composable
 fun GameLogObjectiveContent(
@@ -29,17 +38,13 @@ fun GameLogObjectiveContent(
     canAdd: Boolean,
     selectedOption: String?,
     onSelectOption: (String) -> Unit,
+    question: ChoiceQuestion?,
+    currentPage: Int,
     totalPages: Int = 3,
-    onPageChange: (Int) -> Unit = {}
+    onPageChange: (Int) -> Unit = {},
+    onRefreshQuestion: () -> Unit
 ) {
-    var currentPage by remember { mutableStateOf(1) }
-
-    val options = listOf(
-        "다시 보고 싶을 정도로 재미있었어요",
-        "만족스러웠어요",
-        "무난했어요",
-        "별로였어요"
-    )
+    val options = question?.answerOptions?.map { it.text } ?: emptyList()
 
     Column(
         modifier = Modifier
@@ -86,13 +91,14 @@ fun GameLogObjectiveContent(
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color(0xFFEFF2FF))
+                    .clickable { onRefreshQuestion() }
                     .padding(horizontal = 12.dp, vertical = 4.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        Text("전체적인 경기 직관 소감은 어떤가요?", style = KBongTypography.Heading2)
+        Text(question?.questionText ?: "전체적인 경기 직관 소감은 어떤가요?", style = KBongTypography.Heading2)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -141,8 +147,7 @@ fun GameLogObjectiveContent(
                 modifier = Modifier
                     .size(32.dp)
                     .clickable(enabled = canGoBack) {
-                        currentPage--
-                        onPageChange(currentPage)
+                        onPageChange(currentPage - 1)
                     }
             )
 
@@ -154,8 +159,7 @@ fun GameLogObjectiveContent(
                 modifier = Modifier
                     .size(32.dp)
                     .clickable(enabled = canGoNext) {
-                        currentPage++
-                        onPageChange(currentPage)
+                        onPageChange(currentPage + 1)
                     }
             )
         }

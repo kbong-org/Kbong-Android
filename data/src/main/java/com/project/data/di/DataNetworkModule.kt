@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -80,5 +81,19 @@ object DataNetworkModule {
                 }
             }
         }.build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("upload")
+    fun provideUploadOkHttpClient(
+        httpLoggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(40, TimeUnit.SECONDS)
+            .readTimeout(40, TimeUnit.SECONDS)
+            .writeTimeout(40, TimeUnit.SECONDS)
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
     }
 }

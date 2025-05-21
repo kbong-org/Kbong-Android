@@ -55,10 +55,17 @@ fun HomeRoute(
     var isShowDatePicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        viewModel.intent(HomeViewContract.HomeViewEvent.OnTabSelected(state.selectTab))
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 HomeViewContract.HomeViewSideEffect.ShowDatePicker -> {
                     isShowDatePicker = true
+                }
+                is HomeViewContract.HomeViewSideEffect.NavigateToSelectGame -> {
+                    navController.navigateToSelectGame(sideEffect.date)
                 }
             }
         }
@@ -216,7 +223,8 @@ fun HomeScreen(
                                 homeViewEvent(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory
                                 )
-                            }
+                            },
+                            isAddIcon = state.dailyLogList.size < 3
                         )
                     }
 

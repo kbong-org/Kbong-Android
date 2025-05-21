@@ -29,7 +29,8 @@ private const val MAX_LOG_COUNT = 3
 fun DayHistoryContent(
     selectedDate: LocalDate,
     dailyLogList: List<DailyLog>,
-    onClickAddHistory: () -> Unit
+    onClickAddHistory: () -> Unit,
+    isAddIcon: Boolean
 ) {
     val logCount = dailyLogList.size
 
@@ -53,10 +54,7 @@ fun DayHistoryContent(
                     homeTeam = homeTeamDisplayName,
                     stadium = stadiumFullName,
                     type = type,
-                    imageList = listOf(
-                        "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
-                        "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
-                    )
+                    imageList = imageList
                 )
             }
 
@@ -104,6 +102,7 @@ private fun PreviewDayHistoryHeader() {
     DayHistoryContent(
         selectedDate = LocalDate.of(2025, 2, 17),
         onClickAddHistory = {},
-        dailyLogList = listOf()
+        dailyLogList = listOf(),
+        isAddIcon = true
     )
 }

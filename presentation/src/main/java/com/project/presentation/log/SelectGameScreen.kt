@@ -53,58 +53,61 @@ fun SelectGameScreen(
         viewModel.fetchGames(selectedDate)
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White)
-    ) {
-        KBongTopBar(
-            titleText = "${selectedDate.monthValue}월 ${selectedDate.dayOfMonth}일 " +
-                    selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
-            onClickBackButton = { navController.popBackStack() }
-        )
-
-        Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "기록할 경기를 선택해주세요",
-                style = KBongTypography.Heading2,
-                color = Color.Black,
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 80.dp) // 버튼 높이만큼 패딩 확보
+                .background(Color.White)
+        ) {
+            KBongTopBar(
+                titleText = "${selectedDate.monthValue}월 ${selectedDate.dayOfMonth}일 " +
+                        selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
+                onClickBackButton = { navController.popBackStack() }
             )
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Spacer(modifier = Modifier.height(16.dp))
 
-            when {
-                isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-                errorMessage != null -> Text(
-                    text = errorMessage ?: "오류 발생",
-                    color = Color.Red,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                Text(
+                    text = "기록할 경기를 선택해주세요",
+                    style = KBongTypography.Heading2,
+                    color = Color.Black,
                 )
-                else -> LazyColumn {
-                    items(gameList) { game ->
-                        val finished = game.homeTeamScore != null && game.awayTeamScore != null
 
-                        GameItem(
-                            game = game,
-                            isSelected = selectedGame == game,
-                            isFinished = finished,
-                            onClick = {
-                                selectedGame = game
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+
+                when {
+                    isLoading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                    errorMessage != null -> Text(
+                        text = errorMessage ?: "오류 발생",
+                        color = Color.Red,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                    else -> LazyColumn {
+                        items(gameList) { game ->
+                            GameItem(
+                                game = game,
+                                isSelected = selectedGame == game,
+                                onClick = { selectedGame = game }
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                        }
                     }
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.weight(1f))
-
+        // 하단 고정 버튼
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .background(Color.White) // 버튼 아래 배경 색
+                .padding(horizontal = 20.dp, vertical = 12.dp)
+        ) {
             Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     selectedGame?.let {
                         navController.navigateToGameLogWrite(it.toDto(), selectedDate)
@@ -122,11 +125,18 @@ fun SelectGameScreen(
 fun GameItem(
     game: DailyGameLog,
     isSelected: Boolean,
-    isFinished: Boolean,
     onClick: () -> Unit
 ) {
     val borderColor = if (isSelected) Color(0xFF3D5AFE) else Color.Transparent
     val shape: Shape = MaterialTheme.shapes.medium
+
+    // 상태 분기
+    val (tagText, tagColor, showScore) = when (game.status) {
+        "FINISHED" -> Triple("종료", Color.Gray, true)
+        "CANCELLED" -> Triple("취소", Color.Red, false)
+        "SUSPENDED" -> Triple("연기", Color(0xFF3D5AFE), false)
+        else -> Triple(null, null, false) // SCHEDULED 또는 기타
+    }
 
     Surface(
         modifier = Modifier
@@ -143,25 +153,16 @@ fun GameItem(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Away Team
+                // Away
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = game.awayTeamDisplayName,
-                        style = KBongTypography.Body1NormalSemiBold
-                    )
-                    if (isFinished) {
+                    Text(game.awayTeamDisplayName, style = KBongTypography.Body1NormalSemiBold)
+                    if (showScore) {
                         Text(
                             text = game.awayTeamScore?.toString() ?: "-",
-                            color = when {
-                                (game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0) -> Color(
-                                    0xFF3D5AFE
-                                )
-
-                                else -> Color(0xFFB0B0B0)
-                            },
+                            color = if ((game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -170,12 +171,12 @@ fun GameItem(
                     }
                 }
 
-                // Center (종료 태그 + 시간 + 경기장)
+                // Center
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    if (isFinished) {
+                    tagText?.let {
                         Box(
                             modifier = Modifier
                                 .background(Color(0xFFEDEDED), shape = RoundedCornerShape(6.dp))
@@ -185,10 +186,10 @@ fun GameItem(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "종료",
+                                text = it,
                                 fontSize = 10.sp,
                                 lineHeight = 12.sp,
-                                color = Color.Gray,
+                                color = tagColor!!,
                                 textAlign = TextAlign.Center,
                             )
                         }
@@ -201,7 +202,6 @@ fun GameItem(
                         fontSize = 16.sp,
                         textAlign = TextAlign.Center
                     )
-
                     Text(
                         text = game.stadiumDisplayName,
                         style = KBongTypography.Label2Medium,
@@ -210,25 +210,16 @@ fun GameItem(
                     )
                 }
 
-                // Home Team
+                // Home
                 Column(
                     modifier = Modifier.weight(1f),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = game.homeTeamDisplayName,
-                        style = KBongTypography.Body1NormalSemiBold
-                    )
-                    if (isFinished) {
+                    Text(game.homeTeamDisplayName, style = KBongTypography.Body1NormalSemiBold)
+                    if (showScore) {
                         Text(
                             text = game.homeTeamScore?.toString() ?: "-",
-                            color = when {
-                                (game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0) -> Color(
-                                    0xFF3D5AFE
-                                )
-
-                                else -> Color(0xFFB0B0B0)
-                            },
+                            color = if ((game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -252,11 +243,11 @@ fun PreviewGameItemFinished() {
             awayTeamScore = 5,
             homeTeamScore = 2,
             homeTeamDisplayName = "한화",
-            stadiumDisplayName = "수원"
+            stadiumDisplayName = "수원",
+            status = "FINISHED"
         ),
         isSelected = true,
         onClick = {},
-        isFinished = true
     )
 }
 
@@ -269,10 +260,27 @@ fun PreviewGameItemScheduled() {
             startTimeStr = "18:30",
             awayTeamDisplayName = "두산",
             homeTeamDisplayName = "SSG",
-            stadiumDisplayName = "문학"
+            stadiumDisplayName = "문학",
+            status = "SCHEDULED"
         ),
         isSelected = false,
         onClick = {},
-        isFinished = false
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewGameItemCancelled() {
+    GameItem(
+        game = DailyGameLog(
+            id = 3L,
+            startTimeStr = "18:30",
+            awayTeamDisplayName = "LG",
+            homeTeamDisplayName = "NC",
+            stadiumDisplayName = "잠실",
+            status = "CANCELLED"
+        ),
+        isSelected = false,
+        onClick = {}
     )
 }

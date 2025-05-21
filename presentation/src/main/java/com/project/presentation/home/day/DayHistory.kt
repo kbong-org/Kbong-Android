@@ -1,5 +1,6 @@
 package com.project.presentation.home.day
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -95,29 +96,36 @@ fun DayHistory(
 
         Spacer(modifier = Modifier.weight(1F))
 
-        Box {
-            AsyncImage(
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                placeholder = painterResource(com.project.kbong.designsystem.R.drawable.default_thumbnail),
-                model = imageList.first(),
-                contentDescription = "historyImage"
-            )
-            if (imageList.size > 1) {
-                Box(
+        if (imageList.isNotEmpty()) {
+            Box {
+                AsyncImage(
                     modifier = Modifier
-                        .padding(top = 6.dp, end = 6.dp)
-                        .clip(CircleShape)
-                        .background(KBongImageCount)
-                        .align(Alignment.TopEnd)
-                ) {
-                    Text(
-                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-                        text = "${imageList.size}",
-                        style = KBongTypography.Caption2,
-                        color = KBongGrayscaleGray0
-                    )
+                        .size(80.dp)
+                        .clip(RoundedCornerShape(16.dp)),
+                    placeholder = painterResource(com.project.kbong.designsystem.R.drawable.default_thumbnail),
+                    model = imageList.first(),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                    contentDescription = "historyImage",
+                    onError = {
+                        Log.e("DayHistory", "❌ 이미지 로드 실패: ${it.result.throwable.message}")
+                    }
+                )
+                Log.d("DayHistory", "Image URL: ${imageList.firstOrNull()}")
+                if (imageList.size > 1) {
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 6.dp, end = 6.dp)
+                            .clip(CircleShape)
+                            .background(KBongImageCount)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                            text = "${imageList.size}",
+                            style = KBongTypography.Caption2,
+                            color = KBongGrayscaleGray0
+                        )
+                    }
                 }
             }
         }

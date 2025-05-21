@@ -8,8 +8,9 @@ enum class DayEmotion(
     val title: String
 ) {
     HAPPY(painter = R.drawable.win, title = "HAPPY"),
-    SAD(painter = R.drawable.lose, title = "SAD");
-
+    SAD(painter = R.drawable.lose, title = "SAD"),
+    ANGRY(painter = R.drawable.lightning, title = "ANGRY"),
+    NORMAL(painter = R.drawable.cloud, title = "NORMAL");
 
     companion object {
         fun fromDescription(title: String?): Int? {

@@ -26,7 +26,6 @@ data class DailyLogResponse(
     @SerializedName("type")
     val type: String = "",
 
-    // todo 이미지 리스폰스 추가 되면 해놓기
-    /*@SerializedName("stadiumFullName")
-    val imageList: List<String> = listOf()*/
+    @SerializedName("imagePaths")
+    val imageList: List<String> = listOf()
 )
