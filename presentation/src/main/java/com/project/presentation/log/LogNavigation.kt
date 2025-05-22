@@ -8,7 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.data.model.log.DailyGameLogDto
 import com.project.data.model.log.toDomain
-import com.project.domain.model.day.DailyGameLog
+import com.project.presentation.log.detail.LogDetailScreen
+import com.project.presentation.log.select.SelectGameScreen
+import com.project.presentation.log.write.GameLogWriteRoute
 import com.project.presentation.navigation.NavigationRoute
 import java.time.LocalDate
 
@@ -62,5 +64,22 @@ fun NavGraphBuilder.gameLogWriteNavigation(navController: NavController) {
                 selectedDate = selectedDate
             )
         }
+    }
+}
+
+fun NavController.navigateToLogDetail(logId: Long) {
+    navigate(NavigationRoute.LogDetailScreen.createRoute(logId))
+}
+
+fun NavGraphBuilder.logDetailNavigation(navController: NavController) {
+    composable(
+        route = NavigationRoute.LogDetailScreen.route,
+        arguments = listOf(navArgument("logId") { type = NavType.LongType })
+    ) { backStackEntry ->
+        val logId = backStackEntry.arguments?.getLong("logId") ?: return@composable
+        LogDetailScreen(
+            logId = logId,
+            onBack = { navController.popBackStack() }
+        )
     }
 }

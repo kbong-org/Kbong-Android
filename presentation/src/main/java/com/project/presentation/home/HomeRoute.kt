@@ -42,6 +42,7 @@ import com.project.presentation.home.day.DayGameHistoryContent
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
 import com.project.presentation.home.day.EmptyGameContent
+import com.project.presentation.log.navigateToLogDetail
 import com.project.presentation.log.navigateToSelectGame
 import com.project.presentation.utils.localDateToString
 
@@ -224,7 +225,10 @@ fun HomeScreen(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory
                                 )
                             },
-                            isAddIcon = state.dailyLogList.size < 3
+                            isAddIcon = state.dailyLogList.size < 3,
+                            onClickLogItem = { logId ->
+                                navController.navigateToLogDetail(logId)
+                            }
                         )
                     }
 

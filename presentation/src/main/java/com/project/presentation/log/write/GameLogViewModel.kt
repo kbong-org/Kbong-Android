@@ -1,4 +1,4 @@
-package com.project.presentation.log
+package com.project.presentation.log.write
 
 import android.content.Context
 import android.net.Uri

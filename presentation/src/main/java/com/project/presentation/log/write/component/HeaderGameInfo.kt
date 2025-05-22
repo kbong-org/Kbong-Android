@@ -1,4 +1,4 @@
-package com.project.presentation.log.component
+package com.project.presentation.log.write.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.project.presentation.log
+package com.project.presentation.log.select
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -27,6 +27,7 @@ import com.project.data.model.log.toDto
 import com.project.domain.model.day.DailyGameLog
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.presentation.log.navigateToGameLogWrite
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*

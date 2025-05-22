@@ -3,6 +3,7 @@ package com.project.presentation.home.day
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,12 +43,14 @@ fun DayHistory(
     stadium: String,
     type: String,
     imageList: List<String>,
+    onClick: () -> Unit = {}
 ) {
     val fromTypeData = TagType.fromTypeData(type)
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
         Column {

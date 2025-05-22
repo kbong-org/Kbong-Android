@@ -2,6 +2,7 @@ package com.project.data.service
 
 import com.project.data.model.BaseModel
 import com.project.data.model.log.ChoiceLogRequestDto
+import com.project.data.model.log.DailyLogDetailResponseDto
 import com.project.data.model.log.FreeLogRequestDto
 import com.project.data.model.log.GameListForLogResponse
 import com.project.data.model.log.LogUploadResponseDto
@@ -10,6 +11,7 @@ import com.project.data.model.log.ShortLogRequestDto
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface LogService {
@@ -23,5 +25,7 @@ interface LogService {
     suspend fun postShortLog(@Body request: ShortLogRequestDto): BaseModel<LogUploadResponseDto>
     @POST("/api/v1/daily-log/choice")
     suspend fun postChoiceLog(@Body request: ChoiceLogRequestDto): BaseModel<LogUploadResponseDto>
+    @GET("/api/v1/daily-log/{id}")
+    suspend fun getDailyLogDetail(@Path("id") id: Long): BaseModel<DailyLogDetailResponseDto>
 
 }

@@ -1,4 +1,4 @@
-package com.project.presentation.log
+package com.project.presentation.log.select
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

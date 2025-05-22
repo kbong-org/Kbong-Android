@@ -12,6 +12,7 @@ import com.project.data.mapper.toDto
 import com.project.data.service.LogService
 import com.project.data.utils.getFileExtension
 import com.project.domain.model.log.ChoiceLogRequest
+import com.project.domain.model.log.DailyLogDetail
 import com.project.domain.model.question.ChoiceQuestion
 import com.project.domain.model.log.FreeLogRequest
 import com.project.domain.model.log.ShortLogRequest
@@ -106,5 +107,9 @@ class LogRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun getLogDetail(id: Long): DailyLogDetail {
+        return logService.getDailyLogDetail(id).data?.toDomain() ?: throw Exception("Log detail not found")
     }
 }

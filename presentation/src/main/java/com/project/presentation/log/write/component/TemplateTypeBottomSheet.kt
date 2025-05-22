@@ -1,4 +1,4 @@
-package com.project.presentation.log.component
+package com.project.presentation.log.write.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,11 +16,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray6
-import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray9
 import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.presentation.R
-import com.project.presentation.log.LogInputType
+import com.project.presentation.log.write.LogInputType
 import com.project.kbong.designsystem.theme.KBongTypography
 
 @OptIn(ExperimentalMaterial3Api::class)

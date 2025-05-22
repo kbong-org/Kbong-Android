@@ -145,6 +145,13 @@ object KBongTypography {
         lineHeight = 14.sp
     )
 
+    val Caption2SemiBold = baseTextStyle.copy(
+        fontWeight = FontWeight.SemiBold,
+        fontSize = FontSizeTokens.Caption2,
+        letterSpacing = 0.0311.em,
+        lineHeight = 14.sp
+    )
+
     val Caption3Bold = baseTextStyle.copy(
         fontWeight = FontWeight.Bold,
         fontSize = FontSizeTokens.Caption3,
