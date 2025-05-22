@@ -21,12 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.project.kbong.designsystem.calendar.HorizontalCalendar
 import com.project.kbong.designsystem.datepicker.DatePickerModal
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
@@ -40,21 +42,31 @@ import com.project.presentation.home.day.DayGameHistoryContent
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
 import com.project.presentation.home.day.EmptyGameContent
+import com.project.presentation.log.navigateToLogDetail
+import com.project.presentation.log.navigateToSelectGame
 import com.project.presentation.utils.localDateToString
 
 @Composable
 fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavController,
 ) {
     val state by viewModel.state.collectAsState()
     var isShowDatePicker by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.intent(HomeViewContract.HomeViewEvent.OnTabSelected(state.selectTab))
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 HomeViewContract.HomeViewSideEffect.ShowDatePicker -> {
                     isShowDatePicker = true
+                }
+                is HomeViewContract.HomeViewSideEffect.NavigateToSelectGame -> {
+                    navController.navigateToSelectGame(sideEffect.date)
                 }
             }
         }
@@ -66,7 +78,8 @@ fun HomeRoute(
             state = state,
             homeViewEvent = { event ->
                 viewModel.intent(event)
-            }
+            },
+            navController = navController
         )
         if (isShowDatePicker) {
             DatePickerModal(
@@ -93,6 +106,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeViewContract.HomeViewState,
     homeViewEvent: (HomeViewContract.HomeViewEvent) -> Unit,
+    navController: NavController,
 ) {
     val homeTabTitleList = stringArrayResource(R.array.home_tab).toList()
     val selectedDay = state.selectedDate.dayOfMonth
@@ -113,8 +127,8 @@ fun HomeScreen(
             modifier = Modifier.background(KBongGrayscaleGray0),
             leftContent = {
                 Image(
-                    modifier = Modifier.size(width = 41.dp, height = 21.dp),
-                    painter = painterResource(id = R.drawable.kbong),
+                    modifier = Modifier.size(width = 83.dp, height = 22.dp),
+                    painter = painterResource(id = com.project.kbong.designsystem.R.drawable.title),
                     contentDescription = ""
                 )
             },
@@ -196,6 +210,7 @@ fun HomeScreen(
                                 homeViewEvent(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory
                                 )
+                                navController.navigateToSelectGame(state.selectedDate)
                             }
                         )
                     }
@@ -209,6 +224,10 @@ fun HomeScreen(
                                 homeViewEvent(
                                     HomeViewContract.HomeViewEvent.OnClickAddHistory
                                 )
+                            },
+                            isAddIcon = state.dailyLogList.size < 3,
+                            onClickLogItem = { logId ->
+                                navController.navigateToLogDetail(logId)
                             }
                         )
                     }
@@ -236,6 +255,7 @@ private fun PreviewHomeScreen() {
         modifier = Modifier,
         state = HomeViewContract.HomeViewState(),
         {},
+        navController = NavController(context = LocalContext.current) // Mock NavController
     )
 }
 

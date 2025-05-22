@@ -65,15 +65,15 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.10"
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 

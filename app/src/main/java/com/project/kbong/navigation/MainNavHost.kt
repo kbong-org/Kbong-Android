@@ -7,6 +7,9 @@ import androidx.navigation.compose.NavHost
 import com.project.data.LocalNavController
 import com.project.presentation.auth.kakaoLoginNavigation
 import com.project.presentation.home.homeNavigation
+import com.project.presentation.log.gameLogWriteNavigation
+import com.project.presentation.log.logDetailNavigation
+import com.project.presentation.log.selectGameNavigation
 import com.project.presentation.my.myNavigation
 import com.project.presentation.signUp.signUpNavigation
 
@@ -24,8 +27,11 @@ fun MainNavHost(
         ) {
             kakaoLoginNavigation()
             signUpNavigation(navController = appState.navController)
-            homeNavigation()
+            homeNavigation(navController = appState.navController)
+            selectGameNavigation(navController = appState.navController)
             myNavigation()
+            gameLogWriteNavigation(navController = appState.navController)
+            logDetailNavigation(navController = appState.navController)
         }
     }
 }

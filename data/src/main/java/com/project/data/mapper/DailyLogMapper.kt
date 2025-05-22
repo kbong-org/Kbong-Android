@@ -20,6 +20,6 @@ private fun DailyLogResponse.toDomain(): DailyLog {
         stadiumFullName = stadiumFullName,
         emotion = emotion,
         type = type,
-      //  imageList = imageList
+        imageList = imageList
     )
 }

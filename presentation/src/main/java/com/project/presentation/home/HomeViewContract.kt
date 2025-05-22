@@ -42,5 +42,6 @@ class HomeViewContract {
      */
     sealed interface HomeViewSideEffect : UiSideEffect {
         data object ShowDatePicker : HomeViewSideEffect
+        data class NavigateToSelectGame(val date: LocalDate) : HomeViewSideEffect
     }
 }

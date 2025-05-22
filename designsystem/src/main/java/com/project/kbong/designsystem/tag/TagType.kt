@@ -15,12 +15,23 @@ enum class TagType(
         tagName = "선택형",
         textColor = KBongPrimary,
         backgroundColor = KBongPrimary10
+    ),
+    FREE(
+        type = "FREE",
+        tagName = "자유형",
+        textColor = KBongPrimary,
+        backgroundColor = KBongPrimary10
+    ),
+    SHORT(
+        type = "SHORT",
+        tagName = "주관형",
+        textColor = KBongPrimary,
+        backgroundColor = KBongPrimary10
     );
 
     companion object {
         fun fromTypeData(type: String): TagType {
-            return TagType.entries.find { it.type == type } ?: CHOICE
+            return entries.find { it.type == type } ?: CHOICE
         }
     }
-
 }

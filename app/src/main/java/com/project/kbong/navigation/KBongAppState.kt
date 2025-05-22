@@ -50,6 +50,9 @@ class KBongAppState(
         return when (currentDestination?.route) {
             NavigationRoute.KaKaoLoginScreen.route -> true
             NavigationRoute.SignUpScreen.route -> true
+            NavigationRoute.SelectGameScreen.route -> true
+            NavigationRoute.GameLogWriteScreen.route -> true
+            NavigationRoute.LogDetailScreen.route -> true
             else -> false
         }
     }

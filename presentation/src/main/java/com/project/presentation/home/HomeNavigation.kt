@@ -9,10 +9,12 @@ import com.project.presentation.navigation.NavigationRoute
 fun NavController.navigateToHome(navOptions: NavOptions? = null) =
     navigate(NavigationRoute.CalendarScreen.route, navOptions)
 
-fun NavGraphBuilder.homeNavigation() {
+fun NavGraphBuilder.homeNavigation(
+    navController: NavController
+) {
     composable(
         route = NavigationRoute.CalendarScreen.route,
     ) {
-        HomeRoute()
+        HomeRoute(navController = navController)
     }
 }
