@@ -1,6 +1,7 @@
 package com.project.presentation.log.write
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -65,17 +66,25 @@ fun GameLogWriteRoute(
     var imageUris by remember { mutableStateOf<List<Uri>>(emptyList()) }
     var text by remember { mutableStateOf("") }
 
+    val context = LocalContext.current
+
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
     ) { uris ->
-        if (imageUris.size < 4) {
-            val updated = (imageUris + uris).distinct().take(4)
-            imageUris = updated
+        val availableSlots = 4 - imageUris.size
+        if (uris.size > availableSlots) {
+            Toast
+                .makeText(context, "이미지는 최대 4장까지 선택할 수 있어요.", Toast.LENGTH_SHORT)
+                .show()
+        }
+
+        if (availableSlots > 0) {
+            val limitedUris = uris.take(availableSlots)
+            imageUris = (imageUris + limitedUris).distinct()
         }
     }
 
     val canAddPhoto = imageUris.size < 4
-    val context = LocalContext.current
 
     val shortQuestion by viewModel.shortQuestion.collectAsState()
     val choiceQuestions by viewModel.choiceQuestions.collectAsState()

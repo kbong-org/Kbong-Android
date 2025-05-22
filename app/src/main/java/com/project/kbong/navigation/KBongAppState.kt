@@ -52,6 +52,7 @@ class KBongAppState(
             NavigationRoute.SignUpScreen.route -> true
             NavigationRoute.SelectGameScreen.route -> true
             NavigationRoute.GameLogWriteScreen.route -> true
+            NavigationRoute.LogDetailScreen.route -> true
             else -> false
         }
     }

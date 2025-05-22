@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.log.DailyLogDetail
+import com.project.domain.repository.log.LogRepository
 import com.project.domain.usecase.log.GetLogDetailUseCase
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.kbong.designsystem.theme.KBongTeamEagles
@@ -24,7 +25,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LogDetailViewModel @Inject constructor(
-    private val getLogDetailUseCase: GetLogDetailUseCase
+    private val getLogDetailUseCase: GetLogDetailUseCase,
+    private val logRepository: LogRepository
 ) : ViewModel() {
 
     var logDetail by mutableStateOf<DailyLogDetail?>(null)
@@ -62,5 +64,9 @@ class LogDetailViewModel @Inject constructor(
             "키움" -> KBongTeamHeroes
             else -> null
         }
+    }
+
+    suspend fun deleteLog(id: Long): Result<Unit> {
+        return logRepository.deleteLog(id)
     }
 }

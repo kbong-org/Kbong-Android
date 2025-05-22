@@ -10,13 +10,10 @@ import androidx.annotation.RequiresApi
 import com.project.data.mapper.toDomain
 import com.project.data.mapper.toDto
 import com.project.data.service.LogService
-import com.project.data.utils.getFileExtension
 import com.project.domain.model.log.ChoiceLogRequest
 import com.project.domain.model.log.DailyLogDetail
-import com.project.domain.model.question.ChoiceQuestion
 import com.project.domain.model.log.FreeLogRequest
 import com.project.domain.model.log.ShortLogRequest
-import com.project.domain.model.question.ShortQuestion
 import com.project.domain.repository.log.LogRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -111,5 +108,18 @@ class LogRepositoryImpl @Inject constructor(
 
     override suspend fun getLogDetail(id: Long): DailyLogDetail {
         return logService.getDailyLogDetail(id).data?.toDomain() ?: throw Exception("Log detail not found")
+    }
+
+    override suspend fun deleteLog(id: Long): Result<Unit> {
+        return try {
+            val response = logService.deleteDailyLog(id)
+            if (response.isSuccess) {
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception(response.errorResponse.message))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

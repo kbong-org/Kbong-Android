@@ -9,6 +9,7 @@ import com.project.data.model.log.LogUploadResponseDto
 import com.project.data.model.log.PresignedUrlDto
 import com.project.data.model.log.ShortLogRequestDto
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -27,5 +28,6 @@ interface LogService {
     suspend fun postChoiceLog(@Body request: ChoiceLogRequestDto): BaseModel<LogUploadResponseDto>
     @GET("/api/v1/daily-log/{id}")
     suspend fun getDailyLogDetail(@Path("id") id: Long): BaseModel<DailyLogDetailResponseDto>
-
+    @DELETE("/api/v1/daily-log/{id}")
+    suspend fun deleteDailyLog(@Path("id") id: Long): BaseModel<Unit>
 }

@@ -13,4 +13,5 @@ interface LogRepository {
     suspend fun postShortLog(request: ShortLogRequest): Result<Long>
     suspend fun postChoiceLog(request: ChoiceLogRequest): Result<Long>
     suspend fun getLogDetail(id: Long): DailyLogDetail
+    suspend fun deleteLog(id: Long): Result<Unit>
 }

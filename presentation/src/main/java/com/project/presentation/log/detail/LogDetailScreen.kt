@@ -1,15 +1,30 @@
 package com.project.presentation.log.detail
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -21,10 +36,16 @@ import com.project.domain.model.log.Detail
 import com.project.domain.model.log.Emotion
 import com.project.domain.model.log.GameInfo
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
+import com.project.kbong.designsystem.theme.KBongStatusDestructive
 import com.project.kbong.designsystem.theme.KBongTeamTwins
+import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.presentation.R
+import com.project.presentation.log.Dialog.DeleteLogDialog
 import com.project.presentation.log.detail.content.LogDetailFreeContent
 import com.project.presentation.log.detail.content.LogDetailObjectiveContent
 import com.project.presentation.log.detail.content.LogDetailSubjectiveContent
+import kotlinx.coroutines.launch
 
 @Composable
 fun LogDetailScreen(
@@ -36,8 +57,14 @@ fun LogDetailScreen(
     val log = viewModel.logDetail
     val isLoading = viewModel.isLoading
 
+    var showMenu by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
     LaunchedEffect(logId) {
         viewModel.fetchLogDetail(logId)
+        Log.d("LogDetail", "logId: $logId")
     }
 
     if (isLoading || log == null) {
@@ -50,17 +77,64 @@ fun LogDetailScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        KBongTopBar(
-            onClickBackButton = onBack,
-            rightContent = {
-                Image(
-                    painter = painterResource(id = com.project.kbong.designsystem.R.drawable.more),
-                    contentDescription = "더보기 아이콘"
-                )
-            }
-        )
+        // TopBar + 드롭다운 메뉴
+        Box {
+            KBongTopBar(
+                onClickBackButton = onBack,
+                rightContent = {
+                    Image(
+                        painter = painterResource(id = com.project.kbong.designsystem.R.drawable.more),
+                        contentDescription = "더보기 아이콘",
+                        modifier = Modifier.clickable { showMenu = true }
+                    )
 
-        // 콘텐츠 부분만 스크롤
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false },
+                        modifier = Modifier
+                            .background(Color.White) // 배경 흰색
+                    ) {
+                        DropdownMenuItem(
+                            text = {
+                                Row {
+                                    Text("수정하기", color = KBongGrayscaleGray8, style = KBongTypography.Body2Normal)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.edit),
+                                        contentDescription = null,
+                                    )
+                                }
+                            },
+                            onClick = {
+                                showMenu = false
+                                // TODO: 수정 기능 구현
+                            }
+                        )
+
+                        Divider(color = Color(0xFFEDEDED), thickness = 1.dp)
+
+                        DropdownMenuItem(
+                            text = {
+                                Row {
+                                    Text("삭제하기", color = KBongStatusDestructive,  style = KBongTypography.Body2Normal)
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Image(
+                                        painter = painterResource(id = R.drawable.delete),
+                                        contentDescription = null,
+                                    )
+                                }
+                            },
+                            onClick = {
+                                showMenu = false
+                                showDeleteDialog = true // 다이얼로그 띄우기
+                            }
+                        )
+                    }
+                }
+            )
+        }
+
+        // 스크롤 가능 콘텐츠
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,6 +151,25 @@ fun LogDetailScreen(
                 "SHORT" -> LogDetailSubjectiveContent(log, myTeamColor)
             }
         }
+    }
+
+    // 삭제 다이얼로그
+    if (showDeleteDialog) {
+        DeleteLogDialog(
+            onConfirm = {
+                showDeleteDialog = false
+                coroutineScope.launch {
+                    val result = viewModel.deleteLog(logId)
+                    if (result.isSuccess) {
+                        onBack() // 삭제 성공 시 뒤로 가기
+                    } else {
+                        // 삭제 실패 시 처리 (예: 토스트)
+                        Log.e("LogDetail", "삭제 실패: ${result.exceptionOrNull()?.message}")
+                    }
+                }
+            },
+            onDismiss = { showDeleteDialog = false }
+        )
     }
 }
 
