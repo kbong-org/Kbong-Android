@@ -60,6 +60,7 @@ import androidx.navigation.NavController
 import androidx.navigation.navOptions
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.project.data.LocalNavController
@@ -391,7 +392,10 @@ fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
     }
 
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset(lottieFile))
-    val progress by animateLottieCompositionAsState(composition)
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = LottieConstants.IterateForever
+    )
 
     Column(
         modifier = Modifier
