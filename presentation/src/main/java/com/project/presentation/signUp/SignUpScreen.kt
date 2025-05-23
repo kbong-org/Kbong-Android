@@ -2,7 +2,6 @@ package com.project.presentation.signUp
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -16,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -25,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,7 +42,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -51,7 +49,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,15 +68,26 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
 import com.project.kbong.designsystem.theme.KBongPrimary
+import com.project.kbong.designsystem.theme.KBongPrimary10
 import com.project.kbong.designsystem.theme.KBongTeamBears
+import com.project.kbong.designsystem.theme.KBongTeamBears10
 import com.project.kbong.designsystem.theme.KBongTeamEagles
+import com.project.kbong.designsystem.theme.KBongTeamEagles10
 import com.project.kbong.designsystem.theme.KBongTeamGiants
+import com.project.kbong.designsystem.theme.KBongTeamGiants10
 import com.project.kbong.designsystem.theme.KBongTeamHeroes
+import com.project.kbong.designsystem.theme.KBongTeamHeroes10
+import com.project.kbong.designsystem.theme.KBongTeamKTSub10
 import com.project.kbong.designsystem.theme.KBongTeamLions
+import com.project.kbong.designsystem.theme.KBongTeamLions10
 import com.project.kbong.designsystem.theme.KBongTeamNc
+import com.project.kbong.designsystem.theme.KBongTeamNcSub10
 import com.project.kbong.designsystem.theme.KBongTeamSsg
+import com.project.kbong.designsystem.theme.KBongTeamSsg10
 import com.project.kbong.designsystem.theme.KBongTeamTigers
+import com.project.kbong.designsystem.theme.KBongTeamTigers10
 import com.project.kbong.designsystem.theme.KBongTeamTwins
+import com.project.kbong.designsystem.theme.KBongTeamTwins10
 import com.project.kbong.designsystem.theme.KBongTheme
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
@@ -377,7 +385,8 @@ fun TeamButton(
 
 @Composable
 fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
-    val lottieFile = when (selectedTeam.uppercase()) {
+    // 팀별 로띠 파일
+    val lottieFile = when (selectedTeam) {
         "KIA 타이거즈" -> "Tigers.json"
         "두산 베어스" -> "Bears.json"
         "롯데 자이언츠" -> "Giants.json"
@@ -391,11 +400,23 @@ fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
         else -> "ALL.json"
     }
 
+    // 팀별 배경 컬러 매핑
+    val teamColor = when (selectedTeam) {
+        "KIA 타이거즈" -> KBongTeamTigers10
+        "두산 베어스" -> KBongTeamBears10
+        "롯데 자이언츠" -> KBongTeamGiants10
+        "삼성 라이온즈" -> KBongTeamLions10
+        "SSG 랜더스" -> KBongTeamSsg10
+        "NC 다이노스" -> KBongTeamNcSub10
+        "LG 트윈스" -> KBongTeamTwins10
+        "키움 히어로즈" -> KBongTeamHeroes10
+        "KT 위즈" -> KBongTeamKTSub10
+        "한화 이글즈" -> KBongTeamEagles10
+        else -> KBongPrimary10
+    }
+
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset(lottieFile))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        iterations = LottieConstants.IterateForever
-    )
+    val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
 
     Column(
         modifier = Modifier
@@ -406,12 +427,22 @@ fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
     ) {
         Spacer(modifier = Modifier.height(178.dp))
 
-        // 팀별 로띠 애니메이션
-        LottieAnimation(
-            composition = composition,
-            progress = { progress },
-            modifier = Modifier.size(180.dp)
-        )
+        // 로띠 + 배경 원
+        Box(
+            modifier = Modifier.size(120.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .background(teamColor, shape = CircleShape)
+            )
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier.size(90.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(24.dp))
         Text(
