@@ -124,7 +124,9 @@ class AuthViewModel @Inject constructor(
                             _signUpResult.value = SignUpResult.Required(idToken)
                         }
                     }
+                    else -> {}
                 }
+
             } catch (e: Exception) {
                 Log.e("KakaoLogin", "❌ 서버 요청 중 예외 발생: ${e.localizedMessage}", e)
             }
@@ -145,6 +147,7 @@ class AuthViewModel @Inject constructor(
                     Log.e("SignUp", "❌ 회원가입 실패: ${result.errorMessage}")
                 } else if (result is SignUpResult.Success) {
                     Log.d("SignUp", "✅ 회원가입 성공!")
+                    performKakaoLogin(idToken)
                 }
 
             } catch (e: Exception) {
@@ -172,6 +175,7 @@ class AuthViewModel @Inject constructor(
                 }
 
                 is TokenResult.Failure -> Log.e("KakaoLogin", "❌ 토큰 갱신 실패: ${result.errorMessage}")
+                else -> {}
             }
         }
     }

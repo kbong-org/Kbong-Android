@@ -1,16 +1,20 @@
 package com.project.presentation.signUp
 
-import androidx.compose.foundation.Image
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -28,6 +33,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,84 +42,163 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.project.data.LocalNavController
+import com.project.domain.model.SignUpResult
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray10
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
+import com.project.kbong.designsystem.theme.KBongPrimary
+import com.project.kbong.designsystem.theme.KBongPrimary10
+import com.project.kbong.designsystem.theme.KBongTeamBears
+import com.project.kbong.designsystem.theme.KBongTeamBears10
+import com.project.kbong.designsystem.theme.KBongTeamEagles
+import com.project.kbong.designsystem.theme.KBongTeamEagles10
+import com.project.kbong.designsystem.theme.KBongTeamGiants
+import com.project.kbong.designsystem.theme.KBongTeamGiants10
+import com.project.kbong.designsystem.theme.KBongTeamHeroes
+import com.project.kbong.designsystem.theme.KBongTeamHeroes10
+import com.project.kbong.designsystem.theme.KBongTeamKTSub10
+import com.project.kbong.designsystem.theme.KBongTeamLions
+import com.project.kbong.designsystem.theme.KBongTeamLions10
+import com.project.kbong.designsystem.theme.KBongTeamNc
+import com.project.kbong.designsystem.theme.KBongTeamNcSub10
+import com.project.kbong.designsystem.theme.KBongTeamSsg
+import com.project.kbong.designsystem.theme.KBongTeamSsg10
+import com.project.kbong.designsystem.theme.KBongTeamTigers
+import com.project.kbong.designsystem.theme.KBongTeamTigers10
+import com.project.kbong.designsystem.theme.KBongTeamTwins
+import com.project.kbong.designsystem.theme.KBongTeamTwins10
+import com.project.kbong.designsystem.theme.KBongTheme
+import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
 import com.project.presentation.auth.AuthViewModel
 import com.project.presentation.home.navigateToHome
 import com.project.presentation.navigation.NavigationRoute
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun SignUpScreen(
     authViewModel: AuthViewModel,
     idToken: String
 ) {
     val navController: NavController = LocalNavController.current
-
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 3 })
 
-    // 닉네임과 팀 정보를 상태로 유지
     var nickname by rememberSaveable { mutableStateOf("") }
     var selectedTeam by remember { mutableStateOf("") }
 
-    // 회원가입 완료 후 결과를 감지하여 홈 화면으로 이동 X (회원가입 요청과 홈 이동을 분리)
     val signUpResult by authViewModel.signUpResult.collectAsState()
 
-    Column(
+    val teamColors = mapOf(
+        "KIA 타이거즈" to KBongTeamTigers,
+        "두산 베어스" to KBongTeamBears,
+        "롯데 자이언츠" to KBongTeamGiants,
+        "삼성 라이온즈" to KBongTeamLions,
+        "SSG 랜더스" to KBongTeamSsg,
+        "NC 다이노스" to KBongTeamNc,
+        "LG 트윈스" to KBongTeamTwins,
+        "키움 히어로즈" to KBongTeamHeroes,
+        "KT 위즈" to Color(0xFF000000),
+        "한화 이글즈" to KBongTeamEagles,
+        "모두 응원해요" to KBongPrimary
+    )
+
+    LaunchedEffect(signUpResult) {
+        when (signUpResult) {
+            is SignUpResult.Failure -> {
+                val error = signUpResult as SignUpResult.Failure
+                Log.e("SignUp", "회원가입 실패: ${error.errorMessage}")
+            }
+            is SignUpResult.Success -> {
+                Log.d("SignUp", "회원가입 성공")
+            }
+            else -> {}
+        }
+    }
+
+    val imeBottom = WindowInsets.ime.getBottom(LocalDensity.current)
+    val keyboardHeight = with(LocalDensity.current) { imeBottom.toDp() }
+
+    BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .background(Color.White)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 수직 스크롤 문제 해결
-        HorizontalPager(
-            state = pagerState,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        ) { page ->
-            when (page) {
-                // 부모 상태인 nickname을 직접 전달하여 양방향 바인딩 적용
-                0 -> NicknameInputScreen(
-                    nickname = nickname,
-                    onNicknameEntered = { nickname = it }
-                )
-                1 -> TeamSelectionScreen(
-                    nickname = nickname,
-                    selectedTeam = selectedTeam,
-                    onTeamSelect = { selectedTeam = it },
-                    onBack = { coroutineScope.launch { pagerState.animateScrollToPage(0) } }
-                )
-                2 -> SignUpCompleteScreen(nickname = nickname, selectedTeam = selectedTeam)
+                .fillMaxSize()
+                .padding(bottom = 80.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) { page ->
+                when (page) {
+                    0 -> NicknameInputScreen(nickname) { nickname = it }
+                    1 -> TeamSelectionScreen(nickname, selectedTeam, { selectedTeam = it }) {
+                        coroutineScope.launch { pagerState.animateScrollToPage(0) }
+                    }
+                    2 -> SignUpCompleteScreen(nickname, selectedTeam)
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        // 버튼 텍스트
+        val buttonText = when (pagerState.currentPage) {
+            0, 1 -> "다음"
+            else -> "시작하기"
+        }
 
-        // "다음" 또는 "시작하기" 버튼
+        // 버튼 활성화 여부
+        val isButtonEnabled = when (pagerState.currentPage) {
+            0 -> nickname.isNotEmpty()
+            1 -> selectedTeam.isNotEmpty()
+            else -> true
+        }
+
+        // 버튼 컬러 설정
+        val buttonColor = when (pagerState.currentPage) {
+            2 -> teamColors[selectedTeam] ?: KBongPrimary
+            else -> if (isButtonEnabled) KBongPrimary else KBongGrayscaleGray2
+        }
+
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        // 키보드 위로 올라가는 버튼
         Button(
             onClick = {
                 coroutineScope.launch {
                     when (pagerState.currentPage) {
-                        0 -> pagerState.animateScrollToPage(1)
+                        0 -> {
+                            keyboardController?.hide()
+                            pagerState.animateScrollToPage(1)
+                        }
                         1 -> {
-                            // `selectedTeam`을 서버 ENUM 값으로 변환 후 회원가입 요청
                             val teamEnumMap = mapOf(
                                 "KIA 타이거즈" to "KIA",
                                 "두산 베어스" to "DOOSAN",
@@ -128,49 +213,43 @@ fun SignUpScreen(
                                 "모두 응원해요" to "NONE"
                             )
                             val myTeamEnum = teamEnumMap[selectedTeam] ?: "NONE"
-
-                            // 회원가입 요청 실행
                             authViewModel.performSignUp(idToken, nickname, myTeamEnum)
-
-                            // 회원가입 요청 후 2번(회원가입 완료 화면)으로 이동
                             pagerState.animateScrollToPage(2)
                         }
-                        2 -> {
-                            // 2번(회원가입 완료 화면)에서 "시작하기" 버튼 클릭 시 홈으로 이동
-                            navController.navigateToHome(
-                                navOptions = navOptions {
-                                    popUpTo(NavigationRoute.SignUpScreen.route) { inclusive = true }
-                                }
-                            )
-                        }
+                        2 -> navController.navigateToHome(
+                            navOptions = navOptions {
+                                popUpTo(NavigationRoute.SignUpScreen.route) { inclusive = true }
+                            }
+                        )
                     }
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .height(50.dp),
+            enabled = isButtonEnabled,
+            colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
             shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5865F2))
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(
+                    bottom = if (keyboardHeight > 0.dp) (keyboardHeight - 32.dp).coerceAtLeast(0.dp) else 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+                .fillMaxWidth()
+                .height(50.dp)
         ) {
             Text(
-                text = when (pagerState.currentPage) {
-                    0, 1 -> "다음" // 팀 선택 후 회원가입 요청 + 회원가입 완료 화면으로 이동
-                    else -> "시작하기" // 회원가입 완료 후 홈으로 이동
-                },
-                fontSize = 16.sp,
+                text = buttonText,
+                style = KBongTypography.Body1Normal,
                 color = Color.White
             )
         }
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NicknameInputScreen(nickname: String, onNicknameEntered: (String) -> Unit) {
 
     val maxChar = 10
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
@@ -179,10 +258,12 @@ fun NicknameInputScreen(nickname: String, onNicknameEntered: (String) -> Unit) {
             .padding(top = 96.dp, start = 16.dp, end = 16.dp),
         horizontalAlignment = Alignment.Start
     ) {
+
+        Spacer(modifier = Modifier.height(96.dp))
+
         Text(
             text = "반가워요!\n닉네임을 설정해주세요.",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
+            style = KBongTypography.Title,
             color = Color.Black
         )
 
@@ -191,14 +272,14 @@ fun NicknameInputScreen(nickname: String, onNicknameEntered: (String) -> Unit) {
         OutlinedTextField(
             value = nickname,
             onValueChange = { if (it.length <= maxChar) onNicknameEntered(it) },
-            placeholder = { Text("사용할 닉네임을 적어주세요", color = Color(0xFFEDEFF2)) },
+            placeholder = { Text("사용할 닉네임을 적어주세요", color = KBongGrayscaleGray5) },
             textStyle = TextStyle(fontSize = 16.sp),
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedBorderColor = Color(0xFFEDEFF2),
-                focusedBorderColor = Color(0xFF4F61D2)
+                unfocusedBorderColor = KBongGrayscaleGray2,
+                focusedBorderColor = KBongPrimary,
             ),
             trailingIcon = {
                 Text(
@@ -209,21 +290,6 @@ fun NicknameInputScreen(nickname: String, onNicknameEntered: (String) -> Unit) {
             }
         )
         Spacer(modifier = Modifier.weight(1f))
-
-        //TODO: 추후 버튼 통일 예정
-        Button(
-            onClick = {
-                keyboardController?.hide() },
-            enabled = nickname.isNotEmpty(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-                .height(50.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4F61D2))
-        ) {
-            Text("다음", fontSize = 16.sp, color = Color.White)
-        }
     }
 }
 
@@ -236,7 +302,6 @@ fun TeamSelectionScreen(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .background(Color.White)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.Start
@@ -251,9 +316,14 @@ fun TeamSelectionScreen(
         }
         Spacer(modifier = Modifier.height(55.dp))
         Text(
-            text = "$nickname 님이 응원하는 팀을 선택해주세요", // 닉네임 반영됨
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
+            text = "$nickname 님이",
+            style = KBongTypography.Title,
+            color = Color.Black
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "응원하는 팀을 선택해주세요",
+            style = KBongTypography.Title,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(40.dp))
@@ -297,39 +367,57 @@ fun TeamButton(
             .clip(RoundedCornerShape(8.dp))
             .border(
                 width = if (isSelected) 1.dp else 0.dp,
-                color = if (isSelected) Color(0xFF171719) else Color.Transparent,
+                color = if (isSelected) KBongGrayscaleGray10 else Color.Transparent,
                 shape = RoundedCornerShape(8.dp)
             )
-            .background(if (isSelected) Color.Transparent else Color(0xFFF5F5F5))
+            .background(KBongGrayscaleGray1)
             .clickable { onTeamSelect(team) }
             .padding(horizontal = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = team,
-            fontSize = 16.sp,
-            color = if (isSelected) Color(0xFF171719) else Color.Black,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+            style = KBongTypography.Body1Normal,
+            color = if (isSelected) Color.Black else KBongGrayscaleGray7,
         )
     }
 }
 
 @Composable
 fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
-    val teamColors = mapOf(
-        "KIA 타이거즈" to Color(0xFFE31937),
-        "두산 베어스" to Color(0xFF13274F),
-        "롯데 자이언츠" to Color(0xFFC70101),
-        "삼성 라이온즈" to Color(0xFF005BAC),
-        "SSG 랜더스" to Color(0xFFC60C30),
-        "NC 다이노스" to Color(0xFF0D2B68),
-        "LG 트윈스" to Color(0xFFED1C24),
-        "키움 히어로즈" to Color(0xFF5F0E3B),
-        "KT 위즈" to Color(0xFF231F20),
-        "한화 이글즈" to Color(0xFFFF8C00),
-        "모두 응원해요" to Color(0xFF4F61D2)
-    )
-    val buttonColor = teamColors[selectedTeam] ?: Color(0xFF4F61D2)
+    // 팀별 로띠 파일
+    val lottieFile = when (selectedTeam) {
+        "KIA 타이거즈" -> "Tigers.json"
+        "두산 베어스" -> "Bears.json"
+        "롯데 자이언츠" -> "Giants.json"
+        "삼성 라이온즈" -> "Lions.json"
+        "SSG 랜더스" -> "Landers.json"
+        "NC 다이노스" -> "Dinos.json"
+        "LG 트윈스" -> "Twins.json"
+        "키움 히어로즈" -> "Heroes.json"
+        "KT 위즈" -> "Wiz.json"
+        "한화 이글즈" -> "Eagles.json"
+        else -> "ALL.json"
+    }
+
+    // 팀별 배경 컬러 매핑
+    val teamColor = when (selectedTeam) {
+        "KIA 타이거즈" -> KBongTeamTigers10
+        "두산 베어스" -> KBongTeamBears10
+        "롯데 자이언츠" -> KBongTeamGiants10
+        "삼성 라이온즈" -> KBongTeamLions10
+        "SSG 랜더스" -> KBongTeamSsg10
+        "NC 다이노스" -> KBongTeamNcSub10
+        "LG 트윈스" -> KBongTeamTwins10
+        "키움 히어로즈" -> KBongTeamHeroes10
+        "KT 위즈" -> KBongTeamKTSub10
+        "한화 이글즈" -> KBongTeamEagles10
+        else -> KBongPrimary10
+    }
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.Asset(lottieFile))
+    val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -338,42 +426,144 @@ fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(178.dp))
-        Image(
-            painter = painterResource(id = R.drawable.ic_sample_mascot),
-            contentDescription = "환영 이미지",
-            modifier = Modifier.size(120.dp)
-        )
+
+        // 로띠 + 배경 원
+        Box(
+            modifier = Modifier.size(120.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(120.dp)
+                    .background(teamColor, shape = CircleShape)
+            )
+            LottieAnimation(
+                composition = composition,
+                progress = { progress },
+                modifier = Modifier.size(90.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "$nickname 님 환영해요!",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
+            style = KBongTypography.Title,
             textAlign = TextAlign.Center,
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "직관한 경기를 기록하며\n팀을 응원해 보세요",
-            fontSize = 16.sp,
+            style = KBongTypography.Body1Normal,
             textAlign = TextAlign.Center,
             color = Color.Gray,
-            lineHeight = 24.sp
         )
         Spacer(modifier = Modifier.weight(1f))
-        // "시작하기" 버튼은 여기선 UI 효과만 처리
-        Button(
-            onClick = { /* 이 버튼은 실제 네비게이션은 SignUpScreen 상단 버튼에서 처리됨 */ },
+    }
+}
+
+@Preview
+@Composable
+fun SignUpScreenPreview() {
+    KBongTheme {
+        BoxWithConstraints(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .padding(bottom = 16.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = buttonColor,
-                contentColor = Color.White
-            )
+                .fillMaxSize()
+                .background(Color.White)
         ) {
-            Text("시작하기", fontSize = 16.sp)
+            val screenHeight = maxHeight
+            val imeBottom = WindowInsets.ime.getBottom(LocalDensity.current)
+            val isKeyboardVisible = imeBottom > 0
+
+            var nickname by rememberSaveable { mutableStateOf("") }
+            var selectedTeam by remember { mutableStateOf("") }
+            val pagerState = rememberPagerState(initialPage = 1, pageCount = { 3 })
+            val coroutineScope = rememberCoroutineScope()
+
+            val teamColors = mapOf(
+                "KIA 타이거즈" to KBongTeamTigers,
+                "두산 베어스" to KBongTeamBears,
+                "롯데 자이언츠" to KBongTeamGiants,
+                "삼성 라이온즈" to KBongTeamLions,
+                "SSG 랜더스" to KBongTeamSsg,
+                "NC 다이노스" to KBongTeamNc,
+                "LG 트윈스" to KBongTeamTwins,
+                "키움 히어로즈" to KBongTeamHeroes,
+                "KT 위즈" to Color(0xFF000000),
+                "한화 이글즈" to KBongTeamEagles,
+                "모두 응원해요" to KBongPrimary
+            )
+
+            Box(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(bottom = 80.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    ) { page ->
+                        when (page) {
+                            0 -> NicknameInputScreen(nickname) { nickname = it }
+                            1 -> TeamSelectionScreen(nickname, selectedTeam, { selectedTeam = it }) {
+                                coroutineScope.launch { pagerState.animateScrollToPage(0) }
+                            }
+                            2 -> SignUpCompleteScreen(nickname, selectedTeam)
+                        }
+                    }
+                }
+
+                val buttonText = when (pagerState.currentPage) {
+                    0, 1 -> "다음"
+                    else -> "시작하기"
+                }
+
+                val isButtonEnabled = when (pagerState.currentPage) {
+                    0 -> nickname.isNotEmpty()
+                    1 -> selectedTeam.isNotEmpty()
+                    else -> true
+                }
+
+                val buttonColor = when (pagerState.currentPage) {
+                    2 -> teamColors[selectedTeam] ?: KBongPrimary
+                    else -> if (isButtonEnabled) KBongPrimary else KBongGrayscaleGray2
+                }
+
+                // 버튼
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            when (pagerState.currentPage) {
+                                0 -> pagerState.animateScrollToPage(1)
+                                1 -> pagerState.animateScrollToPage(2)
+                                2 -> {} // 홈 이동 생략
+                            }
+                        }
+                    },
+                    enabled = isButtonEnabled,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(
+                            bottom = if (isKeyboardVisible) imeBottom.dp else 16.dp,
+                            start = 16.dp,
+                            end = 16.dp
+                        )
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
+                ) {
+                    Text(
+                        text = buttonText,
+                        style = KBongTypography.Body1Normal,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }

@@ -107,4 +107,8 @@ dependencies {
 
     // desugar
     coreLibraryDesugaring(libs.desugar.jdk.libs)
+
+    // Lottie
+    implementation(libs.lottie.compose)
+    implementation(libs.lottie.core)
 }
