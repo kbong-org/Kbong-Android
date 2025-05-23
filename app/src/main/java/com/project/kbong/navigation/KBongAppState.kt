@@ -47,12 +47,14 @@ class KBongAppState(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
-        return when (currentDestination?.route) {
-            NavigationRoute.KaKaoLoginScreen.route -> true
-            NavigationRoute.SignUpScreen.route -> true
-            NavigationRoute.SelectGameScreen.route -> true
-            NavigationRoute.GameLogWriteScreen.route -> true
-            NavigationRoute.LogDetailScreen.route -> true
+        val route = currentDestination?.route
+        return when {
+            route == null -> false
+            route == NavigationRoute.KaKaoLoginScreen.route -> true
+            route.startsWith("signup") -> true
+            route == NavigationRoute.SelectGameScreen.route -> true
+            route == NavigationRoute.GameLogWriteScreen.route -> true
+            route == NavigationRoute.LogDetailScreen.route -> true
             else -> false
         }
     }
