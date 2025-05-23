@@ -1,5 +1,6 @@
 package com.project.presentation.log.select
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,6 +51,13 @@ fun SelectGameScreen(
     val errorMessage by viewModel.errorMessage.collectAsState()
     var selectedGame by remember { mutableStateOf<DailyGameLog?>(null) }
 
+    // 뒤로가기 한 번으로 나가게 설정
+    BackHandler {
+        navController.navigate("calendar") {
+            popUpTo("selectGame") { inclusive = true }
+        }
+    }
+
     LaunchedEffect(selectedDate) {
         viewModel.fetchGames(selectedDate)
     }
@@ -64,7 +72,11 @@ fun SelectGameScreen(
             KBongTopBar(
                 titleText = "${selectedDate.monthValue}월 ${selectedDate.dayOfMonth}일 " +
                         selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
-                onClickBackButton = { navController.popBackStack() }
+                onClickBackButton = {
+                    navController.navigate("calendar") {
+                        popUpTo("selectGame") { inclusive = true }
+                    }
+                }
             )
 
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
