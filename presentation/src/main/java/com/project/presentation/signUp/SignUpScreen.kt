@@ -58,6 +58,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.navOptions
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.project.data.LocalNavController
 import com.project.domain.model.SignUpResult
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
@@ -372,6 +376,22 @@ fun TeamButton(
 
 @Composable
 fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
+    val lottieFile = when (selectedTeam.uppercase()) {
+        "KIA 타이거즈" -> "Tigers.json"
+        "두산 베어스" -> "Bears.json"
+        "롯데 자이언츠" -> "Giants.json"
+        "삼성 라이온즈" -> "Lions.json"
+        "SSG 랜더스" -> "Landers.json"
+        "NC 다이노스" -> "Dinos.json"
+        "LG 트윈스" -> "Twins.json"
+        "키움 히어로즈" -> "Heroes.json"
+        "KT 위즈" -> "Wiz.json"
+        "한화 이글즈" -> "Eagles.json"
+        else -> "ALL.json"
+    }
+
+    val composition by rememberLottieComposition(LottieCompositionSpec.Asset(lottieFile))
+    val progress by animateLottieCompositionAsState(composition)
 
     Column(
         modifier = Modifier
@@ -381,11 +401,14 @@ fun SignUpCompleteScreen(nickname: String, selectedTeam: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(178.dp))
-        Image(
-            painter = painterResource(id = R.drawable.ic_sample_mascot),
-            contentDescription = "환영 이미지",
-            modifier = Modifier.size(120.dp)
+
+        // 팀별 로띠 애니메이션
+        LottieAnimation(
+            composition = composition,
+            progress = { progress },
+            modifier = Modifier.size(180.dp)
         )
+
         Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = "$nickname 님 환영해요!",
