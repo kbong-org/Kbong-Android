@@ -42,7 +42,9 @@ fun MyBottomCatalogMainContent(
                     stadium = log.stadiumFullName,
                     type = log.type,
                     imageCount = log.imageCount,
-                    imageList = listOf(log.imagePath)
+                    imageList = listOf(log.imagePath),
+                    // todo myTeamDisplayName 넘겨 받기
+                    myTeamDisplayName = ""
                 )
             }
             Spacer(modifier = Modifier.height(17.dp))
