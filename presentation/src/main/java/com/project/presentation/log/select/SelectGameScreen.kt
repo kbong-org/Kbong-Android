@@ -27,7 +27,11 @@ import androidx.navigation.NavController
 import com.project.data.model.log.toDto
 import com.project.domain.model.day.DailyGameLog
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.theme.KBongAccentButtonBlue
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.log.navigateToGameLogWrite
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -43,6 +47,7 @@ fun spToDp(sp: Float): Dp {
 fun SelectGameScreen(
     navController: NavController,
     selectedDate: LocalDate,
+    myTeamDisplayName: String,
     viewModel: SelectGameViewModel = hiltViewModel(),
     onGameSelected: (DailyGameLog) -> Unit
 ) {
@@ -50,6 +55,8 @@ fun SelectGameScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     var selectedGame by remember { mutableStateOf<DailyGameLog?>(null) }
+
+    val teamColor = remember(myTeamDisplayName) { TeamColorMapper.getTextColor(myTeamDisplayName) }
 
     // 뒤로가기 한 번으로 나가게 설정
     BackHandler {
@@ -102,7 +109,8 @@ fun SelectGameScreen(
                             GameItem(
                                 game = game,
                                 isSelected = selectedGame == game,
-                                onClick = { selectedGame = game }
+                                onClick = { selectedGame = game },
+                                myTeamDisplayName = myTeamDisplayName
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -123,10 +131,14 @@ fun SelectGameScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     selectedGame?.let {
-                        navController.navigateToGameLogWrite(it.toDto(), selectedDate)
+                        navController.navigateToGameLogWrite(it.toDto(), selectedDate, myTeamDisplayName)
                     }
                 },
-                enabled = selectedGame != null
+                enabled = selectedGame != null,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = teamColor,
+                    contentColor = Color.White
+                )
             ) {
                 Text("다음")
             }
@@ -138,9 +150,14 @@ fun SelectGameScreen(
 fun GameItem(
     game: DailyGameLog,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    myTeamDisplayName: String
 ) {
-    val borderColor = if (isSelected) Color(0xFF3D5AFE) else Color.Transparent
+    val teamColor = remember(myTeamDisplayName) {
+        TeamColorMapper.getTextColor(myTeamDisplayName)
+    }
+
+    val borderColor = if (isSelected) teamColor else Color.Transparent
     val shape: Shape = MaterialTheme.shapes.medium
 
     // 상태 분기
@@ -175,7 +192,7 @@ fun GameItem(
                     if (showScore) {
                         Text(
                             text = game.awayTeamScore?.toString() ?: "-",
-                            color = if ((game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
+                            color = if ((game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0)) KBongAccentButtonBlue else KBongGrayscaleGray5,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -192,7 +209,7 @@ fun GameItem(
                     tagText?.let {
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFEDEDED), shape = RoundedCornerShape(6.dp))
+                                .background(KBongGrayscaleGray2, shape = RoundedCornerShape(6.dp))
                                 .height(20.dp)
                                 .defaultMinSize(minWidth = 38.dp)
                                 .padding(horizontal = 6.dp),
@@ -232,7 +249,7 @@ fun GameItem(
                     if (showScore) {
                         Text(
                             text = game.homeTeamScore?.toString() ?: "-",
-                            color = if ((game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
+                            color = if ((game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0)) KBongAccentButtonBlue else KBongGrayscaleGray5,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -261,6 +278,7 @@ fun PreviewGameItemFinished() {
         ),
         isSelected = true,
         onClick = {},
+        myTeamDisplayName = "LG"
     )
 }
 
@@ -278,6 +296,7 @@ fun PreviewGameItemScheduled() {
         ),
         isSelected = false,
         onClick = {},
+        myTeamDisplayName = "LG"
     )
 }
 
@@ -294,6 +313,7 @@ fun PreviewGameItemCancelled() {
             status = "CANCELLED"
         ),
         isSelected = false,
-        onClick = {}
+        onClick = {},
+        myTeamDisplayName = "LG"
     )
 }

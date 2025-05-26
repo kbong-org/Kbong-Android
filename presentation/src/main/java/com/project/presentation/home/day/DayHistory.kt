@@ -27,13 +27,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.project.kbong.designsystem.tag.KBongTag
-import com.project.kbong.designsystem.tag.TagType
+import com.project.kbong.designsystem.tag.TagTypeMapper
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongImageCount
 import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.R
 
 @Composable
@@ -43,9 +44,17 @@ fun DayHistory(
     stadium: String,
     type: String,
     imageList: List<String>,
+    myTeamDisplayName: String,
     onClick: () -> Unit = {}
 ) {
-    val fromTypeData = TagType.fromTypeData(type)
+    val teamTextColor = TeamColorMapper.getTextColor(myTeamDisplayName)
+    val teamBgColor = TeamColorMapper.getBackgroundColor(myTeamDisplayName)
+
+    val fromTypeData = TagTypeMapper.fromType(
+        type = type,
+        textColor = teamTextColor,
+        backgroundColor = teamBgColor
+    )
 
     Row(
         modifier = Modifier
@@ -65,7 +74,7 @@ fun DayHistory(
                 Text(
                     text = stringResource(R.string.vs),
                     style = KBongTypography.Heading2,
-                    color = KBongPrimary
+                    color = teamTextColor
                 )
                 Text(
                     text = homeTeam,
@@ -90,6 +99,7 @@ fun DayHistory(
                 )
             }
             Spacer(modifier = Modifier.height(14.dp))
+
             KBongTag(
                 tagName = fromTypeData.tagName,
                 backgroundColor = fromTypeData.backgroundColor,
@@ -147,5 +157,6 @@ fun PreviewDayHistory() {
             "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
             "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
         ),
+        myTeamDisplayName = "LG",
     )
 }

@@ -41,7 +41,8 @@ fun Emotion.getEmojiRes(): Int {
 }
 
 @Composable
-fun LogDetailHeader(gameInfo: GameInfo, emotion: Emotion) {
+fun LogDetailHeader(gameInfo: GameInfo, emotion: Emotion, myTeamColor: Color) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,7 +58,7 @@ fun LogDetailHeader(gameInfo: GameInfo, emotion: Emotion) {
             )
             Text(
                 text = "vs",
-                style = KBongTypography.Title.copy(color = KBongPrimary)
+                style = KBongTypography.Title.copy(color = myTeamColor)
             )
             Text(
                 text = " ${gameInfo.homeTeamDisplayName}",
@@ -153,6 +154,7 @@ fun LogDetailHeaderPreview() {
             date = "3월 23일 토요일",
             stadiumFullName = "수원 KT위즈파크"
         ),
-        emotion = Emotion.HAPPY
+        emotion = Emotion.HAPPY,
+        myTeamColor = KBongPrimary
     )
 }

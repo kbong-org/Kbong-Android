@@ -35,13 +35,13 @@ import androidx.navigation.NavController
 import com.project.domain.model.day.DailyGameLog
 import com.project.domain.model.log.Emotion
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
-import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.log.Dialog.CancelWritingDialog
-import com.project.presentation.log.write.component.BottomActionBar
 import com.project.presentation.log.component.GameLogObjectiveContent
 import com.project.presentation.log.component.GameLogSubjectiveContent
 import com.project.presentation.log.component.GameLogTextContent
+import com.project.presentation.log.write.component.BottomActionBar
 import com.project.presentation.log.write.component.HeaderGameInfo
 import com.project.presentation.log.write.component.TemplateTypeBottomSheet
 import java.time.LocalDate
@@ -57,6 +57,7 @@ fun GameLogWriteRoute(
     navController: NavController,
     gameInfo: DailyGameLog,
     selectedDate: LocalDate,
+    myTeamDisplayName: String,
     viewModel: GameLogViewModel = hiltViewModel(),
     onSubmit: () -> Unit = {}
 ) {
@@ -67,6 +68,10 @@ fun GameLogWriteRoute(
     var text by remember { mutableStateOf("") }
 
     val context = LocalContext.current
+
+    val teamColor = remember(myTeamDisplayName) {
+        TeamColorMapper.getTextColor(myTeamDisplayName)
+    }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
@@ -225,7 +230,7 @@ fun GameLogWriteRoute(
                                     append(" ")
                                 }
                                 withStyle(
-                                    style = KBongTypography.Heading2.toSpanStyle().copy(color = KBongPrimary)
+                                    style = KBongTypography.Heading2.toSpanStyle().copy(color = teamColor)
                                 ) {
                                     append("vs")
                                 }
@@ -337,7 +342,8 @@ fun GameLogWriteRoute(
                 inputType = it
                 isTemplateSheetVisible = false
             },
-            onDismiss = { isTemplateSheetVisible = false }
+            onDismiss = { isTemplateSheetVisible = false },
+            pointColor = teamColor
         )
     }
 

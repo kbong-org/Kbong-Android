@@ -58,6 +58,7 @@ import com.project.kbong.designsystem.theme.KBongTeamTigers10
 import com.project.kbong.designsystem.theme.KBongTeamTwins
 import com.project.kbong.designsystem.theme.KBongTeamTwins10
 import com.project.kbong.designsystem.utils.DateUtil.today
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.R
 import com.project.presentation.home.day.BeforeDayHistoryContent
 import com.project.presentation.home.day.DayGameHistoryContent
@@ -90,7 +91,10 @@ fun HomeRoute(
                     isShowDatePicker = true
                 }
                 is HomeViewContract.HomeViewSideEffect.NavigateToSelectGame -> {
-                    navController.navigateToSelectGame(sideEffect.date)
+                    navController.navigateToSelectGame(
+                        date = state.selectedDate,
+                        myTeamDisplayName = state.myTeamDisplayName
+                    )
                 }
             }
         }
@@ -141,33 +145,8 @@ fun HomeScreen(
         state.gameDayContents.firstOrNull { it.day.toInt() == selectedDay }?.hasGame ?: false
     }
 
-    val teamColor = when (state.myTeamDisplayName) {
-        "LG" -> KBongTeamTwins
-        "DOOSAN" -> KBongTeamBears
-        "HANHWA" -> KBongTeamEagles
-        "KIA" -> KBongTeamTigers
-        "KT" -> KBongTeamGray10
-        "NC" -> KBongTeamNc
-        "SAMSUNG" -> KBongTeamLions
-        "SSG" -> KBongTeamSsg
-        "LOTTE" -> KBongTeamGiants
-        "KIWOOM" -> KBongTeamHeroes
-        else -> KBongPrimary
-    }
-
-    val teamColorBg = when (state.myTeamDisplayName) {
-        "LG" -> KBongTeamTwins10
-        "DOOSAN" -> KBongTeamBears10
-        "HANHWA" -> KBongTeamEagles10
-        "KIA" -> KBongTeamTigers10
-        "KT" -> KBongTeamGray2
-        "NC" -> KBongTeamNcSub10
-        "SAMSUNG" -> KBongTeamLions10
-        "SSG" -> KBongTeamSsg10
-        "LOTTE" -> KBongTeamGiants10
-        "KIWOOM" -> KBongTeamHeroes10
-        else -> KBongPrimary10
-    }
+    val teamColor = TeamColorMapper.getTextColor(state.myTeamDisplayName)
+    val teamColorBg = TeamColorMapper.getBackgroundColor(state.myTeamDisplayName)
 
     Column(
         modifier = modifier
@@ -268,7 +247,10 @@ fun HomeScreen(
                                     homeViewEvent(
                                         HomeViewContract.HomeViewEvent.OnClickAddHistory
                                     )
-                                    navController.navigateToSelectGame(state.selectedDate)
+                                    navController.navigateToSelectGame(
+                                        date = state.selectedDate,
+                                        myTeamDisplayName = state.myTeamDisplayName
+                                    )
                                 },
                                 teamColor = teamColor,
                                 teamColorBg = teamColorBg
@@ -288,8 +270,9 @@ fun HomeScreen(
                             },
                             isAddIcon = state.dailyLogList.size < 3,
                             onClickLogItem = { logId ->
-                                navController.navigateToLogDetail(logId)
-                            }
+                                navController.navigateToLogDetail(logId, state.myTeamDisplayName)
+                            },
+                            myTeamDisplayName = state.myTeamDisplayName
                         )
                     }
 
