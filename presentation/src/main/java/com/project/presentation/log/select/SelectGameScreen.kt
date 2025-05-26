@@ -27,7 +27,15 @@ import androidx.navigation.NavController
 import com.project.data.model.log.toDto
 import com.project.domain.model.day.DailyGameLog
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.theme.KBongAccentButtonBlue
+import com.project.kbong.designsystem.theme.KBongAccentButtonBlue10
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
+import com.project.kbong.designsystem.theme.KBongStatusDestructive
+import com.project.kbong.designsystem.theme.KBongStatusDestructive10
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.log.navigateToGameLogWrite
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -43,6 +51,7 @@ fun spToDp(sp: Float): Dp {
 fun SelectGameScreen(
     navController: NavController,
     selectedDate: LocalDate,
+    myTeamDisplayName: String,
     viewModel: SelectGameViewModel = hiltViewModel(),
     onGameSelected: (DailyGameLog) -> Unit
 ) {
@@ -50,6 +59,8 @@ fun SelectGameScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     var selectedGame by remember { mutableStateOf<DailyGameLog?>(null) }
+
+    val teamColor = remember(myTeamDisplayName) { TeamColorMapper.getTextColor(myTeamDisplayName) }
 
     // 뒤로가기 한 번으로 나가게 설정
     BackHandler {
@@ -102,7 +113,8 @@ fun SelectGameScreen(
                             GameItem(
                                 game = game,
                                 isSelected = selectedGame == game,
-                                onClick = { selectedGame = game }
+                                onClick = { selectedGame = game },
+                                myTeamDisplayName = myTeamDisplayName
                             )
                             Spacer(modifier = Modifier.height(12.dp))
                         }
@@ -123,10 +135,14 @@ fun SelectGameScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = {
                     selectedGame?.let {
-                        navController.navigateToGameLogWrite(it.toDto(), selectedDate)
+                        navController.navigateToGameLogWrite(it.toDto(), selectedDate, myTeamDisplayName)
                     }
                 },
-                enabled = selectedGame != null
+                enabled = selectedGame != null,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = teamColor,
+                    contentColor = Color.White
+                )
             ) {
                 Text("다음")
             }
@@ -134,22 +150,39 @@ fun SelectGameScreen(
     }
 }
 
+data class GameStatusUi(
+    val tagText: String,
+    val tagColor: Color,
+    val tagBackground: Color,
+    val showScore: Boolean
+)
+
 @Composable
 fun GameItem(
     game: DailyGameLog,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    myTeamDisplayName: String
 ) {
-    val borderColor = if (isSelected) Color(0xFF3D5AFE) else Color.Transparent
+    val teamColor = remember(myTeamDisplayName) {
+        TeamColorMapper.getTextColor(myTeamDisplayName)
+    }
+
+    val borderColor = if (isSelected) teamColor else Color.Transparent
     val shape: Shape = MaterialTheme.shapes.medium
 
     // 상태 분기
-    val (tagText, tagColor, showScore) = when (game.status) {
-        "FINISHED" -> Triple("종료", Color.Gray, true)
-        "CANCELLED" -> Triple("취소", Color.Red, false)
-        "SUSPENDED" -> Triple("연기", Color(0xFF3D5AFE), false)
-        else -> Triple(null, null, false) // SCHEDULED 또는 기타
+    val statusUi = when (game.status) {
+        "FINISHED" -> GameStatusUi("종료", KBongGrayscaleGray7, KBongGrayscaleGray2, true)
+        "CANCELLED" -> GameStatusUi("취소", KBongStatusDestructive, KBongStatusDestructive10, false)
+        "SUSPENDED" -> GameStatusUi("연기", KBongAccentButtonBlue, KBongAccentButtonBlue10, false)
+        else -> null
     }
+
+    val tagText = statusUi?.tagText
+    val tagColor = statusUi?.tagColor
+    val tabBgColor = statusUi?.tagBackground
+    val showScore = statusUi?.showScore ?: false
 
     Surface(
         modifier = Modifier
@@ -175,7 +208,7 @@ fun GameItem(
                     if (showScore) {
                         Text(
                             text = game.awayTeamScore?.toString() ?: "-",
-                            color = if ((game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
+                            color = if ((game.awayTeamScore ?: 0) > (game.homeTeamScore ?: 0)) KBongAccentButtonBlue else KBongGrayscaleGray5,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -192,7 +225,7 @@ fun GameItem(
                     tagText?.let {
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFEDEDED), shape = RoundedCornerShape(6.dp))
+                                .background(tabBgColor!!, shape = RoundedCornerShape(6.dp))
                                 .height(20.dp)
                                 .defaultMinSize(minWidth = 38.dp)
                                 .padding(horizontal = 6.dp),
@@ -232,7 +265,7 @@ fun GameItem(
                     if (showScore) {
                         Text(
                             text = game.homeTeamScore?.toString() ?: "-",
-                            color = if ((game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0)) Color(0xFF3D5AFE) else Color(0xFFB0B0B0),
+                            color = if ((game.homeTeamScore ?: 0) > (game.awayTeamScore ?: 0)) KBongAccentButtonBlue else KBongGrayscaleGray5,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 16.sp
                         )
@@ -261,6 +294,7 @@ fun PreviewGameItemFinished() {
         ),
         isSelected = true,
         onClick = {},
+        myTeamDisplayName = "LG"
     )
 }
 
@@ -278,6 +312,7 @@ fun PreviewGameItemScheduled() {
         ),
         isSelected = false,
         onClick = {},
+        myTeamDisplayName = "LG"
     )
 }
 
@@ -294,6 +329,25 @@ fun PreviewGameItemCancelled() {
             status = "CANCELLED"
         ),
         isSelected = false,
-        onClick = {}
+        onClick = {},
+        myTeamDisplayName = "LG"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewGameItemSuspended() {
+    GameItem(
+        game = DailyGameLog(
+            id = 3L,
+            startTimeStr = "18:30",
+            awayTeamDisplayName = "LG",
+            homeTeamDisplayName = "NC",
+            stadiumDisplayName = "잠실",
+            status = "SUSPENDED"
+        ),
+        isSelected = false,
+        onClick = {},
+        myTeamDisplayName = "LG"
     )
 }

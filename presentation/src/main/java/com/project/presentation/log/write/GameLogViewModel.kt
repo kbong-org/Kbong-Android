@@ -181,30 +181,41 @@ class GameLogViewModel @Inject constructor(
     }
 
     fun getAllSavedObjectiveAnswers(): List<ChoiceLogRequest.AnswerItem> {
-        return _objectiveAnswers.map { (questionId, answerId) ->
-            ChoiceLogRequest.AnswerItem(questionId = questionId, answerOptionId = answerId)
-        }
+        val validIds = _choiceQuestions.value.map { it.questionId }.toSet()
+
+        return _objectiveAnswers
+            .filterKeys { it in validIds } // 실제 질문만 포함
+            .map { (questionId, answerId) ->
+                ChoiceLogRequest.AnswerItem(questionId = questionId, answerOptionId = answerId)
+            }
     }
 
     fun refreshChoiceQuestionAt(index: Int) {
         viewModelScope.launch {
             var newQuestion: ChoiceQuestion? = null
-            val currentIds = _choiceQuestions.value.map { it.questionId }.toSet()
+            val currentQuestions = _choiceQuestions.value
+            val currentIds = currentQuestions.map { it.questionId }.toSet()
 
-            repeat(5) { // 최대 5번 시도 (중복 방지)
-                val result = getRefreshChoiceQuestionUseCase() // 새로운 랜덤 질문 요청
-                if (result.isSuccess) {
-                    val question = result.getOrNull()
-                    if (question != null && question.questionId !in currentIds) {
-                        newQuestion = question
-                        return@repeat
-                    }
+            // 기존 questionId 저장
+            val oldQuestionId = currentQuestions.getOrNull(index)?.questionId
+
+            repeat(5) { // 최대 5번 시도
+                val result = getRefreshChoiceQuestionUseCase()
+                val question = result.getOrNull()
+                if (question != null && question.questionId !in currentIds) {
+                    newQuestion = question
+                    return@repeat
                 }
             }
 
             newQuestion?.let { validQuestion ->
-                _choiceQuestions.value = _choiceQuestions.value.toMutableList().apply {
+                _choiceQuestions.value = currentQuestions.toMutableList().apply {
                     if (index in indices) this[index] = validQuestion
+                }
+
+                // 이전 질문의 답변 삭제
+                oldQuestionId?.let {
+                    _objectiveAnswers.remove(it)
                 }
             }
         }

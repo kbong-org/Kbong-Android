@@ -22,6 +22,7 @@ import com.project.domain.model.day.DailyGameLog
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
+import com.project.presentation.utils.formatLocalDate
 import java.time.LocalDate
 import java.time.format.TextStyle
 import java.util.*
@@ -105,8 +106,7 @@ fun HeaderGameInfo(
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = "${selectedDate.monthValue}월 ${selectedDate.dayOfMonth}일 " +
-                            selectedDate.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN),
+                    text = selectedDate.formatLocalDate(),
                     style = KBongTypography.Label2Medium,
                     color = Color.Gray
                 )

@@ -2,6 +2,7 @@
 <resources>
     <string name="vs">VS</string>
     <string name="empty_day_log">아직 기록한 글이 없어요.</string>
+    <string name="empty_day_log_before_6am">당일 오전 6시 이후 기록이 가능해요.</string>
     <string name="go_log">기록하러 가기</string>
     <string name="no_game">경기가 없는 날이에요.</string>
     <string name="game_history">직관기록</string>

@@ -31,7 +31,8 @@ fun DayHistoryContent(
     dailyLogList: List<DailyLog>,
     onClickAddHistory: () -> Unit,
     isAddIcon: Boolean,
-    onClickLogItem: (logId: Long) -> Unit
+    onClickLogItem: (logId: Long) -> Unit,
+    myTeamDisplayName: String
 ) {
     val logCount = dailyLogList.size
 
@@ -56,6 +57,7 @@ fun DayHistoryContent(
                     stadium = stadiumFullName,
                     type = type,
                     imageList = imageList,
+                    myTeamDisplayName = myTeamDisplayName,
                     onClick = { onClickLogItem(id) }
                 )
             }
@@ -106,6 +108,7 @@ private fun PreviewDayHistoryHeader() {
         onClickAddHistory = {},
         dailyLogList = listOf(),
         isAddIcon = true,
+        myTeamDisplayName = "LG",
         onClickLogItem = {}
     )
 }

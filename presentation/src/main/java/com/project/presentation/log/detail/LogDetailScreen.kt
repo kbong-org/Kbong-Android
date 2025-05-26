@@ -40,6 +40,7 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongStatusDestructive
 import com.project.kbong.designsystem.theme.KBongTeamTwins
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.R
 import com.project.presentation.log.Dialog.DeleteLogDialog
 import com.project.presentation.log.detail.content.LogDetailFreeContent
@@ -51,11 +52,16 @@ import kotlinx.coroutines.launch
 fun LogDetailScreen(
     logId: Long,
     onBack: () -> Unit,
+    myTeamDisplayName: String,
     myTeamColor: Color? = null,
     viewModel: LogDetailViewModel = hiltViewModel()
 ) {
     val log = viewModel.logDetail
     val isLoading = viewModel.isLoading
+
+    val myTeamColor = remember(myTeamDisplayName) {
+        TeamColorMapper.getTextColor(myTeamDisplayName)
+    }
 
     var showMenu by remember { mutableStateOf(false) }
     var showDeleteDialog by remember { mutableStateOf(false) }
@@ -142,7 +148,8 @@ fun LogDetailScreen(
         ) {
             LogDetailHeader(
                 gameInfo = log.gameInfo,
-                emotion = Emotion.valueOf(log.emotion)
+                emotion = Emotion.valueOf(log.emotion),
+                myTeamColor = myTeamColor
             )
 
             when (log.type) {
@@ -204,7 +211,8 @@ fun LogDetailScreenPreview() {
     Column(modifier = Modifier.fillMaxSize().background(Color.White)) {
         LogDetailHeader(
             gameInfo = dummyLog.gameInfo,
-            emotion = Emotion.valueOf(dummyLog.emotion)
+            emotion = Emotion.valueOf(dummyLog.emotion),
+            myTeamColor = KBongTeamTwins
         )
         LogDetailSubjectiveContent(dummyLog, myTeamColor = KBongTeamTwins)
     }

@@ -27,7 +27,8 @@ import com.project.kbong.designsystem.theme.KBongTypography
 fun TemplateTypeBottomSheet(
     selectedType: LogInputType,
     onSelect: (LogInputType) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    pointColor: Color
 ) {
     val iconMapSelected = mapOf(
         LogInputType.TEXT to R.drawable.select_free,
@@ -73,7 +74,7 @@ fun TemplateTypeBottomSheet(
             LogInputType.entries.forEachIndexed { index, type ->
                 val isSelected = type == tempSelectedType
                 val backgroundColor = KBongGrayscaleGray1
-                val borderColor = if (isSelected) KBongPrimary else Color.Transparent
+                val borderColor = if (isSelected) pointColor else Color.Transparent
                 val iconRes = if (isSelected) iconMapSelected[type]!! else iconMapUnselected[type]!!
 
                 Row(
@@ -130,7 +131,7 @@ fun TemplateTypeBottomSheet(
                     .fillMaxWidth()
                     .height(52.dp)
                     .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(containerColor = KBongPrimary)
+                colors = ButtonDefaults.buttonColors(containerColor = pointColor)
             ) {
                 Text("완료", color = Color.White, style = KBongTypography.Body1Normal)
             }
@@ -155,7 +156,8 @@ fun PreviewTemplateTypeBottomSheet() {
                 TemplateTypeBottomSheet(
                     selectedType = LogInputType.SUBJECTIVE,
                     onSelect = {},
-                    onDismiss = {}
+                    onDismiss = {},
+                    pointColor = KBongPrimary
                 )
             }
         }
