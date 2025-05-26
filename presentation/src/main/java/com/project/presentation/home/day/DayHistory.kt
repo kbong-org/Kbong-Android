@@ -39,10 +39,12 @@ import com.project.presentation.R
 
 @Composable
 fun DayHistory(
+    modifier: Modifier = Modifier,
     awayTeam: String,
     homeTeam: String,
     stadium: String,
     type: String,
+    imageCount: Int = 0,
     imageList: List<String>,
     myTeamDisplayName: String,
     onClick: () -> Unit = {}
@@ -57,8 +59,7 @@ fun DayHistory(
     )
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
             .clickable { onClick() }
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
@@ -124,7 +125,7 @@ fun DayHistory(
                     }
                 )
                 Log.d("DayHistory", "Image URL: ${imageList.firstOrNull()}")
-                if (imageList.size > 1) {
+                if (imageCount > 1 ) {
                     Box(
                         modifier = Modifier
                             .padding(top = 6.dp, end = 6.dp)
@@ -134,7 +135,7 @@ fun DayHistory(
                     ) {
                         Text(
                             modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-                            text = "${imageList.size}",
+                            text = "$imageCount",
                             style = KBongTypography.Caption2,
                             color = KBongGrayscaleGray0
                         )
@@ -153,6 +154,7 @@ fun PreviewDayHistory() {
         homeTeam = "삼성",
         stadium = "수원 KT위즈파크",
         type = "CHOICE",
+        imageCount = 3,
         imageList = listOf(
             "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",
             "https://mblogthumb-phinf.pstatic.net/MjAyMDA5MTJfNTkg/MDAxNTk5OTA0OTYzNDk1.Ct3_Y6k_Cyx0Lh8w0w3O1gxG6Q-ApWy1y0rj91p7pwMg.QS9CAOcH6cX0zTaHa449f4hcOj7MruepMCwI1xALX44g.JPEG.kn010123/IMG_1521.JPG?type=w800",

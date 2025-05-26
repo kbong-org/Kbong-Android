@@ -11,6 +11,8 @@ import com.project.presentation.log.gameLogWriteNavigation
 import com.project.presentation.log.logDetailNavigation
 import com.project.presentation.log.selectGameNavigation
 import com.project.presentation.my.myNavigation
+import com.project.presentation.setting.edit.profileEditNavigation
+import com.project.presentation.setting.settingNavigation
 import com.project.presentation.signUp.signUpNavigation
 
 @Composable
@@ -32,6 +34,8 @@ fun MainNavHost(
             myNavigation()
             gameLogWriteNavigation(navController = appState.navController)
             logDetailNavigation(navController = appState.navController)
+            settingNavigation(navController = appState.navController)
+            profileEditNavigation(navController = appState.navController)
         }
     }
 }

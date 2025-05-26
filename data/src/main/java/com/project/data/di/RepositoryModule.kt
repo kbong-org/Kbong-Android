@@ -1,17 +1,19 @@
 package com.project.data.di
 
+import com.project.data.local.repositoryimpl.user.UserDataStoreRepositoryImpl
 import com.project.data.repository.AuthRepositoryImpl
 import com.project.data.repositoryimpl.calendar.CalendarRepositoryImpl
+import com.project.data.repositoryimpl.user.UserRepositoryImpl
 import com.project.data.repositoryimpl.log.DayRepositoryImpl
 import com.project.data.repositoryimpl.log.LogRepositoryImpl
 import com.project.data.repositoryimpl.question.QuestionRepositoryImpl
-import com.project.data.repositoryimpl.user.UserDataStoreRepositoryImpl
 import com.project.domain.repository.AuthRepository
+import com.project.domain.repository.UserRepository
 import com.project.domain.repository.DayRepository
 import com.project.domain.repository.calendar.CalendarRepository
+import com.project.domain.repository.local.user.UserDataStoreRepository
 import com.project.domain.repository.log.LogRepository
 import com.project.domain.repository.question.QuestionRepository
-import com.project.domain.repository.user.UserDataStoreRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -50,4 +52,9 @@ abstract class RepositoryModule {
     abstract fun bindQuestionRepository(
         impl: QuestionRepositoryImpl
     ): QuestionRepository
+    @Binds
+    abstract fun provideUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
+
 }

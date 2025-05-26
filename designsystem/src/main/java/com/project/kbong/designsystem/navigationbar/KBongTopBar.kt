@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +37,8 @@ fun KBongTopBar(
         modifier = modifier
             .fillMaxWidth()
             .height(64.dp),
-        color = Color.White,
+        color = Color.White,  // Add this line to set background color
+        contentColor = contentColorFor(Color.White)
     ) {
         Box(modifier = modifier) {
             Row(

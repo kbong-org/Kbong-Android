@@ -55,6 +55,8 @@ class KBongAppState(
             route == NavigationRoute.SelectGameScreen.route -> true
             route == NavigationRoute.GameLogWriteScreen.route -> true
             route == NavigationRoute.LogDetailScreen.route -> true
+            route == NavigationRoute.SettingScreen.route -> true
+            route == NavigationRoute.ProfileEditScreen.route -> true
             else -> false
         }
     }

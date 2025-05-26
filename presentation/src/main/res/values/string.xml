@@ -7,4 +7,18 @@
     <string name="no_game">경기가 없는 날이에요.</string>
     <string name="game_history">직관기록</string>
     <string name="game_schedule">경기일정</string>
+    <string name="my_team_visited_score">마이팀 직관 승점</string>
+    <string name="my_team_visited_percent">마이팀 직관 승률</string>
+    <string name="setting">설정</string>
+    <string name="latest_version">최신 버전</string>
+    <string name="logout">로그아웃</string>
+    <string name="withdrawal">탈퇴하기</string>
+    <string name="my_info_edit">내 정보 수정</string>
+    <string name="nickname">닉네임</string>
+    <string name="nickname_edit">닉네임 변경</string>
+    <string name="support_team">응원 팀</string>
+    <string name="birthday">생년월일</string>
+    <string name="gender">성별</string>
+    <string name="save">저장</string>
+    <string name="nickname_save_snackbar">닉네임이 변경되었어요.</string>
 </resources>
