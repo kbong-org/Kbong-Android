@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun HorizontalCalendar(
     selectedDate: LocalDate,
     selectTab: String,
     isMyTeam: Boolean,
+    teamColor: Color,
     historyDayContentList: List<HistoryDayContent>,
     gameDayListContent: List<GameDayContent>,
     onSelectedDate: (LocalDate) -> Unit
@@ -60,6 +62,7 @@ fun HorizontalCalendar(
             gameDayListContent = gameDayListContent,
             isMyTeam = isMyTeam,
             selectTab = selectTab,
+            teamColor = teamColor,
             onSelectedDate = { selectedDate ->
                 onSelectedDate(selectedDate)
             },

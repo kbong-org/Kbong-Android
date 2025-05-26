@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.project.domain.model.calendar.GameDayContent
@@ -22,6 +23,7 @@ fun CalendarMonthItem(
     isMyTeam: Boolean,
     historyDayContentList: List<HistoryDayContent>,
     gameDayListContent: List<GameDayContent>,
+    teamColor: Color,
     onSelectedDate: (LocalDate) -> Unit
 ) {
     // 현재 월의 1일 계산
@@ -72,6 +74,7 @@ fun CalendarMonthItem(
                                         selectedDate = selectedDate,
                                         historyDayContent = historyDayContent,
                                         conversionLocalDate = conversionLocalDate,
+                                        teamColor = teamColor,
                                         onSelectedDate = {
                                             onSelectedDate(conversionLocalDate)
                                         }
@@ -91,6 +94,7 @@ fun CalendarMonthItem(
                                         gameDayContent = gameDayContent,
                                         isMyTeam = isMyTeam,
                                         conversionLocalDate = conversionLocalDate,
+                                        teamColor = teamColor,
                                         onSelectedDate = {
                                             onSelectedDate(conversionLocalDate)
                                         }

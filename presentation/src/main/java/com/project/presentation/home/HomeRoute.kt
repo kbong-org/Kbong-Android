@@ -35,9 +35,31 @@ import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.tab.KBongTabBar
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray0
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
+import com.project.kbong.designsystem.theme.KBongPrimary
+import com.project.kbong.designsystem.theme.KBongPrimary10
 import com.project.kbong.designsystem.theme.KBongTeamBears
+import com.project.kbong.designsystem.theme.KBongTeamBears10
+import com.project.kbong.designsystem.theme.KBongTeamEagles
+import com.project.kbong.designsystem.theme.KBongTeamEagles10
+import com.project.kbong.designsystem.theme.KBongTeamGiants
+import com.project.kbong.designsystem.theme.KBongTeamGiants10
+import com.project.kbong.designsystem.theme.KBongTeamGray10
+import com.project.kbong.designsystem.theme.KBongTeamGray2
+import com.project.kbong.designsystem.theme.KBongTeamHeroes
+import com.project.kbong.designsystem.theme.KBongTeamHeroes10
+import com.project.kbong.designsystem.theme.KBongTeamLions
+import com.project.kbong.designsystem.theme.KBongTeamLions10
+import com.project.kbong.designsystem.theme.KBongTeamNc
+import com.project.kbong.designsystem.theme.KBongTeamNcSub10
+import com.project.kbong.designsystem.theme.KBongTeamSsg
+import com.project.kbong.designsystem.theme.KBongTeamSsg10
+import com.project.kbong.designsystem.theme.KBongTeamTigers
+import com.project.kbong.designsystem.theme.KBongTeamTigers10
+import com.project.kbong.designsystem.theme.KBongTeamTwins
+import com.project.kbong.designsystem.theme.KBongTeamTwins10
 import com.project.kbong.designsystem.utils.DateUtil.today
 import com.project.presentation.R
+import com.project.presentation.home.day.BeforeDayHistoryContent
 import com.project.presentation.home.day.DayGameHistoryContent
 import com.project.presentation.home.day.DayHistoryContent
 import com.project.presentation.home.day.EmptyDayHistoryContent
@@ -45,6 +67,8 @@ import com.project.presentation.home.day.EmptyGameContent
 import com.project.presentation.log.navigateToLogDetail
 import com.project.presentation.log.navigateToSelectGame
 import com.project.presentation.utils.localDateToString
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 @Composable
 fun HomeRoute(
@@ -117,6 +141,33 @@ fun HomeScreen(
         state.gameDayContents.firstOrNull { it.day.toInt() == selectedDay }?.hasGame ?: false
     }
 
+    val teamColor = when (state.myTeamDisplayName) {
+        "LG" -> KBongTeamTwins
+        "DOOSAN" -> KBongTeamBears
+        "HANHWA" -> KBongTeamEagles
+        "KIA" -> KBongTeamTigers
+        "KT" -> KBongTeamGray10
+        "NC" -> KBongTeamNc
+        "SAMSUNG" -> KBongTeamLions
+        "SSG" -> KBongTeamSsg
+        "LOTTE" -> KBongTeamGiants
+        "KIWOOM" -> KBongTeamHeroes
+        else -> KBongPrimary
+    }
+
+    val teamColorBg = when (state.myTeamDisplayName) {
+        "LG" -> KBongTeamTwins10
+        "DOOSAN" -> KBongTeamBears10
+        "HANHWA" -> KBongTeamEagles10
+        "KIA" -> KBongTeamTigers10
+        "KT" -> KBongTeamGray2
+        "NC" -> KBongTeamNcSub10
+        "SAMSUNG" -> KBongTeamLions10
+        "SSG" -> KBongTeamSsg10
+        "LOTTE" -> KBongTeamGiants10
+        "KIWOOM" -> KBongTeamHeroes10
+        else -> KBongPrimary10
+    }
 
     Column(
         modifier = modifier
@@ -159,7 +210,7 @@ fun HomeScreen(
                 DateTopContent(
                     currentMonth = "${state.selectedDate.monthValue}",
                     myTeam = state.myTeamDisplayName,
-                    teamColor = KBongTeamBears,
+                    teamColor = teamColor,
                     onClickMonth = {
                         homeViewEvent(
                             HomeViewContract.HomeViewEvent.OnClickMonth
@@ -180,6 +231,7 @@ fun HomeScreen(
                     gameDayListContent = state.gameDayContents,
                     selectTab = state.selectTab,
                     isMyTeam = state.myTeamDisplayName.isNotEmpty(),
+                    teamColor = teamColor,
                     onSelectedDate = { selectedDate ->
                         homeViewEvent(
                             HomeViewContract.HomeViewEvent.OnSelectedDate(selectedDate.localDateToString())
@@ -205,14 +257,23 @@ fun HomeScreen(
                     }
 
                     state.dailyLogList.isEmpty() && state.selectTab == stringResource(R.string.game_history) -> {
-                        EmptyDayHistoryContent(
-                            onClickGoLog = {
-                                homeViewEvent(
-                                    HomeViewContract.HomeViewEvent.OnClickAddHistory
-                                )
-                                navController.navigateToSelectGame(state.selectedDate)
-                            }
-                        )
+                        val now = LocalDateTime.now()
+                        val isBefore6AM = now.isBefore(state.selectedDate.atTime(LocalTime.of(6, 0)))
+
+                        if (isBefore6AM) {
+                            BeforeDayHistoryContent()
+                        } else {
+                            EmptyDayHistoryContent(
+                                onClickGoLog = {
+                                    homeViewEvent(
+                                        HomeViewContract.HomeViewEvent.OnClickAddHistory
+                                    )
+                                    navController.navigateToSelectGame(state.selectedDate)
+                                },
+                                teamColor = teamColor,
+                                teamColorBg = teamColorBg
+                            )
+                        }
                     }
 
                     // 직관기록 일별 컨텐츠
@@ -258,4 +319,3 @@ private fun PreviewHomeScreen() {
         navController = NavController(context = LocalContext.current) // Mock NavController
     )
 }
-

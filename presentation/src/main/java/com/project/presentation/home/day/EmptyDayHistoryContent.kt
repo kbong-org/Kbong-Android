@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,7 +29,9 @@ import com.project.presentation.R
 
 @Composable
 fun EmptyDayHistoryContent(
-    onClickGoLog: () -> Unit
+    onClickGoLog: () -> Unit,
+    teamColor: Color,
+    teamColorBg: Color
 ) {
     Column(
         modifier = Modifier
@@ -50,7 +53,7 @@ fun EmptyDayHistoryContent(
         Button(
             onClick = { onClickGoLog() },
             colors = ButtonColors(
-                containerColor = KBongPrimary10,
+                containerColor = teamColorBg,
                 contentColor = ButtonDefaults.buttonColors().contentColor,
                 disabledContainerColor = ButtonDefaults.buttonColors().disabledContainerColor,
                 disabledContentColor = ButtonDefaults.buttonColors().disabledContentColor,
@@ -61,7 +64,7 @@ fun EmptyDayHistoryContent(
             Text(
                 text = stringResource(R.string.go_log),
                 style = KBongTypography.Label1Reading,
-                color = KBongPrimary
+                color = teamColor
             )
         }
     }
@@ -71,6 +74,8 @@ fun EmptyDayHistoryContent(
 @Composable
 private fun PreviewEmptyDayHistoryContent() {
     EmptyDayHistoryContent(
-        onClickGoLog = {}
+        onClickGoLog = {},
+        teamColor = KBongPrimary,
+        teamColorBg = KBongPrimary10
     )
 }
