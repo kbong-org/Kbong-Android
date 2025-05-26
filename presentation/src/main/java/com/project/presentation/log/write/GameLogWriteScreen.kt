@@ -72,6 +72,9 @@ fun GameLogWriteRoute(
     val teamColor = remember(myTeamDisplayName) {
         TeamColorMapper.getTextColor(myTeamDisplayName)
     }
+    val teamBgColor = remember(myTeamDisplayName) {
+        TeamColorMapper.getBackgroundColor(myTeamDisplayName)
+    }
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetMultipleContents()
@@ -276,6 +279,8 @@ fun GameLogWriteRoute(
                         onAddImage = { imagePickerLauncher.launch("image/*") },
                         onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
                         canAdd = canAddPhoto,
+                        teamColor = teamColor,
+                        teamBgColor = teamBgColor,
                         selectedOption = selectedObjectiveOption,
                         onSelectOption = {
                             selectedObjectiveOption = it
@@ -306,6 +311,8 @@ fun GameLogWriteRoute(
                         onDeleteImage = { index -> imageUris = imageUris.toMutableList().apply { removeAt(index) } },
                         canAdd = canAddPhoto,
                         text = text,
+                        teamColor = teamColor,
+                        teamBgColor = teamBgColor,
                         onTextChange = { text = it },
                         question = shortQuestion,
                         onRefreshQuestion = { viewModel.loadShortQuestion() }

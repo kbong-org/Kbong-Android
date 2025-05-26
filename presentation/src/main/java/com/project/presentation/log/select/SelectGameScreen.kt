@@ -28,8 +28,12 @@ import com.project.data.model.log.toDto
 import com.project.domain.model.day.DailyGameLog
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
 import com.project.kbong.designsystem.theme.KBongAccentButtonBlue
+import com.project.kbong.designsystem.theme.KBongAccentButtonBlue10
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
+import com.project.kbong.designsystem.theme.KBongStatusDestructive
+import com.project.kbong.designsystem.theme.KBongStatusDestructive10
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.presentation.log.navigateToGameLogWrite
@@ -146,6 +150,13 @@ fun SelectGameScreen(
     }
 }
 
+data class GameStatusUi(
+    val tagText: String,
+    val tagColor: Color,
+    val tagBackground: Color,
+    val showScore: Boolean
+)
+
 @Composable
 fun GameItem(
     game: DailyGameLog,
@@ -161,12 +172,17 @@ fun GameItem(
     val shape: Shape = MaterialTheme.shapes.medium
 
     // 상태 분기
-    val (tagText, tagColor, showScore) = when (game.status) {
-        "FINISHED" -> Triple("종료", Color.Gray, true)
-        "CANCELLED" -> Triple("취소", Color.Red, false)
-        "SUSPENDED" -> Triple("연기", Color(0xFF3D5AFE), false)
-        else -> Triple(null, null, false) // SCHEDULED 또는 기타
+    val statusUi = when (game.status) {
+        "FINISHED" -> GameStatusUi("종료", KBongGrayscaleGray7, KBongGrayscaleGray2, true)
+        "CANCELLED" -> GameStatusUi("취소", KBongStatusDestructive, KBongStatusDestructive10, false)
+        "SUSPENDED" -> GameStatusUi("연기", KBongAccentButtonBlue, KBongAccentButtonBlue10, false)
+        else -> null
     }
+
+    val tagText = statusUi?.tagText
+    val tagColor = statusUi?.tagColor
+    val tabBgColor = statusUi?.tagBackground
+    val showScore = statusUi?.showScore ?: false
 
     Surface(
         modifier = Modifier
@@ -209,7 +225,7 @@ fun GameItem(
                     tagText?.let {
                         Box(
                             modifier = Modifier
-                                .background(KBongGrayscaleGray2, shape = RoundedCornerShape(6.dp))
+                                .background(tabBgColor!!, shape = RoundedCornerShape(6.dp))
                                 .height(20.dp)
                                 .defaultMinSize(minWidth = 38.dp)
                                 .padding(horizontal = 6.dp),
@@ -311,6 +327,24 @@ fun PreviewGameItemCancelled() {
             homeTeamDisplayName = "NC",
             stadiumDisplayName = "잠실",
             status = "CANCELLED"
+        ),
+        isSelected = false,
+        onClick = {},
+        myTeamDisplayName = "LG"
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewGameItemSuspended() {
+    GameItem(
+        game = DailyGameLog(
+            id = 3L,
+            startTimeStr = "18:30",
+            awayTeamDisplayName = "LG",
+            homeTeamDisplayName = "NC",
+            stadiumDisplayName = "잠실",
+            status = "SUSPENDED"
         ),
         isSelected = false,
         onClick = {},

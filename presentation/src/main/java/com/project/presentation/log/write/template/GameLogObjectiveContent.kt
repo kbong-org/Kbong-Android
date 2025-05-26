@@ -16,11 +16,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -46,6 +48,8 @@ fun GameLogObjectiveContent(
     onAddImage: () -> Unit,
     onDeleteImage: (Int) -> Unit,
     canAdd: Boolean,
+    teamColor: Color,
+    teamBgColor: Color,
     selectedOption: String?,
     onSelectOption: (String) -> Unit,
     question: ChoiceQuestion?,
@@ -108,21 +112,22 @@ fun GameLogObjectiveContent(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(KBongPrimary10)
+                        .background(teamBgColor)
                         .clickable { onRefreshQuestion() }
                         .padding(horizontal = 14.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Image(
+                    Icon(
                         painter = painterResource(id = R.drawable.refresh),
                         contentDescription = "질문 바꾸기 아이콘",
-                        modifier = Modifier.size(14.dp)
+                        modifier = Modifier.size(14.dp),
+                        tint = teamColor
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "질문 바꾸기",
                         style = KBongTypography.Label2Medium,
-                        color = KBongPrimary
+                        color = teamColor
                     )
                 }
             }
@@ -163,7 +168,7 @@ fun GameLogObjectiveContent(
                         contentDescription = "체크 아이콘",
                         modifier = Modifier.size(20.dp),
                         colorFilter = ColorFilter.tint(
-                            if (isSelected) KBongAccentButtonBlue
+                            if (isSelected) teamColor
                             else KBongGrayscaleGray3
                         )
                     )
@@ -235,6 +240,8 @@ fun PreviewGameLogObjectiveContent() {
         currentPage = 1,
         totalPages = 3,
         onPageChange = {},
-        onRefreshQuestion = {}
+        onRefreshQuestion = {},
+        teamColor = KBongPrimary,
+        teamBgColor = KBongPrimary10
     )
 }

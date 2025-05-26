@@ -37,6 +37,8 @@ fun GameLogSubjectiveContent(
     onDeleteImage: (Int) -> Unit,
     canAdd: Boolean,
     text: String,
+    teamColor: Color,
+    teamBgColor: Color,
     onTextChange: (String) -> Unit,
     question: ShortQuestion?, // 질문 모델 추가
     onRefreshQuestion: () -> Unit // 질문 바꾸기 버튼 콜백 추가
@@ -46,21 +48,22 @@ fun GameLogSubjectiveContent(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
-                .background(KBongPrimary10)
+                .background(teamBgColor)
                 .clickable { onRefreshQuestion() }
                 .padding(horizontal = 14.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
+            Icon(
                 painter = painterResource(id = R.drawable.refresh),
                 contentDescription = "질문 바꾸기 아이콘",
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(14.dp),
+                tint = teamColor
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = "질문 바꾸기",
                 style = KBongTypography.Label2Medium,
-                color = KBongPrimary
+                color = teamColor
             )
         }
 
