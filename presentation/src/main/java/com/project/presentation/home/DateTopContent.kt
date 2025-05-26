@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongTeamBears
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamNameMapper
 import com.project.presentation.R
 
 @Composable
@@ -29,6 +30,9 @@ fun DateTopContent(
     teamColor: Color,
     onClickMonth: () -> Unit
 ) {
+
+    val teamDisplayName = TeamNameMapper.getDisplayName(myTeam)
+
     Box(
         modifier = Modifier.fillMaxWidth(),
     ) {
@@ -60,7 +64,7 @@ fun DateTopContent(
                 Text(
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 14.dp),
-                    text = myTeam,
+                    text = teamDisplayName,
                     color = Color.White,
                     style = KBongTypography.Caption1,
                 )
