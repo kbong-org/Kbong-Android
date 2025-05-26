@@ -29,6 +29,8 @@ import com.project.kbong.designsystem.theme.KBongGrayscaleGray4
 import com.project.kbong.designsystem.theme.KBongPrimary
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
+import com.project.presentation.utils.formatLocalDate
+import com.project.presentation.utils.stringToLocalDate
 
 @DrawableRes
 fun Emotion.getEmojiRes(): Int {
@@ -104,7 +106,7 @@ fun LogDetailHeader(gameInfo: GameInfo, emotion: Emotion, myTeamColor: Color) {
                     Spacer(modifier = Modifier.width(6.dp))
 
                     Text(
-                        text = gameInfo.date,
+                        text = gameInfo.date.stringToLocalDate().formatLocalDate(),
                         style = KBongTypography.Label2Medium,
                         color = KBongGrayscaleGray4
                     )
