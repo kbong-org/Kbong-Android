@@ -61,10 +61,8 @@ fun MyBottomContent(
                 }
 
                 isListSelect -> {
-                    val imageList = dailyLog.flatMap { dailyLog ->
-                        dailyLog.logs.map {
-                            it.imagePath
-                        }
+                    val imageList = dailyLog.flatMap { daily ->
+                        daily.logs.mapNotNull { it.imagePath } // null-safe 처리
                     }
 
                     MyBottomListMainContent(

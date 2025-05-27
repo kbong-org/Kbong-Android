@@ -11,6 +11,6 @@ data class Logs(
     val homeTeamDisplayName: String = "",
     val stadiumFullName: String = "",
     val type: String = "",
-    val imagePath: String = "",
+    val imagePath: String? = null,
     val imageCount: Int = 0
 )

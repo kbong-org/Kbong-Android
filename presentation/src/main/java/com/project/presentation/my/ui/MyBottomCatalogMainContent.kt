@@ -43,7 +43,7 @@ fun MyBottomCatalogMainContent(
                     stadium = log.stadiumFullName,
                     type = log.type,
                     imageCount = log.imageCount,
-                    imageList = listOf(log.imagePath),
+                    imageList = listOf(log.imagePath ?: ""),
                     myTeamDisplayName = myTeamDisplayName
                 )
             }

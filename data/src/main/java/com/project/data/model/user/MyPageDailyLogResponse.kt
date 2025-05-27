@@ -11,7 +11,7 @@ data class MyPageDailyLogResponse(
 )
 
 data class LogsResponse(
-    @SerializedName("logs")
+    @SerializedName("id")
     val id: Long = 0,
 
     @SerializedName("awayTeamDisplayName")

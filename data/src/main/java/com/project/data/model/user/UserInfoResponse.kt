@@ -18,6 +18,6 @@ data class UserInfoResponse(
     @SerializedName("visitedGames")
     val visitedGames: VisitedGamesResponse = VisitedGamesResponse(),
 
-    @SerializedName("dailyLog")
+    @SerializedName("dailyLogs")
     val dailyLog: List<MyPageDailyLogResponse> = listOf()
 )
