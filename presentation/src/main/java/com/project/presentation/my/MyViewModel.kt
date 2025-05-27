@@ -54,7 +54,7 @@ class MyViewModel @Inject constructor(
         updateSnackbar(errorMessage)
     }
 
-    private fun getUserInfoData() {
+    fun getUserInfoData() {
         viewModelScope.launch {
             runCatching {
                 getUserInfoUseCase()

@@ -39,6 +39,7 @@ fun MyRoute(
     val navController = LocalNavController.current
 
     LaunchedEffect(Unit) {
+        viewModel.getUserInfoData()
         viewModel.sideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
                 MyContract.MyViewSideEffect.NavigateToSetting -> {
