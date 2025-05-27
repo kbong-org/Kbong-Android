@@ -3,7 +3,7 @@ package com.project.data.local.repositoryimpl.user
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.project.data.local.datastore.KBongDataStore
 import com.project.domain.model.user.TokenData
-import com.project.domain.repository.local.user.UserDataStoreRepository
+import com.project.domain.repository.user.UserDataStoreRepository
 import javax.inject.Inject
 
 class UserDataStoreRepositoryImpl @Inject constructor(

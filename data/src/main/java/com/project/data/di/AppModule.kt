@@ -1,22 +1,5 @@
 package com.project.data.di
 
-import com.project.data.datasource.AuthRemoteDataSource
-import com.project.data.remote.AuthService
-import com.project.data.repository.AuthRepositoryImpl
-import com.project.domain.repository.AuthRepository
-import com.project.domain.usecase.LoginUseCase
-import com.project.domain.usecase.RefreshTokenUseCase
-import com.project.domain.usecase.SignUpUseCase
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
-
 /*
 @Module
 @InstallIn(SingletonComponent::class)

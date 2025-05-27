@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.project.domain.model.user.MyPageDailyLog
-import com.project.kbong.designsystem.theme.KBongPrimary
-import com.project.kbong.designsystem.theme.KBongPrimary10
+import com.project.kbong.designsystem.utils.TeamColorMapper
+import com.project.kbong.designsystem.utils.TeamNameMapper
 import com.project.presentation.home.day.EmptyDayHistoryContent
 
 const val CATALOG = "CATALOG"
@@ -20,10 +20,14 @@ const val LIST = "LIST"
 fun MyBottomContent(
     modifier: Modifier = Modifier,
     dailyLog: List<MyPageDailyLog>,
+    myTeamCode: String?,
     isCatalogSelect: Boolean = false,
     isListSelect: Boolean = false,
     onClickViewType: (String) -> Unit
 ) {
+    val teamColor = TeamColorMapper.getTextColor(myTeamCode ?: "")
+    val teamColorBg = TeamColorMapper.getBackgroundColor(myTeamCode ?: "")
+    val myTeamDisplayName = TeamNameMapper.getDisplayName(myTeamCode ?: "")
 
     Column(
         modifier = modifier
@@ -42,9 +46,8 @@ fun MyBottomContent(
             ) {
                 EmptyDayHistoryContent(
                     isGoLogButton = false,
-                    // todo teamColor, teamColorBg 팀 컬러에 맞게 받아오도록 해야함
-                    teamColor = KBongPrimary,
-                    teamColorBg = KBongPrimary10
+                    teamColor = teamColor,
+                    teamColorBg = teamColorBg
                 )
             }
 
@@ -52,7 +55,8 @@ fun MyBottomContent(
             when {
                 isCatalogSelect -> {
                     MyBottomCatalogMainContent(
-                        dailyLog = dailyLog
+                        dailyLog = dailyLog,
+                        myTeamDisplayName = myTeamDisplayName
                     )
                 }
 
@@ -94,6 +98,7 @@ private fun PreviewMyBottomContent() {
                  )
              )*/
         ),
-        onClickViewType = {}
+        onClickViewType = {},
+        myTeamCode = "LG",
     )
 }

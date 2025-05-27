@@ -1,4 +1,4 @@
-package com.project.domain.repository.local.user
+package com.project.domain.repository.user
 
 import com.project.domain.model.user.TokenData
 

@@ -22,7 +22,8 @@ import com.project.presentation.utils.stringToFormatLocalData
 
 @Composable
 fun MyBottomCatalogMainContent(
-    dailyLog: List<MyPageDailyLog>
+    dailyLog: List<MyPageDailyLog>,
+    myTeamDisplayName: String
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
@@ -43,8 +44,7 @@ fun MyBottomCatalogMainContent(
                     type = log.type,
                     imageCount = log.imageCount,
                     imageList = listOf(log.imagePath),
-                    // todo myTeamDisplayName 넘겨 받기
-                    myTeamDisplayName = ""
+                    myTeamDisplayName = myTeamDisplayName
                 )
             }
             Spacer(modifier = Modifier.height(17.dp))
@@ -78,6 +78,7 @@ fun PreviewMyBottomMainContent() {
                     )
                 )
             )
-        )
+        ),
+        myTeamDisplayName = "LG"
     )
 }

@@ -1,7 +1,7 @@
 package com.project.data.di
 
 import com.project.data.local.repositoryimpl.user.UserDataStoreRepositoryImpl
-import com.project.data.repository.AuthRepositoryImpl
+import com.project.data.repositoryimpl.auth.AuthRepositoryImpl
 import com.project.data.repositoryimpl.calendar.CalendarRepositoryImpl
 import com.project.data.repositoryimpl.user.UserRepositoryImpl
 import com.project.data.repositoryimpl.log.DayRepositoryImpl
@@ -11,7 +11,7 @@ import com.project.domain.repository.AuthRepository
 import com.project.domain.repository.UserRepository
 import com.project.domain.repository.DayRepository
 import com.project.domain.repository.calendar.CalendarRepository
-import com.project.domain.repository.local.user.UserDataStoreRepository
+import com.project.domain.repository.user.UserDataStoreRepository
 import com.project.domain.repository.log.LogRepository
 import com.project.domain.repository.question.QuestionRepository
 import dagger.Binds

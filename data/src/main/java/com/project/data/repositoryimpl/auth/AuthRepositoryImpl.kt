@@ -1,4 +1,4 @@
-package com.project.data.repository
+package com.project.data.repositoryimpl.auth
 
 import com.project.data.datasource.AuthRemoteDataSource
 import com.project.data.toDomainToken
