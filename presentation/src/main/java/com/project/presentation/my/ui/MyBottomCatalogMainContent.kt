@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.project.domain.model.user.Logs
 import com.project.domain.model.user.MyPageDailyLog
-import com.project.kbong.designsystem.theme.KBongGrayscaleGray1
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.home.day.DayHistory
@@ -23,14 +23,16 @@ import com.project.presentation.utils.stringToFormatLocalData
 @Composable
 fun MyBottomCatalogMainContent(
     dailyLog: List<MyPageDailyLog>,
-    myTeamDisplayName: String
+    myTeamDisplayName: String,
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth()
     ) {
         items(dailyLog) { item ->
             Text(
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .padding(horizontal =16.dp),
                 text = item.date.stringToFormatLocalData(),
                 style = KBongTypography.Body2Normal,
                 color = KBongGrayscaleGray7
@@ -51,7 +53,7 @@ fun MyBottomCatalogMainContent(
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 thickness = 1.dp,
-                color = KBongGrayscaleGray1
+                color = KBongGrayscaleGray2
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -79,6 +81,6 @@ fun PreviewMyBottomMainContent() {
                 )
             )
         ),
-        myTeamDisplayName = "LG"
+        myTeamDisplayName = "LG",
     )
 }

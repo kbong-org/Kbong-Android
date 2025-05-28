@@ -49,8 +49,8 @@ fun DayHistory(
     myTeamDisplayName: String,
     onClick: () -> Unit = {}
 ) {
-    val teamTextColor = TeamColorMapper.getTextColor(myTeamDisplayName)
-    val teamBgColor = TeamColorMapper.getBackgroundColor(myTeamDisplayName)
+    val teamTextColor = TeamColorMapper.getTextColorFromDisplayName(myTeamDisplayName)
+    val teamBgColor = TeamColorMapper.getBackgroundColorFromDisplayName(myTeamDisplayName)
 
     val fromTypeData = TagTypeMapper.fromType(
         type = type,
