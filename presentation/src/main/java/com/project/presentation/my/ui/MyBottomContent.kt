@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.project.domain.model.user.MyPageDailyLog
 import com.project.kbong.designsystem.utils.TeamColorMapper
 import com.project.kbong.designsystem.utils.TeamNameMapper
@@ -53,25 +54,24 @@ fun MyBottomContent(
 
         } else {
             when {
-                isCatalogSelect -> {
+                isListSelect -> {
                     MyBottomCatalogMainContent(
                         dailyLog = dailyLog,
                         myTeamDisplayName = myTeamDisplayName
                     )
                 }
 
-                isListSelect -> {
+                isCatalogSelect -> {
                     val imageList = dailyLog.flatMap { daily ->
                         daily.logs.mapNotNull { it.imagePath } // null-safe 처리
                     }
 
                     MyBottomListMainContent(
-                        modifier = Modifier.padding(),
+                        modifier = Modifier.padding(horizontal = 16.dp),
                         imagePathList = imageList
                     )
                 }
             }
-
         }
     }
 }

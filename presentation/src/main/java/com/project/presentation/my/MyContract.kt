@@ -4,7 +4,7 @@ import com.project.domain.model.user.UserInfoContent
 import com.project.presentation.mvi.UiEvent
 import com.project.presentation.mvi.UiSideEffect
 import com.project.presentation.mvi.UiState
-import com.project.presentation.my.ui.CATALOG
+import com.project.presentation.my.ui.LIST
 import com.project.presentation.setting.edit.ProfileEditType
 
 class MyContract {
@@ -15,7 +15,7 @@ class MyContract {
     data class MyViewState(
         val isError: Boolean = false,
         val userInfoContent: UserInfoContent = UserInfoContent(),
-        val selectViewType: String = CATALOG,
+        val selectViewType: String = LIST,
         val myTeamType: MyTeamType = MyTeamType.fromTypeData(userInfoContent.myTeam.fullName),
         val newNickname: String = "",
         val snackbarMessage: String = ""
