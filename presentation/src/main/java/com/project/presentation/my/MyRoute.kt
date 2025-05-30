@@ -134,6 +134,7 @@ fun MyScreen(
             MyBottomContent(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .weight(1F)
                     .background(Color.White),
                 dailyLog = state.userInfoContent.dailyLog,
                 isCatalogSelect = state.selectViewType == CATALOG,
