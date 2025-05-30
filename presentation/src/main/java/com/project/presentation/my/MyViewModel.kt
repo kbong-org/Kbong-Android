@@ -3,6 +3,7 @@ package com.project.presentation.my
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.project.domain.repository.AuthRepository
 import com.project.domain.usecase.user.GetUserInfoUseCase
 import com.project.domain.usecase.user.UpdateNicknameUseCase
 import com.project.presentation.mvi.BaseViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MyViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val updateNicknameUseCase: UpdateNicknameUseCase,
+    private val authRepository: AuthRepository
 ) : BaseViewModel<MyContract.MyViewState, MyContract.MyViewEvent, MyContract.MyViewSideEffect>() {
 
     init {
@@ -32,7 +34,9 @@ class MyViewModel @Inject constructor(
             MyContract.MyViewEvent.OnClickBack -> postSideEffect(MyContract.MyViewSideEffect.NavigateToBack)
             MyContract.MyViewEvent.SettingEvent.OnClickProfileEdit ->
                 postSideEffect(MyContract.MyViewSideEffect.NavigateToProfileEdit)
-
+            MyContract.MyViewEvent.SettingEvent.OnClickLogout -> {
+                handleLogout()
+            }
             is MyContract.MyViewEvent.ProfileEditEvent.OnClickEditMenu -> postSideEffect(
                 MyContract.MyViewSideEffect.ChangeProfileEditType(event.type)
             )
@@ -115,6 +119,13 @@ class MyViewModel @Inject constructor(
                 Log.e(TAG, "updateNickname: ${it.message}")
                 errorReduce(it.message?:"네트워크 에러")
             }
+        }
+    }
+
+    private fun handleLogout() {
+        viewModelScope.launch {
+            authRepository.clearToken()  // 실제 로그아웃 처리
+            postSideEffect(MyContract.MyViewSideEffect.NavigateToLogin)
         }
     }
 }

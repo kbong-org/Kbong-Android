@@ -6,11 +6,14 @@ import com.project.data.toDomainUser
 import com.project.domain.model.LoginResult
 import com.project.domain.model.SignUpResult
 import com.project.domain.model.TokenResult
+import com.project.domain.model.user.TokenData
 import com.project.domain.repository.AuthRepository
+import com.project.domain.repository.user.UserDataStoreRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remoteDataSource: AuthRemoteDataSource
+    private val remoteDataSource: AuthRemoteDataSource,
+    private val userDataStoreRepository: UserDataStoreRepository
 ) : AuthRepository {
     override suspend fun login(idToken: String): LoginResult {
         val response = remoteDataSource.login(idToken)
@@ -43,5 +46,9 @@ class AuthRepositoryImpl @Inject constructor(
         } else {
             SignUpResult.Failure(response?.errorResponse?.message ?: "Unknown error")
         }
+    }
+
+    override suspend fun clearToken() {
+        userDataStoreRepository.updateUserToken(TokenData())
     }
 }

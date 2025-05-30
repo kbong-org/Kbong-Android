@@ -30,8 +30,9 @@ class MyContract {
         data object OnClickBack : MyViewEvent
 
 
-        sealed interface SettingEvent : UiEvent {
+        sealed interface SettingEvent : MyViewEvent {
             data object OnClickProfileEdit : MyViewEvent
+            data object OnClickLogout : SettingEvent
         }
 
         sealed interface ProfileEditEvent : UiEvent {
@@ -50,5 +51,6 @@ class MyContract {
         data object NavigateToProfileEdit : MyViewSideEffect
         data class ChangeProfileEditType(val type: ProfileEditType) : MyViewSideEffect
         data object ShowSnackbar : MyViewSideEffect
+        data object NavigateToLogin : MyViewSideEffect
     }
 }

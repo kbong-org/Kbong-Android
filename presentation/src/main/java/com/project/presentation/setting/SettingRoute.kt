@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,6 +31,7 @@ import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
 import com.project.presentation.my.MyContract
 import com.project.presentation.my.MyViewModel
+import com.project.presentation.setting.dialog.LogoutDialog
 import com.project.presentation.setting.edit.navigateToProfileEdit
 import kotlinx.coroutines.flow.collectLatest
 
@@ -48,7 +52,11 @@ fun SettingRoute(
                 MyContract.MyViewSideEffect.NavigateToProfileEdit -> {
                     navController.navigateToProfileEdit()
                 }
-
+                MyContract.MyViewSideEffect.NavigateToLogin -> {
+                    navController.navigate("kakaoLogin") {
+                        popUpTo(0) { inclusive = true } // 전체 백스택 제거
+                    }
+                }
                 else -> Unit
             }
         }
@@ -65,6 +73,8 @@ fun SettingScreen(
     state: MyContract.MyViewState,
     event: (MyContract.MyViewEvent) -> Unit,
 ) {
+    val showLogoutDialog = remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -115,7 +125,7 @@ fun SettingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-
+                    showLogoutDialog.value = true
                 }
                 .padding(horizontal = 20.dp, vertical = 24.dp),
             leftContent = {
@@ -141,6 +151,19 @@ fun SettingScreen(
                     color = KBongGrayscaleGray8
                 )
             }
+        )
+    }
+
+    if (showLogoutDialog.value) {
+        LogoutDialog(
+            onConfirm = {
+                showLogoutDialog.value = false
+                event(MyContract.MyViewEvent.SettingEvent.OnClickLogout)
+            },
+            onDismiss = {
+                showLogoutDialog.value = false
+            },
+            buttonColor = state.myTeamType.teamTagBackgroundColor // 팀 컬러 전달
         )
     }
 }
