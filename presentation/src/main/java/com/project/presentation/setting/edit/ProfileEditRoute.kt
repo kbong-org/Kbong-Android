@@ -34,6 +34,8 @@ import com.project.data.LocalNavController
 import com.project.kbong.designsystem.KBongSnackbar
 import com.project.kbong.designsystem.component.BaseSettingContent
 import com.project.kbong.designsystem.navigationbar.KBongTopBar
+import com.project.kbong.designsystem.tag.KBongTag
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray5
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
 import com.project.kbong.designsystem.theme.KBongTypography
 import com.project.presentation.R
@@ -190,6 +192,13 @@ fun ProfileEditScreen(
                     style = KBongTypography.Heading2Medium,
                     color = KBongGrayscaleGray8
                 )
+            },
+            rightContent = {
+                Text(
+                    text = state.userInfoContent.nickname,
+                    style = KBongTypography.Body1Normal,
+                    color = KBongGrayscaleGray8
+                )
             }
         )
 
@@ -205,6 +214,13 @@ fun ProfileEditScreen(
                     text = stringResource(R.string.support_team),
                     style = KBongTypography.Heading2Medium,
                     color = KBongGrayscaleGray8
+                )
+            },
+            rightContent = {
+                KBongTag(
+                    tagName = state.userInfoContent.myTeam.fullName,
+                    backgroundColor = state.myTeamType.teamSub10Color,
+                    textColor = state.myTeamType.teamTagBackgroundColor
                 )
             }
         )
@@ -222,6 +238,16 @@ fun ProfileEditScreen(
                     style = KBongTypography.Heading2Medium,
                     color = KBongGrayscaleGray8
                 )
+            },
+            rightContent = {
+                val birth = state.userInfoContent.birthDate
+                val isUnset = birth.isNullOrBlank()
+
+                Text(
+                    text = if (isUnset) stringResource(R.string.unset) else birth.orEmpty(),
+                    style = KBongTypography.Body1Normal,
+                    color = if (isUnset) KBongGrayscaleGray5 else KBongGrayscaleGray8
+                )
             }
         )
 
@@ -237,6 +263,16 @@ fun ProfileEditScreen(
                     text = stringResource(R.string.gender),
                     style = KBongTypography.Heading2Medium,
                     color = KBongGrayscaleGray8
+                )
+            },
+            rightContent = {
+                val gender = state.userInfoContent.gender
+                val isUnset = gender.isNullOrBlank()
+
+                Text(
+                    text = if (isUnset) stringResource(R.string.unset) else gender.orEmpty(),
+                    style = KBongTypography.Body1Normal,
+                    color = if (isUnset) KBongGrayscaleGray5 else KBongGrayscaleGray8
                 )
             }
         )

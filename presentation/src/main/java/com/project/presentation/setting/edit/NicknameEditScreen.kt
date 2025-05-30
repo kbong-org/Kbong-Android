@@ -67,7 +67,7 @@ fun NicknameEditScreen(
                 .padding(horizontal = 16.dp),
             title = stringResource(R.string.save),
             enabled = beforeNickname != nickname && nickname.isNotEmpty(),
-            onClick = onClickNicknameSave
+            onClick = onClickNicknameSave,
         )
 
     }

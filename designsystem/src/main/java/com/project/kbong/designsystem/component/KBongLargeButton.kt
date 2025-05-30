@@ -9,6 +9,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,7 @@ fun KBongLargeButton(
     shape: Shape = RoundedCornerShape(14.dp),
     enabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(vertical = 14.dp),
+    containerColor: Color = KBongPrimary,
     onClick: () -> Unit = {}
 ) {
 
