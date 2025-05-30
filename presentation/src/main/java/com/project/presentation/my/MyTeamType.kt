@@ -28,6 +28,7 @@ import com.project.kbong.designsystem.theme.myPageBackgroundBlue
 import com.project.kbong.designsystem.theme.myPageBackgroundRed
 
 enum class MyTeamType(
+    val code: String,
     val teamName: String,
     val backgroundColor: Color,
     val teamTagBackgroundColor: Color,
@@ -37,6 +38,7 @@ enum class MyTeamType(
     val infoImage: Int
 ) {
     DOOSAN(
+        code = "DOOSAN",
         teamName = "두산 베어스",
         isBlueStadium = true,
         teamSub10Color = KBongTeamBearsSub10,
@@ -47,6 +49,7 @@ enum class MyTeamType(
     ),
 
     LOTTE(
+        code = "LOTTE",
         teamName = "롯데 자이언츠",
         isBlueStadium = true,
         teamSub10Color = KBongTeamGiantsSub10,
@@ -57,6 +60,7 @@ enum class MyTeamType(
     ),
 
     SAMSUNG(
+        code = "SAMSUNG",
         teamName = "삼성 라이온즈",
         teamSub10Color = KBongTeamLionsSub10,
         isBlueStadium = true,
@@ -67,6 +71,7 @@ enum class MyTeamType(
     ),
 
     SSG(
+        code = "SSG",
         teamName = "SSG 랜더스",
         isBlueStadium = false,
         teamSub10Color = KBongTeamSsgSub10,
@@ -77,6 +82,7 @@ enum class MyTeamType(
     ),
 
     NC(
+        code = "NC",
         teamName = "NC 다이노스",
         isBlueStadium = true,
         teamSub10Color = KBongTeamNcSub10,
@@ -87,6 +93,7 @@ enum class MyTeamType(
     ),
 
     LG(
+        code = "LG",
         teamName = "LG 트윈스",
         isBlueStadium = false,
         teamSub10Color = KBongTeamTwins10,
@@ -97,6 +104,7 @@ enum class MyTeamType(
     ),
 
     KIWOOM(
+        code = "KIWOOM",
         teamName = "키움 히어로즈",
         isBlueStadium = false,
         teamSub10Color = KBongTeamHeroesSub10,
@@ -107,6 +115,7 @@ enum class MyTeamType(
     ),
 
     KT(
+        code = "KT",
         teamName = "KT 위즈",
         isBlueStadium = true,
         teamSub10Color = KBongTeamGray2,
@@ -117,6 +126,7 @@ enum class MyTeamType(
     ),
 
     HANHWA(
+        code = "HANHWA",
         teamName = "한화 이글즈",
         isBlueStadium = false,
         teamSub10Color = KBongTeamEaglesSub10,
@@ -126,8 +136,8 @@ enum class MyTeamType(
         infoImage = com.project.kbong.designsystem.R.drawable.red_info_edit
     ),
 
-
     KIA(
+        code = "KIA",
         teamName = "KIA 타이거즈",
         isBlueStadium = false,
         teamSub10Color = KBongTeamTigersSub10,
@@ -138,6 +148,7 @@ enum class MyTeamType(
     ),
 
     NONE(
+        code = "NONE",
         teamName = "모두 응원해요",
         isBlueStadium = true,
         teamSub10Color = KBongPrimary10,
@@ -148,8 +159,8 @@ enum class MyTeamType(
     );
 
     companion object {
-        fun fromTypeData(teamName: String): MyTeamType {
-            return MyTeamType.entries.find { it.teamName == teamName } ?: NONE
+        fun fromCode(code: String): MyTeamType {
+            return entries.find { it.code == code } ?: NONE
         }
     }
 }

@@ -73,7 +73,7 @@ class MyViewModel @Inject constructor(
                         reduce {
                             copy(
                                 userInfoContent = it,
-                                myTeamType = MyTeamType.fromTypeData(it.myTeam.fullName)
+                                myTeamType = MyTeamType.fromCode(it.myTeam.code)
                             )
                         }
                     }

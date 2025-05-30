@@ -27,52 +27,52 @@ import com.project.kbong.designsystem.theme.KBongTeamTwins10
 object TeamColorMapper {
     private val teamCodeMap = mapOf(
         "LG" to "LG",
-        "DOOSAN" to "DOOSAN",
-        "HANHWA" to "HANHWA",
+        "두산" to "DOOSAN",
+        "한화" to "HANHWA",
         "KIA" to "KIA",
         "KT" to "KT",
         "NC" to "NC",
-        "SAMSUNG" to "SAMSUNG",
+        "삼성" to "SAMSUNG",
         "SSG" to "SSG",
-        "LOTTE" to "LOTTE",
-        "KIWOOM" to "KIWOOM"
+        "롯데" to "LOTTE",
+        "키움" to "KIWOOM"
     )
 
-    fun getTextColorFromDisplayName(displayName: String): Color {
-        val teamCode = teamCodeMap.entries.find { displayName.contains(it.key, ignoreCase = true) }?.value
-        return getTextColor(teamCode ?: "")
-    }
-
-    fun getBackgroundColorFromDisplayName(displayName: String): Color {
-        val teamCode = teamCodeMap.entries.find { displayName.contains(it.key, ignoreCase = true) }?.value
-        return getBackgroundColor(teamCode ?: "")
-    }
+//    fun getTextColorFromDisplayName(displayName: String): Color {
+//        val teamCode = teamCodeMap.entries.find { displayName.contains(it.key, ignoreCase = true) }?.value
+//        return getTextColor(teamCode ?: "")
+//    }
+//
+//    fun getBackgroundColorFromDisplayName(displayName: String): Color {
+//        val teamCode = teamCodeMap.entries.find { displayName.contains(it.key, ignoreCase = true) }?.value
+//        return getBackgroundColor(teamCode ?: "")
+//    }
 
     fun getTextColor(teamCode: String): Color = when (teamCode.uppercase()) {
         "LG" -> KBongTeamTwins
-        "DOOSAN" -> KBongTeamBears
-        "HANHWA" -> KBongTeamEagles
+        "두산" -> KBongTeamBears
+        "한화" -> KBongTeamEagles
         "KIA" -> KBongTeamTigers
         "KT" -> KBongTeamGray10
         "NC" -> KBongTeamNc
-        "SAMSUNG" -> KBongTeamLions
+        "삼성" -> KBongTeamLions
         "SSG" -> KBongTeamSsg
-        "LOTTE" -> KBongTeamGiants
-        "KIWOOM" -> KBongTeamHeroes
+        "롯데" -> KBongTeamGiants
+        "키움" -> KBongTeamHeroes
         else -> KBongPrimary
     }
 
     fun getBackgroundColor(teamCode: String): Color = when (teamCode.uppercase()) {
         "LG" -> KBongTeamTwins10
-        "DOOSAN" -> KBongTeamBears10
-        "HANHWA" -> KBongTeamEagles10
+        "두산" -> KBongTeamBears10
+        "한화" -> KBongTeamEagles10
         "KIA" -> KBongTeamTigers10
         "KT" -> KBongTeamGray2
         "NC" -> KBongTeamNcSub10
-        "SAMSUNG" -> KBongTeamLions10
+        "삼성" -> KBongTeamLions10
         "SSG" -> KBongTeamSsg10
-        "LOTTE" -> KBongTeamGiants10
-        "KIWOOM" -> KBongTeamHeroes10
+        "롯데" -> KBongTeamGiants10
+        "키움" -> KBongTeamHeroes10
         else -> KBongPrimary10
     }
 }

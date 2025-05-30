@@ -17,6 +17,7 @@ import com.project.domain.model.user.MyPageDailyLog
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
 import com.project.kbong.designsystem.theme.KBongGrayscaleGray7
 import com.project.kbong.designsystem.theme.KBongTypography
+import com.project.kbong.designsystem.utils.TeamNameMapper
 import com.project.presentation.home.day.DayHistory
 import com.project.presentation.utils.stringToFormatLocalData
 
@@ -46,7 +47,7 @@ fun MyBottomCatalogMainContent(
                     type = log.type,
                     imageCount = log.imageCount,
                     imageList = listOf(log.imagePath ?: ""),
-                    myTeamDisplayName = myTeamDisplayName
+                    myTeamDisplayName = TeamNameMapper.getDisplayName(myTeamDisplayName)
                 )
             }
             Spacer(modifier = Modifier.height(17.dp))

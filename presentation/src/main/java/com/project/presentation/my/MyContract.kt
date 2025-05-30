@@ -16,7 +16,7 @@ class MyContract {
         val isError: Boolean = false,
         val userInfoContent: UserInfoContent = UserInfoContent(),
         val selectViewType: String = LIST,
-        val myTeamType: MyTeamType = MyTeamType.fromTypeData(userInfoContent.myTeam.fullName),
+        val myTeamType: MyTeamType = MyTeamType.fromCode(userInfoContent.myTeam.code),
         val newNickname: String = "",
         val snackbarMessage: String = ""
     ) : UiState

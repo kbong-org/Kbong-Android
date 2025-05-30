@@ -1,5 +1,6 @@
 package com.project.presentation.my
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,6 +65,9 @@ fun MyScreen(
     state: MyContract.MyViewState,
     event: (MyContract.MyViewEvent) -> Unit,
 ) {
+
+    Log.d("MyScreen_LogCheck", "myTeamType = ${state.myTeamType}")
+    Log.d("MyScreen_LogCheck", "myTeamCode = ${state.userInfoContent.myTeam.code}")
 
     val lottieFile = when (state.myTeamType) {
         MyTeamType.KIA -> "Tigers.json"
