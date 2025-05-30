@@ -1,7 +1,7 @@
 package com.project.data.di
 
 
-import com.project.data.remote.AuthService
+import com.project.data.service.AuthService
 import com.project.data.service.CalendarService
 import com.project.data.service.LogService
 import com.project.data.service.QuestionService

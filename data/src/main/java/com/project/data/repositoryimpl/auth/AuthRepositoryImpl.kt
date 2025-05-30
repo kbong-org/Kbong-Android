@@ -51,4 +51,11 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun clearToken() {
         userDataStoreRepository.updateUserToken(TokenData())
     }
+
+    override suspend fun withdrawUser() {
+        val response = remoteDataSource.withdraw()
+        if (response?.isSuccess != true) {
+            throw Exception(response?.errorResponse?.message ?: "회원 탈퇴 실패")
+        }
+    }
 }

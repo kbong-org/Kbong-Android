@@ -9,4 +9,5 @@ interface AuthRepository {
     suspend fun refreshToken(refreshToken: String): TokenResult
     suspend fun signUp(idToken: String, nickname: String, myTeam: String): SignUpResult
     suspend fun clearToken()
+    suspend fun withdrawUser()
 }

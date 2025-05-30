@@ -49,6 +49,10 @@ class MyViewModel @Inject constructor(
                 updateNickname(event.snackbarMessage)
             }
 
+            is MyContract.MyViewEvent.SettingEvent.OnClickWithdraw -> {
+                handleWithdraw()
+            }
+
             else -> Unit
         }
     }
@@ -126,6 +130,19 @@ class MyViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.clearToken()  // 실제 로그아웃 처리
             postSideEffect(MyContract.MyViewSideEffect.NavigateToLogin)
+        }
+    }
+
+    private fun handleWithdraw() {
+        viewModelScope.launch {
+            val result = runCatching { authRepository.withdrawUser() }
+            if (result.isSuccess) {
+                authRepository.clearToken()
+                postSideEffect(MyContract.MyViewSideEffect.NavigateToLogin)
+            } else {
+                Log.e(TAG, "withdraw failed: ${result.exceptionOrNull()}")
+                // TODO: 에러 처리 원하면 여기서 다이얼로그나 Snackbar로
+            }
         }
     }
 }

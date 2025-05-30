@@ -33,6 +33,7 @@ class MyContract {
         sealed interface SettingEvent : MyViewEvent {
             data object OnClickProfileEdit : MyViewEvent
             data object OnClickLogout : SettingEvent
+            data object OnClickWithdraw : SettingEvent
         }
 
         sealed interface ProfileEditEvent : UiEvent {

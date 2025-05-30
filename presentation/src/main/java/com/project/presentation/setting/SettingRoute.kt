@@ -32,6 +32,7 @@ import com.project.presentation.R
 import com.project.presentation.my.MyContract
 import com.project.presentation.my.MyViewModel
 import com.project.presentation.setting.dialog.LogoutDialog
+import com.project.presentation.setting.dialog.WithdrawDialog
 import com.project.presentation.setting.edit.navigateToProfileEdit
 import kotlinx.coroutines.flow.collectLatest
 
@@ -74,6 +75,7 @@ fun SettingScreen(
     event: (MyContract.MyViewEvent) -> Unit,
 ) {
     val showLogoutDialog = remember { mutableStateOf(false) }
+    val showWithdrawDialog = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -141,7 +143,7 @@ fun SettingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
-
+                    showWithdrawDialog.value = true
                 }
                 .padding(horizontal = 20.dp, vertical = 24.dp),
             leftContent = {
@@ -164,6 +166,18 @@ fun SettingScreen(
                 showLogoutDialog.value = false
             },
             buttonColor = state.myTeamType.teamTagBackgroundColor // 팀 컬러 전달
+        )
+    }
+
+    if (showWithdrawDialog.value) {
+        WithdrawDialog(
+            onConfirm = {
+                showWithdrawDialog.value = false
+                event(MyContract.MyViewEvent.SettingEvent.OnClickWithdraw)
+            },
+            onDismiss = {
+                showWithdrawDialog.value = false
+            }
         )
     }
 }

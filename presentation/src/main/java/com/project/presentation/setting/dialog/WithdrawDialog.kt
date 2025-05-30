@@ -12,18 +12,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.project.kbong.designsystem.theme.*
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray2
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray6
+import com.project.kbong.designsystem.theme.KBongGrayscaleGray8
+import com.project.kbong.designsystem.theme.KBongStatusDestructive
+import com.project.kbong.designsystem.theme.KBongTypography
 
 @Composable
-fun LogoutDialog(
+fun WithdrawDialog(
     onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-    buttonColor: Color
+    onDismiss: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0x99000000)) // 배경
+            .background(Color(0x99000000))
             .clickable(enabled = false) {}
             .padding(horizontal = 24.dp)
     ) {
@@ -35,10 +38,19 @@ fun LogoutDialog(
                 .padding(horizontal = 24.dp, vertical = 24.dp)
         ) {
             Text(
-                text = "로그아웃 하시겠어요?",
+                text = "서비스를 탈퇴 하시겠어요?",
                 style = KBongTypography.Heading2,
                 color = Color.Black
             )
+
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "본 서비스의 모든 기록들이 삭제 되며,\n" +
+                        "복구할 수 없어요.",
+                style = KBongTypography.Label1Reading,
+                color = KBongGrayscaleGray6
+            )
+
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -53,39 +65,30 @@ fun LogoutDialog(
                         .padding(vertical = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "닫기",
-                        style = KBongTypography.Body1Normal,
-                        color = KBongGrayscaleGray8
-                    )
+                    Text("닫기", style = KBongTypography.Body1Normal, color = KBongGrayscaleGray8)
                 }
 
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(buttonColor) // 팀 컬러 적용
+                        .background(KBongStatusDestructive) // ❗고정 색상
                         .clickable { onConfirm() }
                         .padding(vertical = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = "로그아웃",
-                        style = KBongTypography.Body1Normal,
-                        color = Color.White
-                    )
+                    Text("탈퇴하기", style = KBongTypography.Body1Normal, color = Color.White)
                 }
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun PreviewLogoutDialog() {
-    LogoutDialog(
+fun PreviewWithdrawDialog() {
+    WithdrawDialog(
         onConfirm = {},
-        onDismiss = {},
-        buttonColor = KBongStatusDestructive
+        onDismiss = {}
     )
 }

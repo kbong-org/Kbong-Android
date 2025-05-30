@@ -9,4 +9,5 @@ interface AuthRemoteDataSource {
     suspend fun login(idToken: String): ApiResponse<LoginResponseData>?
     suspend fun refreshToken(refreshToken: String): ApiResponse<TokenResponse>?
     suspend fun signUp(idToken: String, nickname: String, myTeam: String): SignUpResponse?
+    suspend fun withdraw(): ApiResponse<Any>?
 }

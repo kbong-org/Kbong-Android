@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.project.data.model.*
-import com.project.data.remote.AuthService
+import com.project.data.service.AuthService
 import javax.inject.Inject
 
 class AuthRemoteDataSourceImpl @Inject constructor(
@@ -60,5 +60,11 @@ class AuthRemoteDataSourceImpl @Inject constructor(
                 SignUpResponse(false, null, ErrorResponse("Unknown", "Unknown error"))
             }
         }
+    }
+
+    override suspend fun withdraw(): ApiResponse<Any>? {
+        return runCatching {
+            authService.withdraw().body()
+        }.getOrNull()
     }
 }
